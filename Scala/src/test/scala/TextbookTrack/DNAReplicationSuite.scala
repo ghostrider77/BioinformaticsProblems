@@ -58,6 +58,24 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
       }
     }
 
+    "Find All Occurrences of a Pattern in a String" - {
+      import BA1D.findPatternOccurrences
+
+      "should calculate the indices where pattern appears in text" - {
+        "test case 1" in {
+          val text: String = "GATATATGCATATACTT"
+          val pattern: String = "ATAT"
+          findPatternOccurrences(text, pattern) should contain theSameElementsAs List(1, 3, 9)
+        }
+
+        "test case 2" in {
+          val text: String = "ATATATA"
+          val pattern: String = "ATA"
+          findPatternOccurrences(text, pattern) should contain theSameElementsAs List(0, 2, 4)
+        }
+      }
+    }
+
     "Compute the Hamming Distance Between Two Strings" - {
       import BA1G.calcHammingDistance
 
