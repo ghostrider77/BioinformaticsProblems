@@ -58,6 +58,34 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
       }
     }
 
+    "Compute the Hamming Distance Between Two Strings" - {
+      import BA1G.calcHammingDistance
+
+      "should calculate the Hamming distance" in {
+        val s1: String = "GGGCCGTTGGT"
+        val s2: String = "GGACCGTTGAC"
+        calcHammingDistance(s1, s2) shouldEqual 3
+      }
+    }
+
+    "Generate the Frequency Array of a String" - {
+      import BA1K.computingFrequencies
+
+      "should calculate the k-mer frequency array of a string" - {
+        "test case 1" in {
+          val text: String = "ACGCGGCTCTGAAA"
+          val k: Int = 2
+          computingFrequencies(text, k) shouldEqual Vector(2, 1, 0, 0, 0, 0, 2, 2, 1, 2, 1, 0, 0, 1, 1, 0)
+        }
+
+        "test case 2" in {
+          val text: String = "AAAAC"
+          val k: Int = 2
+          computingFrequencies(text, k) shouldEqual Vector(3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        }
+      }
+    }
+
     "Implement PatternToNumber" - {
       import BA1L.patternToNumber
 
@@ -93,24 +121,6 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
           val encoding: Int = 5353
           val k: Int = 7
           numberToPattern(encoding, k) shouldEqual "CCATGGC"
-        }
-      }
-    }
-
-    "Generate the Frequency Array of a String" - {
-      import BA1K.computingFrequencies
-
-      "should calculate the k-mer frequency array of a string" - {
-        "test case 1" in {
-          val text: String = "ACGCGGCTCTGAAA"
-          val k: Int = 2
-          computingFrequencies(text, k) shouldEqual Vector(2, 1, 0, 0, 0, 0, 2, 2, 1, 2, 1, 0, 0, 1, 1, 0)
-        }
-
-        "test case 2" in {
-          val text: String = "AAAAC"
-          val k: Int = 2
-          computingFrequencies(text, k) shouldEqual Vector(3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         }
       }
     }
