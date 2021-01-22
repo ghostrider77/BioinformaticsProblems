@@ -48,5 +48,14 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
         }
       }
     }
+
+    "Find the Reverse Complement of a String" - {
+      import BA1C.calcReverseComplement
+
+      "should calculate the reverse complement of a DNA pattern" in {
+        val dna: String = "AAAACCCGGT"
+        calcReverseComplement(dna) shouldEqual "ACCGGGTTTT"
+      }
+    }
   }
 }
