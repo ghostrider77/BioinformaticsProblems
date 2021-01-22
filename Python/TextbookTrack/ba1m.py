@@ -12,7 +12,6 @@ def number_to_pattern(encoding, k):
     return ''.join(pattern[::-1])
 
 
-
 def main():
     data = sys.stdin.read().splitlines()
     encoding = int(data[0])

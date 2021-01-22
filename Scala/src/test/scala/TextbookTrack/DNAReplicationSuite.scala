@@ -96,5 +96,23 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
         }
       }
     }
+
+    "Generate the Frequency Array of a String" - {
+      import BA1K.computingFrequencies
+
+      "should calculate the k-mer frequency array of a string" - {
+        "test case 1" in {
+          val text: String = "ACGCGGCTCTGAAA"
+          val k: Int = 2
+          computingFrequencies(text, k) shouldEqual Vector(2, 1, 0, 0, 0, 0, 2, 2, 1, 2, 1, 0, 0, 1, 1, 0)
+        }
+
+        "test case 2" in {
+          val text: String = "AAAAC"
+          val k: Int = 2
+          computingFrequencies(text, k) shouldEqual Vector(3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+        }
+      }
+    }
   }
 }
