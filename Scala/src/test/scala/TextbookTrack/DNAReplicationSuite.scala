@@ -57,5 +57,44 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
         calcReverseComplement(dna) shouldEqual "ACCGGGTTTT"
       }
     }
+
+    "Implement PatternToNumber" - {
+      import BA1L.patternToNumber
+
+      "should calculate the index of a k-mer in lexicographic order" - {
+        "test case 1" in {
+          val pattern: String = "AGT"
+          patternToNumber(pattern) shouldEqual 11
+        }
+
+        "test case 2" in {
+          val pattern: String = "AAAAA"
+          patternToNumber(pattern) shouldEqual 0
+        }
+
+        "test case 3" in {
+          val pattern: String = "TTTTT"
+          patternToNumber(pattern) shouldEqual 1023
+        }
+      }
+    }
+
+    "Implement NumberToPattern" - {
+      import BA1M.numberToPattern
+
+      "should calculate the k-mer based on its index in lexicographic order" - {
+        "test case 1" in {
+          val encoding: Int = 45
+          val k: Int = 4
+          numberToPattern(encoding, k) shouldEqual "AGTC"
+        }
+
+        "test case 2" in {
+          val encoding: Int = 5353
+          val k: Int = 7
+          numberToPattern(encoding, k) shouldEqual "CCATGGC"
+        }
+      }
+    }
   }
 }

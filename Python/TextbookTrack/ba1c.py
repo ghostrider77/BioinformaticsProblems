@@ -1,7 +1,6 @@
 # Find the Reverse Complement of a String
 import sys
 
-
 NUCLEOTIDE_COMPLEMENTS = {'A': 'T', 'C': 'G', 'T': 'A', 'G': 'C'}
 
 
