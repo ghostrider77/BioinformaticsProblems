@@ -7,7 +7,7 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
 
   "k-mer problems" - {
 
-    "ba1a" - {
+    "Compute the Number of Times a Pattern Appears in a Text" - {
       import BA1A.countPattern
 
       "should return the number of times pattern appears in text" - {
@@ -31,7 +31,7 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
       }
     }
 
-    "ba1b" - {
+    "Find the Most Frequent Words in a String" - {
       import BA1B.mostFrequentKMer
 
       "should collect the most frequent k-mers from text" - {
