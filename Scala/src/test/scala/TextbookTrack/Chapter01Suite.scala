@@ -103,6 +103,34 @@ class Chapter01Suite extends AnyFreeSpec with Matchers {
       }
     }
 
+    "Find All Approximate Occurrences of a Pattern in a String" - {
+      import TextbookTrack.Chapter01.BA1H.findApproximatePatternOccurrences
+
+      "should calculate the indices where pattern approximately appears in text up to given Hamming distance" - {
+        "test case 1" in {
+          val text: String =
+            "CGCCCGAATCCAGAACGCATTCCCATATTTCGGGACCACTGGCCTCCACGGTACGGACGTCAATCAAATGCCTAGCGGCTTGTGGTTTCTCCTACGCTCC"
+          val pattern: String = "ATTCTGGA"
+          val d: Int = 3
+          findApproximatePatternOccurrences(text, pattern, d) should contain theSameElementsAs List(6, 7, 26, 27, 78)
+        }
+
+        "test case 2" in {
+          val text: String = "CCACCT"
+          val pattern: String = "CCA"
+          val d: Int = 0
+          findApproximatePatternOccurrences(text, pattern, d) should contain theSameElementsAs List(0)
+        }
+
+        "test case 3" in {
+          val text: String = "AAAAAA"
+          val pattern: String = "TTT"
+          val d: Int = 3
+          findApproximatePatternOccurrences(text, pattern, d) should contain theSameElementsAs List(0, 1, 2, 3)
+        }
+      }
+    }
+
     "Generate the Frequency Array of a String" - {
       import TextbookTrack.Chapter01.BA1K.computingFrequencies
 
