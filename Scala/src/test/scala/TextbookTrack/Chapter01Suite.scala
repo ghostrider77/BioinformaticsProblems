@@ -76,13 +76,20 @@ class Chapter01Suite extends AnyFreeSpec with Matchers {
       }
     }
 
-    "Compute the Hamming Distance Between Two Strings" - {
-      import TextbookTrack.Chapter01.BA1G.calcHammingDistance
+    "Find a Position in a Genome Minimizing the Skew" - {
+      import TextbookTrack.Chapter01.BA1F.getSkewnessArgmins
 
-      "should calculate the Hamming distance" in {
-        val s1: String = "GGGCCGTTGGT"
-        val s2: String = "GGACCGTTGAC"
-        calcHammingDistance(s1, s2) shouldEqual 3
+      "should calculate the minimum indices of GC-skewness" - {
+        "test case 1" in {
+          val genome: String =
+            "CCTATCGGTGGATTAGCATGTCCCTGTACGTTTCGCCGCGAACTAGTTCACACGGCTTGATGGCAAATGGTTTTTCCGGCGACCGTAATCGTCCACCGAG"
+          getSkewnessArgmins(genome) shouldEqual List(53, 97)
+        }
+
+        "test case 2" in {
+          val genome: String = "TAAAGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGAT"
+          getSkewnessArgmins(genome) shouldEqual List(11, 24)
+        }
       }
     }
 
