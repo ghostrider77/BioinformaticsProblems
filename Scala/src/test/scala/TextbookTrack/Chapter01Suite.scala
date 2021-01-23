@@ -1,9 +1,9 @@
-package TextbookTrack.Chapter01
+package TextbookTrack
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 
-class DNAReplicationSuite extends AnyFreeSpec with Matchers {
+class Chapter01Suite extends AnyFreeSpec with Matchers {
 
   "k-mer problems" - {
 
@@ -73,6 +73,16 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
           val pattern: String = "ATA"
           findPatternOccurrences(text, pattern) should contain theSameElementsAs List(0, 2, 4)
         }
+      }
+    }
+
+    "Compute the Hamming Distance Between Two Strings" - {
+      import TextbookTrack.Chapter01.BA1G.calcHammingDistance
+
+      "should calculate the Hamming distance" in {
+        val s1: String = "GGGCCGTTGGT"
+        val s2: String = "GGACCGTTGAC"
+        calcHammingDistance(s1, s2) shouldEqual 3
       }
     }
 
