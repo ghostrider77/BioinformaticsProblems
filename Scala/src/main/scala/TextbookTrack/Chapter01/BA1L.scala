@@ -1,4 +1,4 @@
-package TextbookTrack
+package TextbookTrack.Chapter01
 
 object BA1L {
   private val NucleotideOrder: Map[Char, Int] = Map('A' -> 0, 'C' -> 1, 'G' -> 2, 'T' -> 3)

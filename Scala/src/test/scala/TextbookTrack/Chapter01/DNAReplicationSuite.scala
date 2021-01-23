@@ -1,4 +1,4 @@
-package TextbookTrack
+package TextbookTrack.Chapter01
 
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
@@ -8,7 +8,7 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
   "k-mer problems" - {
 
     "Compute the Number of Times a Pattern Appears in a Text" - {
-      import BA1A.countPattern
+      import TextbookTrack.Chapter01.BA1A.countPattern
 
       "should return the number of times pattern appears in text" - {
         "test case 1" in {
@@ -32,7 +32,7 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
     }
 
     "Find the Most Frequent Words in a String" - {
-      import BA1B.mostFrequentKMer
+      import TextbookTrack.Chapter01.BA1B.mostFrequentKMer
 
       "should collect the most frequent k-mers from text" - {
         "test case 1" in {
@@ -50,7 +50,7 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
     }
 
     "Find the Reverse Complement of a String" - {
-      import BA1C.calcReverseComplement
+      import TextbookTrack.Chapter01.BA1C.calcReverseComplement
 
       "should calculate the reverse complement of a DNA pattern" in {
         val dna: String = "AAAACCCGGT"
@@ -59,7 +59,7 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
     }
 
     "Find All Occurrences of a Pattern in a String" - {
-      import BA1D.findPatternOccurrences
+      import TextbookTrack.Chapter01.BA1D.findPatternOccurrences
 
       "should calculate the indices where pattern appears in text" - {
         "test case 1" in {
@@ -77,7 +77,7 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
     }
 
     "Compute the Hamming Distance Between Two Strings" - {
-      import BA1G.calcHammingDistance
+      import TextbookTrack.Chapter01.BA1G.calcHammingDistance
 
       "should calculate the Hamming distance" in {
         val s1: String = "GGGCCGTTGGT"
@@ -87,7 +87,7 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
     }
 
     "Generate the Frequency Array of a String" - {
-      import BA1K.computingFrequencies
+      import TextbookTrack.Chapter01.BA1K.computingFrequencies
 
       "should calculate the k-mer frequency array of a string" - {
         "test case 1" in {
@@ -105,7 +105,7 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
     }
 
     "Implement PatternToNumber" - {
-      import BA1L.patternToNumber
+      import TextbookTrack.Chapter01.BA1L.patternToNumber
 
       "should calculate the index of a k-mer in lexicographic order" - {
         "test case 1" in {
@@ -126,7 +126,7 @@ class DNAReplicationSuite extends AnyFreeSpec with Matchers {
     }
 
     "Implement NumberToPattern" - {
-      import BA1M.numberToPattern
+      import TextbookTrack.Chapter01.BA1M.numberToPattern
 
       "should calculate the k-mer based on its index in lexicographic order" - {
         "test case 1" in {

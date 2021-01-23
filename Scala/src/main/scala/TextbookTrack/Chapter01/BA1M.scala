@@ -1,6 +1,7 @@
-package TextbookTrack
+package TextbookTrack.Chapter01
 
 object BA1M {
+
   import scala.math.Integral.Implicits._
 
   private val Nucleotides: Vector[Char] = Vector('A', 'C', 'G', 'T')

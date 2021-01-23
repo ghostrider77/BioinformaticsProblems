@@ -1,4 +1,4 @@
-package TextbookTrack
+package TextbookTrack.Chapter01
 
 object BA1A {
   def countPattern(text: String, pattern: String): Int = text.sliding(pattern.length).count(_ == pattern)

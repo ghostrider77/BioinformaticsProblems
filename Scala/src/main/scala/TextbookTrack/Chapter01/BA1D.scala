@@ -1,12 +1,12 @@
-package TextbookTrack
+package TextbookTrack.Chapter01
 
 object BA1D {
   def findPatternOccurrences(text: String, pattern: String): List[Int] =
     text
       .sliding(pattern.length)
       .zipWithIndex
-      .filter{ case (substring, _) => substring == pattern }
-      .map{ case (_, ix) => ix }
+      .filter { case (substring, _) => substring == pattern }
+      .map { case (_, ix) => ix }
       .toList
 
   def main(args: Array[String]): Unit = {

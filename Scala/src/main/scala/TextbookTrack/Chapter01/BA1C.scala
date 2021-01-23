@@ -1,4 +1,4 @@
-package TextbookTrack
+package TextbookTrack.Chapter01
 
 object BA1C {
   private val NucleotideComplements: Map[Char, Char] = Map('A' -> 'T', 'C' -> 'G', 'T' -> 'A', 'G' -> 'C')
