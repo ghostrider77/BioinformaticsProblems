@@ -226,5 +226,24 @@ class Chapter01Suite extends AnyFreeSpec with Matchers {
         }
       }
     }
+
+    "Generate the d-Neighborhood of a String" - {
+      import TextbookTrack.Chapter01.BA1N.generateNeighbourhood
+
+      "should retrieve strings that are at most d Hamming distance away from a given string" - {
+        "test case 1" in {
+          val pattern: String = "ACG"
+          val d: Int = 1
+          generateNeighbourhood(pattern, d) shouldEqual
+            Set("CCG", "TCG", "GCG", "AAG", "ATG", "AGG", "ACA", "ACC", "ACT", "ACG")
+        }
+
+        "test case 2" in {
+          val pattern: String = "A"
+          val d: Int = 10
+          generateNeighbourhood(pattern, d) shouldEqual Set("A", "C", "G", "T")
+        }
+      }
+    }
   }
 }
