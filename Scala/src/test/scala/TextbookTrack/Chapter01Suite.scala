@@ -76,6 +76,45 @@ class Chapter01Suite extends AnyFreeSpec with Matchers {
       }
     }
 
+    "Find Patterns Forming Clumps in a String" - {
+      import TextbookTrack.Chapter01.BA1E.findClumpsInText
+
+      "should find k-mers forming (l, t)-clumps in a string" - {
+        "test case 1" in {
+          val text: String = "ACGTACGT"
+          val k: Int = 1
+          val l: Int = 5
+          val t: Int = 2
+          findClumpsInText(text, k, l, t) should contain theSameElementsAs List("A", "C", "G", "T")
+        }
+
+        "test case 2" in {
+          val text: String = "AAAACGTCGAAAAA"
+          val k: Int = 2
+          val l: Int = 4
+          val t: Int = 2
+          findClumpsInText(text, k, l, t) should contain theSameElementsAs List("AA")
+        }
+
+        "test case 3" in {
+          val text: String =
+            "CGGACTCGACAGATGTGAAGAAATGTGAAGACTGAGTGAAGAGAAGAGGAAACACGACACGACATTGCGACATAATGTACGAATGTAATGTGCCTATGGC"
+          val k: Int = 5
+          val l: Int = 75
+          val t: Int = 4
+          findClumpsInText(text, k, l, t) should contain theSameElementsAs List("CGACA", "GAAGA", "AATGT")
+        }
+
+        "test case 4" in {
+          val text: String = "CGGACTCGACAGATGTGAAGAACGACAATGTGAAGACTCGACACGACAGAGTGAAGAGAAGAGGAAACATTGTAA"
+          val k: Int = 5
+          val l: Int = 50
+          val t: Int = 4
+          findClumpsInText(text, k, l, t) should contain theSameElementsAs List("CGACA", "GAAGA")
+        }
+      }
+    }
+
     "Find a Position in a Genome Minimizing the Skew" - {
       import TextbookTrack.Chapter01.BA1F.getSkewnessArgmins
 
