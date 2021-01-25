@@ -6,9 +6,9 @@ object BA1E {
   private val Nucleotides: Vector[Char] = Vector('A', 'C', 'G', 'T')
   private val NucleotideOrder: Map[Char, Int] = Map('A' -> 0, 'C' -> 1, 'G' -> 2, 'T' -> 3)
 
-  private def converToIntList(line: String): List[Int] = line.split(" ").map(_.toInt).toList
+  private def convertToIntList(line: String): List[Int] = line.split(" ").map(_.toInt).toList
 
-  private def readParameters(line: String): (Int, Int, Int) = converToIntList(line) match {
+  private def readParameters(line: String): (Int, Int, Int) = convertToIntList(line) match {
     case List(k, l, t) => (k, l, t)
     case _ => throw new Exception("Unexpected input data format.")
   }
