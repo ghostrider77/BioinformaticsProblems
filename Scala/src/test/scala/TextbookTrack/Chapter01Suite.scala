@@ -218,6 +218,36 @@ class Chapter01Suite extends AnyFreeSpec with Matchers {
       }
     }
 
+    "Find Frequent Words with Mismatches and Reverse Complements" - {
+      import TextbookTrack.Chapter01.BA1J.mostFrequentApproximateKMersWithReverseComplements
+
+      "should calculate the most frequent k-mer with its reverse complement up to d mismatches" - {
+        "test case 1" in {
+          val text: String = "ACGTTGCATGTCGCATGATGCATGAGAGCT"
+          val k: Int = 4
+          val d: Int = 1
+          val result: List[String] = mostFrequentApproximateKMersWithReverseComplements(text, k, d)
+          result should contain theSameElementsAs List("ACAT", "ATGT")
+        }
+
+        "test case 2" in {
+          val text: String = "AAAAAAAAAA"
+          val k: Int = 2
+          val d: Int = 1
+          val result: List[String] = mostFrequentApproximateKMersWithReverseComplements(text, k, d)
+          result should contain theSameElementsAs List("AT", "TA")
+        }
+
+        "test case 3" in {
+          val text: String = "AATTAATTGGTAGGTAGGTA"
+          val k: Int = 4
+          val d: Int = 0
+          val result: List[String] = mostFrequentApproximateKMersWithReverseComplements(text, k, d)
+          result should contain theSameElementsAs List("AATT")
+        }
+      }
+    }
+
     "Generate the Frequency Array of a String" - {
       import TextbookTrack.Chapter01.BA1K.computingFrequencies
 
