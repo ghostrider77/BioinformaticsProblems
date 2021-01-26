@@ -32,4 +32,22 @@ class Chapter02Suite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Find a Median String" - {
+    import TextbookTrack.Chapter02.BA2B.calcMedianString
+
+    "should find a pattern that minimizes d(Pattern, texts) over all k-mers Pattern" - {
+      "test case 1" in {
+        val k: Int = 3
+        val texts: List[String] = List("AAATTGACGCAT", "GACGACCACGTT", "CGTCAGCGCCTG", "GCTGAGCACCGG", "AGTACGGGACAG")
+        Set("ACG", "GAC") should contain (calcMedianString(texts, k))
+      }
+
+      "test case 2" in {
+        val k: Int = 3
+        val texts: List[String] = List("ATA", "ACA", "AGA", "AAT", "AAC")
+        Set("AAA") should contain (calcMedianString(texts, k))
+      }
+    }
+  }
 }
