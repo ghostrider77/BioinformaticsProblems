@@ -50,4 +50,22 @@ class Chapter02Suite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Find a Profile-most Probable k-mer in a String" - {
+    import TextbookTrack.Chapter02.BA2C.{ProfileColumn, profileMostProbableKMer, readProfileMatrix}
+
+    "should find the pattern in text that maximizes the conditional probability P(pattern|profile)" in {
+      val text: String = "ACCTGTTTATTGCCTAAGTTCCGAACAAACCCAATATAGCCCGAGGGCCT"
+      val k: Int = 5
+      val rows: Iterator[String] =
+        List(
+          "0.2 0.2 0.3 0.2 0.3",
+          "0.4 0.3 0.1 0.5 0.1",
+          "0.3 0.3 0.5 0.2 0.4",
+          "0.1 0.2 0.1 0.1 0.2"
+        ).iterator
+      val matrix: List[ProfileColumn] = readProfileMatrix(rows)
+      profileMostProbableKMer(text, matrix, k) shouldEqual "CCGAG"
+    }
+  }
 }
