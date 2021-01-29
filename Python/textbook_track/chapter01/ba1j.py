@@ -1,4 +1,4 @@
-# Find the Most Frequent Words with Mismatches in a String
+# Find Frequent Words with Mismatches and Reverse Complements
 import itertools as it
 import sys
 
