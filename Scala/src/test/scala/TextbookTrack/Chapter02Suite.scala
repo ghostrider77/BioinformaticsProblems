@@ -68,4 +68,39 @@ class Chapter02Suite extends AnyFreeSpec with Matchers {
       profileMostProbableKMer(text, matrix, k) shouldEqual "CCGAG"
     }
   }
+
+  "Implement GreedyMotifSearch" - {
+    import TextbookTrack.Chapter02.BA2D.greedyMotifSearch
+
+    "should find motifs from each text where the ith motif is the profile most probable k-mer from the ith text" - {
+      "test case 1" in {
+        val k: Int = 3
+        val texts: List[String] = List("GGCGTTCAGGCA", "AAGAATCAGTCA", "CAAGGAGTTCGC", "CACGTCAATCAC", "CAATAATATTCG")
+        greedyMotifSearch(texts, k) shouldEqual List("CAG", "CAG", "CAA", "CAA", "CAA")
+      }
+
+      "test case 2" in {
+        val k: Int = 3
+        val texts: List[String] = List("GCCCAA", "GGCCTG", "AACCTA", "TTCCTT")
+        greedyMotifSearch(texts, k) shouldEqual List("GCC", "GCC", "AAC", "TTC")
+      }
+
+      "test case 3" in {
+        val k: Int = 5
+        val texts: List[String] =
+          List(
+            "GACCTACGGTTACAACGCAGCAACCGAAGAATATTGGCAA",
+            "TCATTATCGATAACGATTCGCCGGAGGCCATTGCCGCACA",
+            "GGAGTCTGGTGAAGTGTGGGTTATGGGGCAGACTGGGAAA",
+            "GAATCCGATAACTGACACCTGCTCTGGCACCGCTCTCATC",
+            "AAGCGCGTAGGCGCGGCTTGGCATCTCGGTGTGTGGCCAA",
+            "AATTGAAAGGCGCATCTTACTCTTTTCGCTTAAAATCAAA",
+            "GGTATAGCCAGAAAGCGTAGTTAATTTCGGCTCCTGCCAA",
+            "TCTGTTGTTGCTAACACCGTTAAAGGCGGCGACGGCAACT"
+          )
+        greedyMotifSearch(texts, k) shouldEqual
+          List("GCAGC", "TCATT", "GGAGT", "TCATC", "GCATC", "GCATC", "GGTAT", "GCAAC")
+      }
+    }
+  }
 }
