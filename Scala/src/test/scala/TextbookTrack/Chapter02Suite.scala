@@ -121,4 +121,15 @@ class Chapter02Suite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Implement DistanceBetweenPatternAndStrings" - {
+    import TextbookTrack.Chapter02.BA2H.distanceBetweenPatternAndCollectionOfTexts
+
+    "should calculate the distance between a pattern and a list of texts" in {
+      val pattern: String = "AAA"
+      val k: Int = pattern.length
+      val texts: List[String] = List("TTACCTTAAC", "GATATCTGTC", "ACGGCGTTCG", "CCCTAAAGAG", "CGTCAGAGGT")
+      distanceBetweenPatternAndCollectionOfTexts(texts, pattern, k) shouldEqual 5
+    }
+  }
 }
