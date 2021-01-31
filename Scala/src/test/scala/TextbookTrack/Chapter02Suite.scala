@@ -103,4 +103,22 @@ class Chapter02Suite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Implement GreedyMotifSearch with Pseudocounts" - {
+    import TextbookTrack.Chapter02.BA2E.improvedGreedyMotifSearch
+
+    "should find motifs from each text where the ith motif is the profile most probable k-mer from the ith text" - {
+      "test case 1" in {
+        val k: Int = 3
+        val texts: List[String] = List("GGCGTTCAGGCA", "AAGAATCAGTCA", "CAAGGAGTTCGC", "CACGTCAATCAC", "CAATAATATTCG")
+        improvedGreedyMotifSearch(texts, k) shouldEqual List("TTC", "ATC", "TTC", "ATC", "TTC")
+      }
+
+      "test case 2" in {
+        val k: Int = 4
+        val texts: List[String] = List("TTACCTTAAC", "GATGTCTGTC", "ACGGCGTTAG", "CCCTAACGAG", "CGTCAGAGGT")
+        improvedGreedyMotifSearch(texts, k) shouldEqual List("ACCT", "ATGT", "ACGG", "ACGA", "AGGT")
+      }
+    }
+  }
 }
