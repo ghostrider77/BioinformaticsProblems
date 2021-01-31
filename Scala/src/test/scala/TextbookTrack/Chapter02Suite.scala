@@ -122,6 +122,23 @@ class Chapter02Suite extends AnyFreeSpec with Matchers {
     }
   }
 
+  "Implement RandomizedMotifSearch" - {
+    import TextbookTrack.Chapter02.BA2F.runRandomizedMotifSearch
+
+    "should find motifs with low score" in {
+      val k: Int = 8
+      val texts: List[String] =
+        List(
+          "CGCCCCTCTCGGGGGTGTTCAGTAAACGGCCA",
+          "GGGCGAGGTATGTGTAAGTGCCAAGGTGCCAG",
+          "TAGTACCGAGACCGAAAGAAGTATACAGGCGT",
+          "TAGATCAAGTTTCAGGTGCACGTCGGTGAACC",
+          "AATCCACCAGCTCCACGTGCAATGTTGGCCTA"
+        )
+      runRandomizedMotifSearch(texts, k) shouldEqual List("TCTCGGGG", "CCAAGGTG", "TACAGGCG", "TTCAGGTG", "TCCACGTG")
+    }
+  }
+
   "Implement DistanceBetweenPatternAndStrings" - {
     import TextbookTrack.Chapter02.BA2H.distanceBetweenPatternAndCollectionOfTexts
 
