@@ -85,9 +85,9 @@ object BA2F {
     loop(initialMotifs, k * texts.length, initialMotifs)
   }
 
-  def runRandomizedMotifSearch(texts: List[String], k: Int, nr_iterations: Int = 1000): List[String] = {
+  def runRandomizedMotifSearch(texts: List[String], k: Int, nrIterations: Int = 1000): List[String] = {
     val (bestMotifs, _): (List[String], Int) =
-      (0 until nr_iterations).foldLeft((List.empty[String], k * texts.length)) {
+      (0 until nrIterations).foldLeft((List.empty[String], k * texts.length)) {
         case (acc @ (_, bestScore), _) =>
           val (motifs, score): (List[String], Int) = randomizedMotifSearch(texts, k)
           if (score < bestScore) (motifs, score) else acc

@@ -139,6 +139,25 @@ class Chapter02Suite extends AnyFreeSpec with Matchers {
     }
   }
 
+  "Implement GibbsSampler" - {
+    import TextbookTrack.Chapter02.BA2G.runGibbsSampling
+
+    "should find motifs with low score" in {
+      val k: Int = 8
+      val n: Int = 100
+      val texts: Vector[String] =
+        Vector(
+          "CGCCCCTCTCGGGGGTGTTCAGTAAACGGCCA",
+          "GGGCGAGGTATGTGTAAGTGCCAAGGTGCCAG",
+          "TAGTACCGAGACCGAAAGAAGTATACAGGCGT",
+          "TAGATCAAGTTTCAGGTGCACGTCGGTGAACC",
+          "AATCCACCAGCTCCACGTGCAATGTTGGCCTA"
+        )
+      runGibbsSampling(texts, k, texts.length, n) shouldEqual
+        Vector("TCTCGGGG", "CCAAGGTG", "TACAGGCG", "TTCAGGTG", "TCCACGTG")
+    }
+  }
+
   "Implement DistanceBetweenPatternAndStrings" - {
     import TextbookTrack.Chapter02.BA2H.distanceBetweenPatternAndCollectionOfTexts
 
