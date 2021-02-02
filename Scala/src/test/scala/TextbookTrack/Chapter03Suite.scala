@@ -14,4 +14,13 @@ class Chapter03Suite extends AnyFreeSpec with Matchers {
       calcKMerComposition(text, k) shouldEqual List("AATCC", "ATCCA", "CAATC", "CCAAC", "TCCAA")
     }
   }
+
+  "Reconstruct a String from its Genome Path" - {
+    import TextbookTrack.Chapter03.BA3B.calcStringSpelledByAGenomePath
+
+    "should find the string spelled by a genome path" in {
+      val kMers: List[String] = List("ACCGA", "CCGAA", "CGAAG", "GAAGC", "AAGCT")
+      calcStringSpelledByAGenomePath(kMers) shouldEqual "ACCGAAGCT"
+    }
+  }
 }
