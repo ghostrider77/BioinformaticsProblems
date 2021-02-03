@@ -23,4 +23,24 @@ class Chapter03Suite extends AnyFreeSpec with Matchers {
       calcStringSpelledByAGenomePath(kMers) shouldEqual "ACCGAAGCT"
     }
   }
+
+  "Construct the Overlap Graph of a Collection of k-mers" - {
+    import TextbookTrack.Chapter03.BA3C.OverlapGraph
+
+    "should construct the adjacency list of an overlap graph" - {
+      "test case 1" in {
+        val kMers: List[String] = List("ATGCG", "GCATG", "CATGC", "AGGCA", "GGCAT")
+        val graph = new OverlapGraph(kMers)
+        graph.edgeList should contain theSameElementsAs
+          List("AGGCA -> GGCAT", "CATGC -> ATGCG", "GCATG -> CATGC", "GGCAT -> GCATG")
+      }
+
+      "test case 2" in {
+        val kMers: List[String] = List("AAA", "AAC", "ACA", "ACG", "CAA")
+        val graph = new OverlapGraph(kMers)
+        graph.edgeList should contain theSameElementsAs
+          List("AAA -> AAA", "AAA -> AAC", "AAC -> ACG", "AAC -> ACA", "ACA -> CAA", "CAA -> AAA", "CAA -> AAC")
+      }
+    }
+  }
 }
