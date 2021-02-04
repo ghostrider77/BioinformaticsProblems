@@ -5,6 +5,13 @@ import org.scalatest.matchers.should.Matchers
 
 class Chapter03Suite extends AnyFreeSpec with Matchers {
 
+  object TestUtils {
+    def splitEdge(edge: String): List[String] = {
+      val List(startNode, endNode, _*) = edge.split(" -> ").toList
+      endNode.split(",").toList.map(node => s"$startNode -> $node")
+    }
+  }
+
   "Generate the k-mer Composition of a String" - {
     import TextbookTrack.Chapter03.BA3A.calcKMerComposition
 
@@ -46,11 +53,7 @@ class Chapter03Suite extends AnyFreeSpec with Matchers {
 
   "Construct the De Bruijn Graph of a String" - {
     import TextbookTrack.Chapter03.BA3D.DeBruijnGraph
-
-    def splitEdge(edge: String): List[String] = {
-      val List(startNode, endNode, _*) = edge.split(" -> ").toList
-      endNode.split(",").toList.map(node => s"$startNode -> $node")
-    }
+    import TestUtils.splitEdge
 
     "should construct the De Bruijn graph when the whole string is given" - {
       "test case 1" in {
@@ -76,15 +79,21 @@ class Chapter03Suite extends AnyFreeSpec with Matchers {
         val k: Int = 3
         val text: String = "AACAAC"
         val graph = new DeBruijnGraph(text, k)
-        val expectedResult: List[String] =
-          List(
-            "AA -> AC",
-            "AA -> AC",
-            "AC -> CA",
-            "CA -> AA"
-          )
-        graph.edges.flatMap(splitEdge).toList should contain theSameElementsAs expectedResult
+        graph.edges.flatMap(splitEdge).toList should contain theSameElementsAs
+          List("AA -> AC", "AA -> AC", "AC -> CA", "CA -> AA")
       }
+    }
+  }
+
+  "Construct the De Bruijn Graph of a Collection of k-mers" - {
+    import TextbookTrack.Chapter03.BA3E.DeBruijnGraph
+    import TestUtils.splitEdge
+
+    "should construct the De Bruijn graph when a collection of k-mers is given" - {
+      val kMers: List[String] = List("GAGG", "CAGG", "GGGG", "GGGA", "CAGG", "AGGG", "GGAG")
+      val graph = new DeBruijnGraph(kMers)
+      graph.edges.flatMap(splitEdge).toList should contain theSameElementsAs
+        List("AGG -> GGG", "CAG -> AGG", "CAG -> AGG", "GAG -> AGG", "GGA -> GAG", "GGG -> GGA", "GGG -> GGG")
     }
   }
 }
