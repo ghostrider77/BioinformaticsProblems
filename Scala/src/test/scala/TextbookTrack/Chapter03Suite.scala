@@ -31,15 +31,59 @@ class Chapter03Suite extends AnyFreeSpec with Matchers {
       "test case 1" in {
         val kMers: List[String] = List("ATGCG", "GCATG", "CATGC", "AGGCA", "GGCAT")
         val graph = new OverlapGraph(kMers)
-        graph.edgeList should contain theSameElementsAs
+        graph.edges.toList should contain theSameElementsAs
           List("AGGCA -> GGCAT", "CATGC -> ATGCG", "GCATG -> CATGC", "GGCAT -> GCATG")
       }
 
       "test case 2" in {
         val kMers: List[String] = List("AAA", "AAC", "ACA", "ACG", "CAA")
         val graph = new OverlapGraph(kMers)
-        graph.edgeList should contain theSameElementsAs
+        graph.edges.toList should contain theSameElementsAs
           List("AAA -> AAA", "AAA -> AAC", "AAC -> ACG", "AAC -> ACA", "ACA -> CAA", "CAA -> AAA", "CAA -> AAC")
+      }
+    }
+  }
+
+  "Construct the De Bruijn Graph of a String" - {
+    import TextbookTrack.Chapter03.BA3D.DeBruijnGraph
+
+    def splitEdge(edge: String): List[String] = {
+      val List(startNode, endNode, _*) = edge.split(" -> ").toList
+      endNode.split(",").toList.map(node => s"$startNode -> $node")
+    }
+
+    "should construct the De Bruijn graph when the whole string is given" - {
+      "test case 1" in {
+        val k: Int = 4
+        val text: String = "AAGATTCTCTAC"
+        val graph = new DeBruijnGraph(text, k)
+        val expectedResult: List[String] =
+          List(
+            "AAG -> AGA",
+            "AGA -> GAT",
+            "ATT -> TTC",
+            "CTA -> TAC",
+            "CTC -> TCT",
+            "GAT -> ATT",
+            "TCT -> CTA",
+            "TCT -> CTC",
+            "TTC -> TCT"
+          )
+        graph.edges.flatMap(splitEdge).toList should contain theSameElementsAs expectedResult
+      }
+
+      "test case 2" in {
+        val k: Int = 3
+        val text: String = "AACAAC"
+        val graph = new DeBruijnGraph(text, k)
+        val expectedResult: List[String] =
+          List(
+            "AA -> AC",
+            "AA -> AC",
+            "AC -> CA",
+            "CA -> AA"
+          )
+        graph.edges.flatMap(splitEdge).toList should contain theSameElementsAs expectedResult
       }
     }
   }

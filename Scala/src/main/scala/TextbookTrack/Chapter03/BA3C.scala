@@ -4,13 +4,11 @@ object BA3C {
   class OverlapGraph(kMers: List[String]) {
     import OverlapGraph.buildOverlapGraph
 
-    override def toString: String = edgeList.mkString("\n")
-
-    def edgeList: List[String] =
-      (for {
-        (kMer, neighbours) <- adjacencyList
+    def edges: Iterator[String] =
+      for {
+        (kMer, neighbours) <- adjacencyList.iterator
         neighbour <- neighbours
-      } yield s"$kMer -> $neighbour").toList
+      } yield s"$kMer -> $neighbour"
 
     private val adjacencyList: Map[String, List[String]] = buildOverlapGraph(kMers)
   }
@@ -36,7 +34,7 @@ object BA3C {
   def main(args: Array[String]): Unit = {
     val reader: Iterator[String] = scala.io.Source.stdin.getLines()
     val kMers: List[String] = reader.toList
-    val result = new OverlapGraph(kMers)
-    println(result)
+    val graph = new OverlapGraph(kMers)
+    graph.edges.foreach(println)
   }
 }

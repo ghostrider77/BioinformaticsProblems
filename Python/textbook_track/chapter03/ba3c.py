@@ -8,12 +8,10 @@ class OverlapGraph:
     def __init__(self, k_mers):
         self._adjacency_list = build_overlap_graph(k_mers)
 
-    def __str__(self):
-        edges = []
+    def edges(self):
         for k_mer, neighbours in self._adjacency_list.items():
             for neighbour in neighbours:
-                edges.append(f'{k_mer} -> {neighbour}')
-        return '\n'.join(edges)
+                yield f'{k_mer} -> {neighbour}'
 
 
 def build_overlap_graph(k_mers):
@@ -35,8 +33,9 @@ def build_overlap_graph(k_mers):
 
 def main():
     data = sys.stdin.read().splitlines()
-    result = OverlapGraph(data)
-    print(result)
+    graph = OverlapGraph(data)
+    for edge in graph.edges():
+        print(edge)
 
 
 if __name__ == '__main__':
