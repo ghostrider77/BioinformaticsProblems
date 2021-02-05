@@ -1,9 +1,10 @@
 package TextbookTrack
 
+import org.scalatest.Inspectors
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 
-class Chapter03Suite extends AnyFreeSpec with Matchers {
+class Chapter03Suite extends AnyFreeSpec with Matchers with Inspectors {
 
   object TestUtils {
     def splitEdge(edge: String): List[String] = {
@@ -94,6 +95,57 @@ class Chapter03Suite extends AnyFreeSpec with Matchers {
       val graph = new DeBruijnGraph(kMers)
       graph.edges.flatMap(splitEdge).toList should contain theSameElementsAs
         List("AGG -> GGG", "CAG -> AGG", "CAG -> AGG", "GAG -> AGG", "GGA -> GAG", "GGG -> GGA", "GGG -> GGG")
+    }
+  }
+
+  "Find an Eulerian Cycle in a Graph" - {
+    import TextbookTrack.Chapter03.BA3F.{EulerianGraph, readLines}
+
+    def createAdjacencyListFromEulerianCycle(cycle: List[Int]): Map[Int, List[Int]] = {
+      val edges: List[(Int, Int)] = (for { List(a, b) <- cycle.sliding(2) } yield (a, b)).toList
+      edges.groupBy{ case (node1, _) => node1 }.view.mapValues(_.map(_._2)).toMap
+    }
+
+    "should construct the De Bruijn graph when a collection of k-mers is given" - {
+      "test case 1" in {
+        val edgeStrings: Iterator[String] =
+          List(
+            "0 -> 3",
+            "1 -> 0",
+            "2 -> 6,1",
+            "3 -> 2",
+            "4 -> 2",
+            "5 -> 4",
+            "6 -> 5,8",
+            "7 -> 9",
+            "8 -> 7",
+            "9 -> 6"
+          ).iterator
+        val adjacencyList: Map[Int, List[Int]] = readLines(edgeStrings)
+        val graph = new EulerianGraph(adjacencyList)
+        val result: List[Int] = graph.findEulerianCycle()
+        val edgesFromCycle: Map[Int, List[Int]] = createAdjacencyListFromEulerianCycle(result)
+
+        edgesFromCycle.keySet shouldEqual adjacencyList.keySet
+
+        forAll(adjacencyList.keys) {
+          node => edgesFromCycle(node) should contain theSameElementsAs adjacencyList(node)
+        }
+      }
+
+      "test case 2" in {
+        val edgeStrings: Iterator[String] = List("0 -> 1", "1 -> 3,2", "3 -> 0", "2 -> 4", "4 -> 1").iterator
+        val adjacencyList: Map[Int, List[Int]] = readLines(edgeStrings)
+        val graph = new EulerianGraph(adjacencyList)
+        val result: List[Int] = graph.findEulerianCycle()
+        val edgesFromCycle: Map[Int, List[Int]] = createAdjacencyListFromEulerianCycle(result)
+
+        edgesFromCycle.keySet shouldEqual adjacencyList.keySet
+
+        forAll(adjacencyList.keys) {
+          node => edgesFromCycle(node) should contain theSameElementsAs adjacencyList(node)
+        }
+      }
     }
   }
 }
