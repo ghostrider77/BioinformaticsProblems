@@ -106,7 +106,7 @@ class Chapter03Suite extends AnyFreeSpec with Matchers with Inspectors {
       edges.groupBy{ case (node1, _) => node1 }.view.mapValues(_.map(_._2)).toMap
     }
 
-    "should construct the De Bruijn graph when a collection of k-mers is given" - {
+    "should find an Eulerian cycle in a connected and balanced directed graph" - {
       "test case 1" in {
         val edgeStrings: Iterator[String] =
           List(
@@ -145,6 +145,30 @@ class Chapter03Suite extends AnyFreeSpec with Matchers with Inspectors {
         forAll(adjacencyList.keys) {
           node => edgesFromCycle(node) should contain theSameElementsAs adjacencyList(node)
         }
+      }
+    }
+  }
+
+  "Find an Eulerian Path in a Graph" - {
+    import TextbookTrack.Chapter03.BA3G.{readLines, EulerianGraph}
+
+    def createAdjacencyListFromEulerianPath(path: List[Int]): Map[Int, List[Int]] = {
+      val edges: List[(Int, Int)] = (for { List(a, b) <- path.sliding(2) } yield (a, b)).toList
+      edges.groupBy{ case (node1, _) => node1 }.view.mapValues(_.map(_._2)).toMap
+    }
+
+    "should find an Eulerian path in a connected and nearly balanced directed graph" in {
+      val edgeStrings: Iterator[String] =
+        List("0 -> 2", "1 -> 3", "2 -> 1", "3 -> 0,4", "6 -> 3,7", "7 -> 8", "8 -> 9", "9 -> 6").iterator
+      val adjacencyList: Map[Int, List[Int]] = readLines(edgeStrings)
+      val graph = new EulerianGraph(adjacencyList)
+      val result: List[Int] = graph.findEulerianPath()
+      val edgesFromPath: Map[Int, List[Int]] = createAdjacencyListFromEulerianPath(result)
+
+      edgesFromPath.keySet shouldEqual adjacencyList.keySet
+
+      forAll(adjacencyList.keys) {
+        node => edgesFromPath(node) should contain theSameElementsAs adjacencyList(node)
       }
     }
   }
