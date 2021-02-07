@@ -157,19 +157,40 @@ class Chapter03Suite extends AnyFreeSpec with Matchers with Inspectors {
       edges.groupBy{ case (node1, _) => node1 }.view.mapValues(_.map(_._2)).toMap
     }
 
-    "should find an Eulerian path in a connected and nearly balanced directed graph" in {
-      val edgeStrings: Iterator[String] =
-        List("0 -> 2", "1 -> 3", "2 -> 1", "3 -> 0,4", "6 -> 3,7", "7 -> 8", "8 -> 9", "9 -> 6").iterator
-      val adjacencyList: Map[Int, List[Int]] = readLines(edgeStrings)
-      val graph = new EulerianGraph(adjacencyList)
-      val result: List[Int] = graph.findEulerianPath()
-      val edgesFromPath: Map[Int, List[Int]] = createAdjacencyListFromEulerianPath(result)
+    "should find an Eulerian path in a connected and nearly balanced directed graph" - {
+      "test case 1" in {
+        val edgeStrings: Iterator[String] =
+          List("0 -> 2", "1 -> 3", "2 -> 1", "3 -> 0,4", "6 -> 3,7", "7 -> 8", "8 -> 9", "9 -> 6").iterator
+        val adjacencyList: Map[Int, List[Int]] = readLines(edgeStrings)
+        val graph = new EulerianGraph(adjacencyList)
+        val result: List[Int] = graph.findEulerianPath()
+        val edgesFromPath: Map[Int, List[Int]] = createAdjacencyListFromEulerianPath(result)
 
-      edgesFromPath.keySet shouldEqual adjacencyList.keySet
+        edgesFromPath.keySet shouldEqual adjacencyList.keySet
 
-      forAll(adjacencyList.keys) {
-        node => edgesFromPath(node) should contain theSameElementsAs adjacencyList(node)
+        forAll(adjacencyList.keys) {
+          node => edgesFromPath(node) should contain theSameElementsAs adjacencyList(node)
+        }
       }
+
+      "test case 2" in {
+        val edgeStrings: Iterator[String] = List("2 -> 3", "1 -> 2").iterator
+        val adjacencyList: Map[Int, List[Int]] = readLines(edgeStrings)
+        val graph = new EulerianGraph(adjacencyList)
+        val result: List[Int] = graph.findEulerianPath()
+        result shouldEqual List(1, 2, 3)
+      }
+    }
+  }
+
+  "Reconstruct a String from its k-mer Composition" - {
+    import TextbookTrack.Chapter03.BA3H.{DeBruijnGraph, calcStringSpelledByAGenomePath}
+
+    "should reconstruct the genome from its k-mer compositions" in {
+      val kMers: List[String] = List("CTTA", "ACCA", "TACC", "GGCT", "GCTT", "TTAC")
+      val graph = DeBruijnGraph(kMers)
+      val path: List[String] = graph.findEulerianPath()
+      calcStringSpelledByAGenomePath(path) shouldEqual "GGCTTACCA"
     }
   }
 }
