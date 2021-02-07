@@ -193,4 +193,20 @@ class Chapter03Suite extends AnyFreeSpec with Matchers with Inspectors {
       calcStringSpelledByAGenomePath(path) shouldEqual "GGCTTACCA"
     }
   }
+
+  "Find a k-Universal Circular String" - {
+    import TextbookTrack.Chapter03.BA3I.findUniversalCircularBinaryString
+
+    "should create a circular binary universal string for a given integer k" - {
+      "test case 1" in {
+        val k: Int = 1
+        Set("01", "10") should contain (findUniversalCircularBinaryString(k))
+      }
+
+      "test case 2" in {
+        val k: Int = 2
+        Set("0110", "1100", "1001", "0011") should contain (findUniversalCircularBinaryString(k))
+      }
+    }
+  }
 }
