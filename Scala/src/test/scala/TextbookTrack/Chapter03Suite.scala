@@ -209,4 +209,60 @@ class Chapter03Suite extends AnyFreeSpec with Matchers with Inspectors {
       }
     }
   }
+
+  "Construct a String Spelled by a Gapped Genome Path" - {
+    import TextbookTrack.Chapter03.BA3L.{GappedPattern, calcStringSpelledByAGappedGenomePath}
+
+    "should reconstruct a string from a sequence of (k,d)-mers corresponding to a path in a paired de Bruijn graph." - {
+      "test case 1" in {
+        val k: Int = 4
+        val d: Int = 2
+        val patterns: List[GappedPattern] =
+          List(
+            GappedPattern("GACC", "GCGC"),
+            GappedPattern("ACCG", "CGCC"),
+            GappedPattern("CCGA", "GCCG"),
+            GappedPattern("CGAG", "CCGG"),
+            GappedPattern("GAGC", "CGGA")
+          )
+        calcStringSpelledByAGappedGenomePath(patterns, k, d) shouldEqual Some("GACCGAGCGCCGGA")
+      }
+
+      "test case 2" in {
+        val k: Int = 2
+        val d: Int = 1
+        val patterns: List[GappedPattern] =
+          List(
+            GappedPattern("AG", "AG"),
+            GappedPattern("GC", "GC"),
+            GappedPattern("CA", "CT"),
+            GappedPattern("AG", "TG"),
+            GappedPattern("GC", "GC"),
+            GappedPattern("CT", "CT"),
+            GappedPattern("TG", "TG"),
+            GappedPattern("GC", "GC"),
+            GappedPattern("CT", "TA")
+          )
+        calcStringSpelledByAGappedGenomePath(patterns, k, d) shouldEqual Some("AGCAGCTGCTGCA")
+      }
+
+      "test case 3" in {
+        val k: Int = 2
+        val d: Int = 1
+        val patterns: List[GappedPattern] =
+          List(
+            GappedPattern("AG", "AG"),
+            GappedPattern("GC", "GC"),
+            GappedPattern("CT", "CT"),
+            GappedPattern("TG", "TG"),
+            GappedPattern("GC", "GC"),
+            GappedPattern("CA", "CT"),
+            GappedPattern("AG", "TG"),
+            GappedPattern("GC", "GC"),
+            GappedPattern("CT", "CA")
+          )
+        calcStringSpelledByAGappedGenomePath(patterns, k, d) shouldBe None
+      }
+    }
+  }
 }
