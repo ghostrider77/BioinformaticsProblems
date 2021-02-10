@@ -22,7 +22,7 @@ end
 
 function calc_frequencies_for_approximate_occurrences(text, k, d)
     frequencies = zeros(Int32, 4 ^ k)
-    for ix in 1:(length(text)-k)
+    for ix in 1:(length(text)-k+1)
         exact_pattern = text[ix:ix+k-1]
         for pattern in generate_neighbourhood(exact_pattern, d)
             code = pattern_to_number(pattern)

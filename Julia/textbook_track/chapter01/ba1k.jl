@@ -8,7 +8,7 @@ pattern_to_number(pattern) = foldl((acc, nucleotide) -> 4 * acc + NUCLEOTIDE_ORD
 
 function computing_frequencies(text, k)
     frequencies = zeros(Int32, 4 ^ k)
-    for ix in 1:(length(text)-k)
+    for ix in 1:(length(text)-k+1)
         pattern = text[ix:ix+k-1]
         code = pattern_to_number(pattern)
         frequencies[code+1] += 1

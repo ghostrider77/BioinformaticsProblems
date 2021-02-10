@@ -5,7 +5,7 @@ calc_hamming_distance(s1, s2) = count(((c1, c2),) -> c1 != c2, zip(s1, s2))
 
 function distance_between_pattern_and_text(text, pattern, k)
     mindist = k
-    for ix in 1:(length(text)-k)
+    for ix in 1:(length(text)-k+1)
         kmer = text[ix:ix+k-1]
         distance = calc_hamming_distance(pattern, kmer)
         if distance < mindist

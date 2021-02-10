@@ -1,10 +1,10 @@
 # Find All Occurrences of a Pattern in a String
 
 function find_pattern_occurrences(text, pattern)
-    patternlength = length(pattern)
+    k = length(pattern)
     matching_indices = Int64[]
-    for ix in 1:(length(text)-patternlength)
-        substring = SubString(text, ix, ix + patternlength - 1)
+    for ix in 1:(length(text)-k+1)
+        substring = text[ix:ix+k-1]
         if substring == pattern
             push!(matching_indices, ix - 1)
         end

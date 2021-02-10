@@ -1,10 +1,10 @@
 # Compute the Number of Times a Pattern Appears in a Text
 
 function count_pattern(text, pattern)
-    patternlength = length(pattern)
+    k = length(pattern)
     count = 0
-    for ix in 1:(length(text)-patternlength)
-        substring = SubString(text, ix, ix + patternlength - 1)
+    for ix in 1:(length(text)-k+1)
+        substring = text[ix:ix+k-1]
         if substring == pattern
             count += 1
         end

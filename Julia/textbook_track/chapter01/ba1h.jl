@@ -4,10 +4,10 @@ calc_hamming_distance(s1, s2) = count(((c1, c2),) -> c1 != c2, zip(s1, s2))
 
 
 function find_approximate_pattern_occurrences(text, pattern, d)
-    patternlength = length(pattern)
+    k = length(pattern)
     matching_indices = Int64[]
-    for ix in 1:(length(text)-patternlength)
-        substring = text[ix:ix+patternlength-1]
+    for ix in 1:(length(text)-k+1)
+        substring = text[ix:ix+k-1]
         if calc_hamming_distance(substring, pattern) <= d
             push!(matching_indices, ix - 1)
         end

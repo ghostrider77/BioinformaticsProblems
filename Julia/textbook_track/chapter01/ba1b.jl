@@ -2,8 +2,8 @@
 
 function most_frequent_k_mers(text, k)
     counts = Dict{AbstractString, Int64}()
-    for ix in 1:(length(text)-k)
-        k_mer = SubString(text, ix, ix + k - 1)
+    for ix in 1:(length(text)-k+1)
+        k_mer = text[ix:ix+k-1]
         count = get(counts, k_mer, 0)
         counts[k_mer] = count + 1
     end
