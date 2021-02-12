@@ -1,4 +1,4 @@
-# Implement GreedyMotifSearch
+# Implement GreedyMotifSearch with Pseudocounts
 using DataStructures
 
 const NUCLEOTIDES = ('A', 'C', 'G', 'T')
@@ -23,12 +23,12 @@ convert_to_intlist(line) = map(x -> parse(Int, x), split(line))
 calc_hamming_distance(s1, s2) = count(((c1, c2),) -> c1 != c2, zip(s1, s2))
 
 
-function create_profile_matrix_from_motifs(motifs)
+function create_profile_matrix_from_motifs_using_pseudocounts(motifs)
     nr_motifs = length(motifs)
     profile_matrix = ProfileColumn[]
     for column in zip(motifs...)
         counts = counter(column)
-        vals = (get(counts, nucleotide, 0) / nr_motifs for nucleotide in NUCLEOTIDES)
+        vals = ((get(counts, nucleotide, 0) + 1) / (nr_motifs + 4) for nucleotide in NUCLEOTIDES)
         push!(profile_matrix, ProfileColumn(vals...))
     end
     profile_matrix
@@ -36,7 +36,7 @@ end
 
 
 function calc_profile_matrix_score(motifs)
-    profile_matrix = create_profile_matrix_from_motifs(motifs)
+    profile_matrix = create_profile_matrix_from_motifs_using_pseudocounts(motifs)
     consensus = join(map(argmax, profile_matrix))
     foldl((score, motif) -> score + calc_hamming_distance(motif, consensus), motifs; init=0)
 end
@@ -61,14 +61,14 @@ function profile_most_probable_kmer(text, profile_matrix, k)
 end
 
 
-function greedy_motif_search(texts, k)
+function improved_greedy_motif_search(texts, k)
     best_motifs = map(text -> text[1:k], texts)
     best_score = calc_profile_matrix_score(best_motifs)
     for ix in 1:(length(texts[1])-k+1)
         kmer = texts[1][ix:ix+k-1]
         motifs = [kmer]
         for text in texts[2:end]
-            profile = create_profile_matrix_from_motifs(motifs)
+            profile = create_profile_matrix_from_motifs_using_pseudocounts(motifs)
             motif = profile_most_probable_kmer(text, profile, k)
             push!(motifs, motif)
         end
@@ -85,7 +85,7 @@ end
 function main()
     k, t = convert_to_intlist(readline())
     texts = map(_ -> readline(), 1:t)
-    result = greedy_motif_search(texts, k)
+    result = improved_greedy_motif_search(texts, k)
     foreach(println, result)
 end
 
