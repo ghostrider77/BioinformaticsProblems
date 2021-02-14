@@ -210,6 +210,18 @@ class Chapter03Suite extends AnyFreeSpec with Matchers with Inspectors {
     }
   }
 
+  "Generate Contigs from a Collection of Reads" - {
+    import TextbookTrack.Chapter03.BA3K.{DeBruijnGraph, calcStringSpelledByAGenomePath, findMaximalNonBranchingPaths}
+
+    "should generate the contigs from a collection of reads (with imperfect coverage)" in {
+      val kMers: List[String] = List("ATG", "ATG", "TGT", "TGG", "CAT", "GGA", "GAT", "AGA")
+      val graph = DeBruijnGraph(kMers)
+      val result: List[List[String]] = findMaximalNonBranchingPaths(graph)
+      result.map(calcStringSpelledByAGenomePath) should contain theSameElementsAs
+        List("AGA", "ATG", "ATG", "CAT", "GAT", "TGGA", "TGT")
+    }
+  }
+
   "Construct a String Spelled by a Gapped Genome Path" - {
     import TextbookTrack.Chapter03.BA3L.{GappedPattern, calcStringSpelledByAGappedGenomePath}
 
@@ -269,41 +281,43 @@ class Chapter03Suite extends AnyFreeSpec with Matchers with Inspectors {
   "Generate All Maximal Non-Branching Paths in a Graph" - {
     import TextbookTrack.Chapter03.BA3M.{findMaximalNonBranchingPaths, readLines, Graph}
 
-    "should all maximal non-branching paths and all remaining isolated cycles in a directed graph" - {
+    "should generate all maximal non-branching paths and all remaining isolated cycles in a directed graph" - {
       "test case 1" in {
         val edgeStrings: Iterator[String] = List("1 -> 2", "2 -> 3", "3 -> 4,5", "6 -> 7", "7 -> 6").iterator
         val adjacencyList: Map[Int, List[Int]] = readLines(edgeStrings)
         val graph = new Graph[Int](adjacencyList)
-        val result: Set[List[Int]] = findMaximalNonBranchingPaths(graph)
-        val (paths, cycles): (Set[List[Int]], Set[List[Int]]) = result.partition(path => path.head != path.last)
+        val result: List[List[Int]] = findMaximalNonBranchingPaths(graph)
+        val (paths, cycles): (List[List[Int]], List[List[Int]]) = result.partition(path => path.head != path.last)
 
-        result should have size 4
-        paths shouldEqual Set(List(1, 2, 3), List(3, 4), List(3, 5))
-        cycles should have size 1
+        result should have length  4
+        paths should contain theSameElementsAs List(List(1, 2, 3), List(3, 4), List(3, 5))
+        cycles should have length 1
       }
 
       "test case 2" in {
         val edgeStrings: Iterator[String] =
           List(
-            "10 -> 2",
-            "2 -> 5",
-            "5 -> 3",
-            "3 -> 6,8,12",
-            "12 -> 14",
-            "9 -> 6",
-            "6 -> 3",
-            "1 -> 4",
-            "4 -> 7",
-            "7 -> 1"
+            "10 -> 2", "2 -> 5", "5 -> 3", "3 -> 6,8,12", "12 -> 14", "9 -> 6", "6 -> 3", "1 -> 4", "4 -> 7", "7 -> 1"
           ).iterator
         val adjacencyList: Map[Int, List[Int]] = readLines(edgeStrings)
         val graph = new Graph[Int](adjacencyList)
-        val result: Set[List[Int]] = findMaximalNonBranchingPaths(graph)
-        val (paths, cycles): (Set[List[Int]], Set[List[Int]]) = result.partition(path => path.head != path.last)
+        val result: List[List[Int]] = findMaximalNonBranchingPaths(graph)
+        val (paths, cycles): (List[List[Int]], List[List[Int]]) = result.partition(path => path.head != path.last)
 
-        result should have size 7
-        paths shouldEqual Set(List(10, 2, 5, 3), List(9, 6), List(3, 12, 14), List(3, 8), List(3, 6), List(6, 3))
-        cycles should have size 1
+        result should have length 7
+        paths should contain theSameElementsAs
+          List(List(10, 2, 5, 3), List(9, 6), List(3, 12, 14), List(3, 8), List(3, 6), List(6, 3))
+        cycles should have length 1
+      }
+
+      "test case 3" in {
+        val edgeStrings: Iterator[String] = List("1 -> 2", "2 -> 3,3").iterator
+        val adjacencyList: Map[Int, List[Int]] = readLines(edgeStrings)
+        val graph = new Graph[Int](adjacencyList)
+        val result: List[List[Int]] = findMaximalNonBranchingPaths(graph)
+
+        result should have length 3
+        result should contain theSameElementsAs List(List(1, 2), List(2, 3), List(2, 3))
       }
     }
   }

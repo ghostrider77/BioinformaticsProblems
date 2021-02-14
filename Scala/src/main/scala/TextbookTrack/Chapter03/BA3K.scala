@@ -1,9 +1,9 @@
 package TextbookTrack.Chapter03
 
-object BA3M {
+object BA3K {
   import scala.annotation.tailrec
 
-  class Graph[T](adjacencyList: Map[T, List[T]]) {
+  class DeBruijnGraph[T](adjacencyList: Map[T, List[T]]) {
     private val (inDegrees, outDegrees): (Map[T, Int], Map[T, Int]) = calcNodeDegrees()
 
     lazy val nodes: Set[T] = adjacencyList.keySet ++ adjacencyList.valuesIterator.flatMap(_.toSet).toSet
@@ -33,18 +33,20 @@ object BA3M {
     def nodesWithOutgoingEdges: Set[T] = nodes.filter(outDegree(_) > 0)
   }
 
-  private def splitEdges(line: String): (String, String) = line.split(" -> ").toList match {
-    case List(node, neighbours) => (node, neighbours)
-    case _ => throw new Exception("Malformed input data.")
+  object DeBruijnGraph {
+    def apply(kMers: List[String]): DeBruijnGraph[String] = {
+      val adjacencyList: Map[String, List[String]] =
+        kMers
+          .map(kMer => (kMer.dropRight(1), kMer.drop(1)))
+          .groupBy{ case (prefix, _) => prefix }
+          .view
+          .mapValues(_.map{ case (_, suffix) => suffix })
+          .toMap
+      new DeBruijnGraph[String](adjacencyList)
+    }
   }
 
-  def readLines(lines: Iterator[String]): Map[Int, List[Int]] =
-    lines.map { line =>
-      val (node, neighbours): (String, String) = splitEdges(line)
-      node.toInt -> neighbours.split(",").map(_.toInt).toList
-    }.toMap
-
-  private def buildNonBranchingPaths[T](graph: Graph[T], node: T): List[List[T]] = {
+  private def buildNonBranchingPaths[T](graph: DeBruijnGraph[T], node: T): List[List[T]] = {
     def extendPath(node: T, neighbour: T): List[T] = {
       @tailrec
       def loop(path: List[T], w: T): List[T] = {
@@ -61,7 +63,7 @@ object BA3M {
     graph.neighbours(node).map(neighbour => extendPath(node, neighbour))
   }
 
-  private def buildCycle[T](graph: Graph[T], startNode: T): List[T] = {
+  private def buildCycle[T](graph: DeBruijnGraph[T], startNode: T): List[T] = {
     @tailrec
     def loop(cycle: List[T], node: T): List[T] = {
       graph.neighbours(node) match {
@@ -74,7 +76,7 @@ object BA3M {
     loop(List(startNode), startNode)
   }
 
-  private def findIsolatedCyclesInGraph[T](graph: Graph[T], paths: List[List[T]]): Set[List[T]] = {
+  private def findIsolatedCyclesInGraph[T](graph: DeBruijnGraph[T], paths: List[List[T]]): Set[List[T]] = {
     @tailrec
     def loop(isolatedCycles: Set[List[T]], unusedNodes: Set[T]): Set[List[T]] = {
       if (unusedNodes.isEmpty) isolatedCycles
@@ -88,7 +90,7 @@ object BA3M {
     loop(Set.empty[List[T]], missingNodes)
   }
 
-  def findMaximalNonBranchingPaths[T](graph: Graph[T]): List[List[T]] = {
+  def findMaximalNonBranchingPaths[T](graph: DeBruijnGraph[T]): List[List[T]] = {
     val paths: List[List[T]] =
       graph.nodes
         .iterator
@@ -99,11 +101,16 @@ object BA3M {
     paths ++ cycles
   }
 
+  def calcStringSpelledByAGenomePath(kMers: List[String]): String = kMers match {
+    case Nil => ""
+    case x :: xs => (x.toList ::: xs.map(_.last)).mkString
+  }
+
   def main(args: Array[String]): Unit = {
     val reader: Iterator[String] = scala.io.Source.stdin.getLines()
-    val adjacencyList: Map[Int, List[Int]] = readLines(reader)
-    val graph = new Graph[Int](adjacencyList)
-    val result: List[List[Int]] = findMaximalNonBranchingPaths(graph)
-    result.foreach(line => println(line.mkString(" -> ")))
+    val kMers: List[String] = reader.toList
+    val graph = DeBruijnGraph(kMers)
+    val result: List[List[String]] = findMaximalNonBranchingPaths(graph)
+    println(result.map(calcStringSpelledByAGenomePath).mkString(" "))
   }
 }
