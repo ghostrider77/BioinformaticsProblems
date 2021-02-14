@@ -1,5 +1,6 @@
 .idea/
 
 target/
-resources/
 project/
+
+__pycache__/
