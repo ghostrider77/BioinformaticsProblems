@@ -19,4 +19,16 @@ class Chapter04Suite extends AnyFreeSpec with Matchers {
       translateRNA(rna, geneticCode) shouldEqual "MAMAPRTEINSTRING"
     }
   }
+
+  "Find Substrings of a Genome Encoding a Given Amino Acid String" - {
+    import TextbookTrack.Chapter04.BA4B.findPeptideEncodingSubstrings
+    import Fixtures.geneticCode
+
+    "should find substrings of a genome encoding a given amino acid sequence" in {
+      val dna: String = "ATGGCCATGGCCCCCAGAACTGAGATCAATAGTACCCGTATTAACGGGTGA"
+      val peptide: String = "MA"
+      findPeptideEncodingSubstrings(dna, peptide, geneticCode) should contain theSameElementsAs
+        List("ATGGCC", "GGCCAT", "ATGGCC")
+    }
+  }
 }
