@@ -1,7 +1,7 @@
 package TextbookTrack.Chapter04
 
 object BA4B {
-  import TextbookTrack.Utils.readGeneticCode
+  import TextbookTrack.Utils.GeneticCode
 
   private val NucleotideComplements: Map[Char, Char] = Map('A' -> 'T', 'C' -> 'G', 'T' -> 'A', 'G' -> 'C')
 
@@ -9,10 +9,10 @@ object BA4B {
 
   private def transcriptDna(dna: String): String = dna.map(nucleotide => if (nucleotide == 'T') 'U' else nucleotide)
 
-  def findPeptideEncodingSubstrings(dna: String, peptide: String, geneticCode: Map[String, String]): List[String] = {
+  def findPeptideEncodingSubstrings(dna: String, peptide: String): List[String] = {
     def doesKMerTranslateToPeptide(pattern: String): Boolean =
-      pattern.grouped(3).map(geneticCode.get).zip(peptide).forall{
-        case (Some(aminoAcid), char) => aminoAcid == char.toString
+      pattern.grouped(3).map(GeneticCode.get).zip(peptide).forall{
+        case (Some(aminoAcid), char) => aminoAcid == char
         case (None, _) => false
       }
 
@@ -33,8 +33,7 @@ object BA4B {
     val reader: Iterator[String] = scala.io.Source.stdin.getLines()
     val dna: String = reader.next()
     val peptide: String = reader.next()
-    val geneticCode: Map[String, String] = readGeneticCode()
-    val result: List[String] = findPeptideEncodingSubstrings(dna, peptide, geneticCode)
+    val result: List[String] = findPeptideEncodingSubstrings(dna, peptide)
     result.foreach(println)
   }
 }
