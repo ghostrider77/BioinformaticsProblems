@@ -32,4 +32,13 @@ class Chapter04Suite extends AnyFreeSpec with Matchers {
         List(0, 113, 114, 128, 129, 227, 242, 242, 257, 355, 356, 370, 371, 484)
     }
   }
+
+  "Generate the Theoretical Spectrum of a Linear Peptide" - {
+    import TextbookTrack.Chapter04.BA4J.calcTheoreticalSpectrum
+
+    "should generate the theoretical spectrum of a cyclic peptide" in {
+      val peptide: String = "NQEL"
+      calcTheoreticalSpectrum(peptide) shouldEqual List(0, 113, 114, 128, 129, 242, 242, 257, 370, 371, 484)
+    }
+  }
 }
