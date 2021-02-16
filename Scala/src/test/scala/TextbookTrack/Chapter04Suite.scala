@@ -33,6 +33,37 @@ class Chapter04Suite extends AnyFreeSpec with Matchers {
     }
   }
 
+  "Compute the Number of Peptides of Given Total Mass" - {
+    import TextbookTrack.Chapter04.BA4D.calcNumberOfPeptidesWithGivenMass
+
+    "should comute the number of peptides given total mass when peptides are considered as integer mass sequences" - {
+      "test case 1" in {
+        val totalMass: Int = 1024
+        calcNumberOfPeptidesWithGivenMass(totalMass) shouldEqual 14712706211L
+      }
+
+      "test case 2" in {
+        val totalMass: Int = 57
+        calcNumberOfPeptidesWithGivenMass(totalMass) shouldEqual 1L
+      }
+
+      "test case 3" in {
+        val totalMass: Int = 113
+        calcNumberOfPeptidesWithGivenMass(totalMass) shouldEqual 1L
+      }
+
+      "test case 4" in {
+        val totalMass: Int = 10
+        calcNumberOfPeptidesWithGivenMass(totalMass) shouldEqual 0L
+      }
+
+      "test case 5" in {
+        val totalMass: Int = 0
+        calcNumberOfPeptidesWithGivenMass(totalMass) shouldEqual 0L
+      }
+    }
+  }
+
   "Generate the Theoretical Spectrum of a Linear Peptide" - {
     import TextbookTrack.Chapter04.BA4J.calcTheoreticalSpectrum
 
