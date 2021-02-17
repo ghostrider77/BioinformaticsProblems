@@ -64,6 +64,16 @@ class Chapter04Suite extends AnyFreeSpec with Matchers {
     }
   }
 
+  "Find a Cyclic Peptide with Theoretical Spectrum Matching an Ideal Spectrum" - {
+    import TextbookTrack.Chapter04.BA4E.cyclopeptideSequencing
+
+    "should find all cyclic peptides whose theoretical spectrum matches the experimental spectrum" in {
+      val spectrum: Map[Int, Int] = Map(0 -> 1, 113 -> 1, 128 -> 1, 186 -> 1, 241 -> 1, 299 -> 1, 314 -> 1, 427 -> 1)
+      cyclopeptideSequencing(spectrum).map(_.toString) should contain theSameElementsAs
+        List("186-128-113", "186-113-128", "128-186-113", "128-113-186", "113-186-128", "113-128-186")
+    }
+  }
+
   "Generate the Theoretical Spectrum of a Linear Peptide" - {
     import TextbookTrack.Chapter04.BA4J.calcTheoreticalSpectrum
 
