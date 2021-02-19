@@ -74,6 +74,31 @@ class Chapter04Suite extends AnyFreeSpec with Matchers {
     }
   }
 
+  "Compute the Score of a Cyclic Peptide Against a Spectrum" - {
+    import TextbookTrack.Chapter04.BA4F.{calcConsistencyScore, Peptide}
+
+    "should compute the score of a cyclic peptide against an experimental spectrum" in {
+      val peptide = Peptide("NQEL")
+      val spectrum: Map[Int, Int] =
+        Map(
+          0 -> 1,
+          99 -> 1,
+          113 -> 1,
+          114 -> 1,
+          128 -> 1,
+          227 -> 1,
+          257 -> 1,
+          299 -> 1,
+          355 -> 1,
+          356 -> 1,
+          370 -> 1,
+          371 -> 1,
+          484 -> 1
+        )
+      calcConsistencyScore(peptide, spectrum) shouldEqual 11
+    }
+  }
+
   "Generate the Theoretical Spectrum of a Linear Peptide" - {
     import TextbookTrack.Chapter04.BA4J.calcTheoreticalSpectrum
 
