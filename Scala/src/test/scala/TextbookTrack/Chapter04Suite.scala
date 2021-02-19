@@ -99,6 +99,33 @@ class Chapter04Suite extends AnyFreeSpec with Matchers {
     }
   }
 
+  "Implement LeaderboardCyclopeptideSequencing" - {
+    import TextbookTrack.Chapter04.BA4G.{leaderboardCyclopeptideSequencing, Peptide}
+
+    "should find the highest scoring peptide against a given experimental spectrum" in {
+      val limit: Int = 10
+      val spectrum: Map[Int, Int] =
+        Map(
+          0 -> 1,
+          71 -> 1,
+          113 -> 1,
+          129 -> 1,
+          147 -> 1,
+          200 -> 1,
+          218 -> 1,
+          260 -> 1,
+          313 -> 1,
+          331 -> 1,
+          347 -> 1,
+          389 -> 1,
+          460 -> 1
+        )
+      val result: Peptide = leaderboardCyclopeptideSequencing(spectrum, limit)
+      result.length shouldEqual 4
+      result.masses should contain theSameElementsAs List(113, 147, 71, 129)
+    }
+  }
+
   "Generate the Theoretical Spectrum of a Linear Peptide" - {
     import TextbookTrack.Chapter04.BA4J.calcTheoreticalSpectrum
 
