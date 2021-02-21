@@ -1,5 +1,4 @@
 # Implement LeaderboardCyclopeptideSequencing
-import functools as ft
 import itertools as it
 import operator
 import sys
@@ -28,10 +27,6 @@ class Peptide:
     @property
     def total_mass(self):
         return self._total_mass
-
-    @ft.cached_property
-    def score(self, spectrum):
-        pass
 
     def update(self, mass):
         self._masses.append(mass)
@@ -79,14 +74,9 @@ def calc_theoretical_cyclic_spectrum(peptide):
     return Counter(cyclospectrum)
 
 
-def calc_linear_consistency_score(peptide, experimental_spectrum):
-    linear_spectrum = calc_theoretical_linear_spectrum(peptide)
-    return sum(min(experimental_spectrum.get(mass, 0), count) for mass, count in linear_spectrum.items())
-
-
-def calc_cyclic_consistency_score(peptide, experimental_spectrum):
-    cyclospectrum = calc_theoretical_cyclic_spectrum(peptide)
-    return sum(min(experimental_spectrum.get(mass, 0), count) for mass, count in cyclospectrum.items())
+def calc_consistency_score(peptide, experimental_spectrum, spectrum_calculator):
+    spectrum = spectrum_calculator(peptide)
+    return sum(min(experimental_spectrum.get(mass, 0), count) for mass, count in spectrum.items())
 
 
 def trim_leaderboard(leaderboard, experimental_spectrum, limit):
@@ -95,7 +85,7 @@ def trim_leaderboard(leaderboard, experimental_spectrum, limit):
 
     scored_peptides = []
     for peptide in leaderboard:
-        score = calc_linear_consistency_score(peptide, experimental_spectrum)
+        score = calc_consistency_score(peptide, experimental_spectrum, calc_theoretical_linear_spectrum)
         scored_peptides.append((peptide, score))
 
     sorted_peptides = sorted(scored_peptides, key=lambda x: x[1], reverse=True)
@@ -116,7 +106,7 @@ def leaderboard_cyclopeptide_sequencing(experimental_spectrum, mass_table, limit
         leaderboard = []
         for peptide in candidate_peptides:
             if peptide.total_mass == parent_mass:
-                score = calc_cyclic_consistency_score(peptide, experimental_spectrum)
+                score = calc_consistency_score(peptide, experimental_spectrum, calc_theoretical_cyclic_spectrum)
                 if score > leader_score:
                     leader_peptide = peptide
                     leader_score = score

@@ -134,4 +134,29 @@ class Chapter04Suite extends AnyFreeSpec with Matchers {
       calcTheoreticalSpectrum(peptide) shouldEqual List(0, 113, 114, 128, 129, 242, 242, 257, 370, 371, 484)
     }
   }
+
+  "Compute the Score of a Linear Peptide" - {
+    import TextbookTrack.Chapter04.BA4K.{calcConsistencyScore, Peptide}
+
+    "should compute the linear score of a peptide against an experimental spectrum" in {
+      val peptide = Peptide("NQEL")
+      val spectrum: Map[Int, Int] =
+        Map(
+          0 -> 1,
+          99 -> 1,
+          113 -> 1,
+          114 -> 1,
+          128 -> 1,
+          227 -> 1,
+          257 -> 1,
+          299 -> 1,
+          355 -> 1,
+          356 -> 1,
+          370 -> 1,
+          371 -> 1,
+          484 -> 1
+        )
+      calcConsistencyScore(peptide, spectrum) shouldEqual 8
+    }
+  }
 }
