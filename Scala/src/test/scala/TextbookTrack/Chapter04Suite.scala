@@ -135,6 +135,40 @@ class Chapter04Suite extends AnyFreeSpec with Matchers {
     }
   }
 
+  "Implement ConvolutionCyclopeptideSequencing" - {
+    import TextbookTrack.Chapter04.BA4I.{convolutionCyclopeptideSequencing, Peptide}
+
+    "should find the highest scoring peptide against a spectrum using a limited set of amino acid masses" in {
+      val m: Int = 20
+      val limit: Int = 60
+      val spectrum: Map[Int, Int] =
+        Map(
+          57 -> 2,
+          71 -> 1,
+          99 -> 1,
+          129 -> 1,
+          137 -> 1,
+          170 -> 1,
+          186 -> 1,
+          194 -> 1,
+          208 -> 1,
+          228 -> 1,
+          265 -> 1,
+          285 -> 1,
+          299 -> 1,
+          307 -> 1,
+          323 -> 1,
+          356 -> 1,
+          364 -> 1,
+          394 -> 1,
+          422 -> 1,
+          493 -> 1
+        )
+      val result: Peptide = convolutionCyclopeptideSequencing(spectrum, limit, m)
+      result.length shouldEqual 6
+    }
+  }
+
   "Generate the Theoretical Spectrum of a Linear Peptide" - {
     import TextbookTrack.Chapter04.BA4J.calcTheoreticalSpectrum
 
