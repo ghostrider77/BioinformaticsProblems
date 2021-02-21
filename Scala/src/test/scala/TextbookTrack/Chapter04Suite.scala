@@ -126,6 +126,15 @@ class Chapter04Suite extends AnyFreeSpec with Matchers {
     }
   }
 
+  "Generate the Convolution of a Spectrum" - {
+    import TextbookTrack.Chapter04.BA4H.calcConvolutionOfSpectrum
+
+    "Compute the convolution of a spectrum" in {
+      val spectrum: Map[Int, Int] = Map(0 -> 1, 137 -> 1, 186 -> 1, 323 -> 1)
+      calcConvolutionOfSpectrum(spectrum) should contain theSameElementsAs List(137, 137, 186, 186, 323, 49)
+    }
+  }
+
   "Generate the Theoretical Spectrum of a Linear Peptide" - {
     import TextbookTrack.Chapter04.BA4J.calcTheoreticalSpectrum
 
