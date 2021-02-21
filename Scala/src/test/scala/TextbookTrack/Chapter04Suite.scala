@@ -168,4 +168,16 @@ class Chapter04Suite extends AnyFreeSpec with Matchers {
       calcConsistencyScore(peptide, spectrum) shouldEqual 8
     }
   }
+
+  "Trim a Peptide Leaderboard" - {
+    import TextbookTrack.Chapter04.BA4L.{trimLeaderboard, Peptide}
+
+    "should trim a leaderboard of peptides" in {
+      val peptides = List(Peptide("LAST"), Peptide("ALST"), Peptide("TLLT"), Peptide("TQAS"))
+      val spectrum: Map[Int, Int] =
+        Map(0 -> 1, 71 -> 1, 87 -> 1, 101 -> 1, 113 -> 1, 158 -> 1, 184 -> 1, 188 -> 1, 259 -> 1, 271 -> 1, 372 -> 1)
+      val limit: Int = 2
+      trimLeaderboard(peptides, spectrum, limit) shouldEqual List(Peptide("LAST"), Peptide("ALST"))
+    }
+  }
 }
