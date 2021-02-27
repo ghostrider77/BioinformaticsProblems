@@ -35,4 +35,15 @@ class Chapter05Suite extends AnyFreeSpec with Matchers {
       calcLongestPath(n, m, downWeights, rightWeights) shouldEqual 34
     }
   }
+
+  "Find a Longest Common Subsequence of Two Strings" - {
+    import TextbookTrack.Chapter05.BA5C.calcLongestCommonSubsequence
+
+    "should calculate the longest common subsequence of two strings" in {
+      val s1: String = "AACCTTGG"
+      val s2: String = "ACACTGTGA"
+      val lcs: String = calcLongestCommonSubsequence(s1, s2)
+      lcs should have length 6
+    }
+  }
 }
