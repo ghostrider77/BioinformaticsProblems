@@ -46,4 +46,18 @@ class Chapter05Suite extends AnyFreeSpec with Matchers {
       lcs should have length 6
     }
   }
+
+  "Find a Highest-Scoring Alignment of Two Strings" - {
+    import TextbookTrack.Chapter05.BA5E.calcGlobalAlignment
+
+    "should calculate the maximum alignment score of two strings using the BLOSUM64 scoring matrix" in {
+      val s1: String = "PLEASANTLY"
+      val s2: String = "MEANLY"
+      val sigma: Int = 5
+      val (score, alignedString1, alignedString2): (Int, String, String) = calcGlobalAlignment(s1, s2, sigma)
+      score shouldEqual 8
+      alignedString1 shouldEqual "PLEASANTLY"
+      alignedString2 shouldEqual "-MEA--N-LY"
+    }
+  }
 }
