@@ -1,9 +1,10 @@
 package TextbookTrack.Chapter05
 
-import scala.annotation.tailrec
-
 object BA5E {
-  import TextbookTrack.Utils.Blosum62
+  import scala.annotation.tailrec
+  import TextbookTrack.Utils.readScoringMatrix
+
+  private val Blosum62: Map[(Char, Char), Int] = readScoringMatrix("BLOSUM62")
 
   private def collectGlobalAlignment(backtrack: Array[Array[Byte]],
                                      string1: String,

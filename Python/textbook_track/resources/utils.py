@@ -24,8 +24,8 @@ def read_amino_acid_mass_table():
     return mass_table
 
 
-def read_scoring_matrix():
-    file_path = Path(__file__).with_name('BLOSUM62.txt')
+def read_scoring_matrix(name):
+    file_path = Path(__file__).with_name(f'{name}.txt')
     with open(file_path, 'r') as f:
         amino_acids = next(f).split()
         matrix = {}

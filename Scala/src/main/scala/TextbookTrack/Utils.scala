@@ -5,8 +5,6 @@ object Utils {
 
   val IntegerMassTable: Map[Char, Int] = readAminoAcidMassTable()
 
-  val Blosum62: Map[(Char, Char), Int] = readScoringMatrix()
-
   private def readGeneticCode(): Map[String, Char] = {
     val lines: Iterator[String] = scala.io.Source.fromResource("RNA_codon_table.txt").getLines()
     lines.map(_.split(" ").toList).collect{ case List(codon, aminoAcid) => (codon, aminoAcid.head) }.toMap
@@ -17,8 +15,8 @@ object Utils {
     lines.map(_.split(" ").toList).collect{ case List(aminoAcid, mass) => (aminoAcid.head, mass.toInt) }.toMap
   }
 
-  private def readScoringMatrix(): Map[(Char, Char), Int] = {
-    val lines: Iterator[String] = scala.io.Source.fromResource("BLOSUM62.txt").getLines()
+  def readScoringMatrix(name: String): Map[(Char, Char), Int] = {
+    val lines: Iterator[String] = scala.io.Source.fromResource(s"$name.txt").getLines()
     val aminoAcids: List[Char] = lines.next().split("\\s+").filterNot(_ == "").map(_.head).toList
     lines.flatMap{ line =>
       val split: List[String] = line.split("\\s+").toList

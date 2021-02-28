@@ -59,7 +59,7 @@ def main():
     data = sys.stdin.read().splitlines()
     string1 = data[0]
     string2 = data[1]
-    blosum62 = read_scoring_matrix()
+    blosum62 = read_scoring_matrix('BLOSUM62')
     sigma = 5
     score, aligned_string1, aligned_string2 = calc_global_alignment(string1, string2, blosum62, sigma)
     print(score)

@@ -60,4 +60,18 @@ class Chapter05Suite extends AnyFreeSpec with Matchers {
       alignedString2 shouldEqual "-MEA--N-LY"
     }
   }
+
+  "Find a Highest-Scoring Local Alignment of Two Strings" - {
+    import TextbookTrack.Chapter05.BA5F.calcLocalAlignment
+
+    "should calculate the maximum score of a local alignment of the strings using the PAM250 scoring matrix" in {
+      val s1: String = "MEANLY"
+      val s2: String = "PENALTY"
+      val sigma: Int = 5
+      val (score, alignedString1, alignedString2): (Int, String, String) = calcLocalAlignment(s1, s2, sigma)
+      score shouldEqual 15
+      alignedString1 shouldEqual "EANL-Y"
+      alignedString2 shouldEqual "ENALTY"
+    }
+  }
 }
