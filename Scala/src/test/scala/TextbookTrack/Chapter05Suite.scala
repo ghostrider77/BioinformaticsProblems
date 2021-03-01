@@ -74,4 +74,14 @@ class Chapter05Suite extends AnyFreeSpec with Matchers {
       alignedString2 shouldEqual "ENALTY"
     }
   }
+
+  "Compute the Edit Distance Between Two Strings" - {
+    import TextbookTrack.Chapter05.BA5G.calcEditDistance
+
+    "should calculate the edit distance of two strings" in {
+      val s1: String = "PLEASANTLY"
+      val s2: String = "MEANLY"
+      calcEditDistance(s1, s2) shouldEqual 5
+    }
+  }
 }
