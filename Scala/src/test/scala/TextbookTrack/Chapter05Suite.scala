@@ -84,4 +84,18 @@ class Chapter05Suite extends AnyFreeSpec with Matchers {
       calcEditDistance(s1, s2) shouldEqual 5
     }
   }
+
+  "Find a Highest-Scoring Fitting Alignment of Two Strings" - {
+    import TextbookTrack.Chapter05.BA5H.calcFittingAlignment
+
+    "should construct a highest-scoring fitting alignment between two strings" in {
+      val s1: String = "GTAGGCTTAAGGTTA"
+      val s2: String = "TAGATA"
+      val (score, alignedString1, alignedString2): (Int, String, String) = calcFittingAlignment(s1, s2)
+      score shouldEqual 2
+      alignedString1.zip(alignedString2).foldLeft(0){
+        case (acc, (c1, c2)) => if (c1 == c2 && c1 != '-') acc + 1 else acc - 1
+      } shouldEqual score
+    }
+  }
 }
