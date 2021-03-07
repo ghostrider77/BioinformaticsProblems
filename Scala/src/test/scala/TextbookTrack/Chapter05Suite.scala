@@ -114,4 +114,32 @@ class Chapter05Suite extends AnyFreeSpec with Matchers {
       s2 should startWith (alignedString2.filter(_ != '-'))
     }
   }
+
+  "Find a Topological Ordering of a DAG" - {
+    def isTopologicalSortingValid[T](adjacencyList: Map[T, List[T]], orderedNodes: List[T]): Boolean = {
+      adjacencyList.forall {
+        case (node, neighbours) =>
+          val indexOfNode: Int = orderedNodes.indexOf(node)
+          neighbours.forall(orderedNodes.indexOf(_) > indexOfNode)
+      }
+    }
+
+    import TextbookTrack.Chapter05.BA5N.{DirectedGraph, readLines}
+
+    "should find a topological ordering of a directed acyclic graph" - {
+      "test case 1" in {
+        val edges: Iterator[String] = Iterator("1 -> 2", "2 -> 3", "4 -> 2", "5 -> 3")
+        val adjacencyList: Map[Int, List[Int]] = readLines(edges)
+        val graph = new DirectedGraph[Int](adjacencyList)
+        isTopologicalSortingValid(graph.adjacencyList, graph.topologicalSorting) shouldBe true
+      }
+
+      "test case 2" in {
+        val edges: Iterator[String] = Iterator("10 -> 20", "2 -> 10,0", "0 -> 10")
+        val adjacencyList: Map[Int, List[Int]] = readLines(edges)
+        val graph = new DirectedGraph[Int](adjacencyList)
+        graph.topologicalSorting shouldEqual List(2, 0, 10, 20)
+      }
+    }
+  }
 }
