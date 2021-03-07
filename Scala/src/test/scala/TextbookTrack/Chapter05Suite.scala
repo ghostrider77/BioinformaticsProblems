@@ -98,4 +98,20 @@ class Chapter05Suite extends AnyFreeSpec with Matchers {
       } shouldEqual score
     }
   }
+
+  "Find a Highest-Scoring Overlap Alignment of Two Strings" - {
+    import TextbookTrack.Chapter05.BA5I.calcOverlapAlignment
+
+    "should construct a highest-scoring overlap alignment between two strings" in {
+      val s1: String = "PAWHEAE"
+      val s2: String = "HEAGAWGHEE"
+      val (score, alignedString1, alignedString2): (Int, String, String) = calcOverlapAlignment(s1, s2)
+      score shouldEqual 1
+      alignedString1.zip(alignedString2).foldLeft(0){
+        case (acc, (c1, c2)) => if (c1 == c2 && c1 != '-') acc + 1 else acc - 2
+      } shouldEqual score
+      s1 should endWith (alignedString1.filter(_ != '-'))
+      s2 should startWith (alignedString2.filter(_ != '-'))
+    }
+  }
 }
