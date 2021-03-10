@@ -47,6 +47,21 @@ class Chapter05Suite extends AnyFreeSpec with Matchers {
     }
   }
 
+  "Find the Longest Path in a DAG" - {
+    import TextbookTrack.Chapter05.BA5D.{DirectedWeightedGraph, WeightedEdge, readWeightedEdges, findLongestPath}
+
+    "should find a topological ordering of a directed acyclic graph" in {
+      val source: Int = 0
+      val sink: Int = 4
+      val edges: Iterator[String] = Iterator("0->1:7", "0->2:4", "2->3:2", "1->4:1", "3->4:3")
+      val adjacencyList: Map[Int, List[WeightedEdge]] = readWeightedEdges(edges)
+      val graph = new DirectedWeightedGraph(adjacencyList)
+      val (length, longestPath): (Int, List[Int]) = findLongestPath(graph, source, sink)
+      length shouldEqual 9
+      longestPath shouldEqual List(0, 2, 3, 4)
+    }
+  }
+
   "Find a Highest-Scoring Alignment of Two Strings" - {
     import TextbookTrack.Chapter05.BA5E.calcGlobalAlignment
 
