@@ -214,4 +214,14 @@ class Chapter04Suite extends AnyFreeSpec with Matchers {
       trimLeaderboard(peptides, spectrum, limit) shouldEqual List(Peptide("LAST"), Peptide("ALST"))
     }
   }
+
+  "Solve the Turnpike Problem" - {
+    import TextbookTrack.Chapter04.BA4M.solveTurnpikeProblem
+
+    "should reconstruct the positions of points given their pairwise differences" in {
+      val differences: Map[Int, Int] = Map(2 -> 2, 3 -> 2, 4 -> 1, 5 -> 1, 6 -> 1, 7 -> 1, 8 -> 1, 10 -> 1)
+      val possibleSolutions: Set[List[Int]] = Set(List(0, 3, 6, 8, 10), List(0, 2, 4, 7, 10))
+      possibleSolutions should contain (solveTurnpikeProblem(differences))
+    }
+  }
 }
