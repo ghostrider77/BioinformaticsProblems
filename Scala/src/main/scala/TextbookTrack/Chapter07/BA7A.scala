@@ -4,7 +4,7 @@ object BA7A {
   final case class WeightedEdge(nodeFrom: Int, nodeTo: Int, weight: Int)
 
   class Tree(val adjacencyList: Map[Int, List[WeightedEdge]], val nrLeaves: Int) {
-    lazy val nrNodes: Int = adjacencyList.valuesIterator.flatMap(_.map(_.nodeTo)).max + 1
+    private val nrNodes: Int = adjacencyList.valuesIterator.flatMap(_.map(_.nodeTo)).max + 1
 
     def calcPairwiseDistances(): List[List[Int]] = {
       val distances: Array[Array[Double]] = initializeDistanceMatrix()
