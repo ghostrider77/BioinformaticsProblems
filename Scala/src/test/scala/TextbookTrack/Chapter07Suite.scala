@@ -29,4 +29,52 @@ class Chapter07Suite extends AnyFreeSpec with Matchers {
       calcLimbLength(distances, leaf, nrLeaves) shouldEqual 2
     }
   }
+
+  "Implement AdditivePhylogeny" - {
+    import TextbookTrack.Chapter07.BA7C.{additivePhylogeny, Tree}
+
+    "should construct a simple tree fitting a given additive distance matrix" - {
+      "test case 1" in {
+        val nrLeaves: Int = 4
+        val distances: Vector[Vector[Int]] =
+          Vector(Vector(0, 13, 21, 22), Vector(13, 0, 12, 13), Vector(21, 12, 0, 13), Vector(22, 13, 13, 0))
+        val tree: Tree = additivePhylogeny(distances, nrLeaves)
+        tree.edges.toSet shouldEqual
+          Set("0->4:11", "1->4:2", "2->5:6", "3->5:7", "4->0:11", "4->1:2", "4->5:4", "5->4:4", "5->3:7", "5->2:6")
+      }
+
+      "test case 2" in {
+        val nrLeaves: Int = 6
+        val distances: Vector[Vector[Int]] =
+          Vector(
+            Vector(0, 10, 12, 13, 14, 15),
+            Vector(10, 0, 6, 7, 8, 9),
+            Vector(12, 6, 0, 7, 8, 9),
+            Vector(13, 7, 7, 0, 9, 10),
+            Vector(14, 8, 8, 9, 0, 7),
+            Vector(15, 9, 9, 10, 7, 0)
+          )
+        val tree: Tree = additivePhylogeny(distances, nrLeaves)
+        tree.edges.toSet shouldEqual
+          Set(
+            "0->6:8",
+            "1->6:2",
+            "2->7:3",
+            "3->7:4",
+            "4->8:3",
+            "5->8:4",
+            "6->0:8",
+            "6->1:2",
+            "6->7:1",
+            "7->6:1",
+            "7->2:3",
+            "7->3:4",
+            "7->8:2",
+            "8->4:3",
+            "8->5:4",
+            "8->7:2"
+          )
+      }
+    }
+  }
 }
