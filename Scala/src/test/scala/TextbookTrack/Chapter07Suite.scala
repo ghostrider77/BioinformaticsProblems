@@ -77,4 +77,31 @@ class Chapter07Suite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Implement UPGMA" - {
+    import TextbookTrack.Chapter07.BA7D.{DistanceMatrix, WeightedEdge, performUpgmaClustering, readDistanceMatrix}
+
+    "should return the edges for the ultrametric tree output by UPGMA" in {
+      val nrLeaves: Int = 4
+      val lines: Iterator[String] = Iterator("0 20 17 11", "20 0 20 13", "17 20 0 10", "11 13 10 0")
+      val distances: DistanceMatrix = readDistanceMatrix(lines, nrLeaves)
+      val result: List[WeightedEdge] = performUpgmaClustering(distances, nrLeaves)
+      val expectedResult: List[String] =
+        List(
+          "0->5:7.0",
+          "1->6:8.833",
+          "2->4:5.0",
+          "3->4:5.0",
+          "4->2:5.0",
+          "4->3:5.0",
+          "4->5:2.0",
+          "5->0:7.0",
+          "5->4:2.0",
+          "5->6:1.833",
+          "6->5:1.833",
+          "6->1:8.833"
+        )
+      result.map(_.toString) should contain theSameElementsAs expectedResult
+    }
+  }
 }
