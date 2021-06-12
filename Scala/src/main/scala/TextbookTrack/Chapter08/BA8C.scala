@@ -4,13 +4,13 @@ object BA8C {
   import scala.reflect.ClassTag
   import scala.annotation.tailrec
 
-  type Point = Vector[Double]
+  type Point = List[Double]
 
-  private def convertToNumber[T: ClassTag](line: String, converter: String => T): Vector[T] =
-    line.split(" ").map(converter).toVector
+  private def convertToNumber[T: ClassTag](line: String, converter: String => T): List[T] =
+    line.split(" ").map(converter).toList
 
   private def readParameters(line: String): (Int, Int) = convertToNumber(line, _.toInt) match {
-    case Vector(k, m) => (k, m)
+    case List(k, m) => (k, m)
     case _ => throw new Exception("Unexpected number of parameters.")
   }
 
@@ -38,11 +38,11 @@ object BA8C {
             .map{ case (point, _) => point }
             .toList
         val clusterSize: Int = clusterPoints.length
-        clusterPoints.transpose.map(_.sum / clusterSize).toVector
+        clusterPoints.transpose.map(_.sum / clusterSize)
     }.toList
 
   private def areSameCenters(centers: List[Point], updatedCenters: List[Point]): Boolean =
-    centers.lazyZip(updatedCenters).forall{euclideanDistance(_, _) <= 1e-12 }
+    centers.lazyZip(updatedCenters).forall{ euclideanDistance(_, _) <= 1e-12 }
 
   def runKMeansClustering(points: List[Point], k: Int): List[Point] = {
     @tailrec

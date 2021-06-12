@@ -53,21 +53,21 @@ class Chapter08Suite extends AnyFreeSpec with Matchers with Inspectors {
       val k: Int = 2
       val points: List[Point] =
         List(
-          Vector(1.3, 1.1),
-          Vector(1.3, 0.2),
-          Vector(0.6, 2.8),
-          Vector(3.0, 3.2),
-          Vector(1.2, 0.7),
-          Vector(1.4, 1.6),
-          Vector(1.2, 1.0),
-          Vector(1.2, 1.1),
-          Vector(0.6, 1.5),
-          Vector(1.8, 2.6),
-          Vector(1.2, 1.3),
-          Vector(1.2, 1.0),
-          Vector(0.0, 1.9)
+          List(1.3, 1.1),
+          List(1.3, 0.2),
+          List(0.6, 2.8),
+          List(3.0, 3.2),
+          List(1.2, 0.7),
+          List(1.4, 1.6),
+          List(1.2, 1.0),
+          List(1.2, 1.1),
+          List(0.6, 1.5),
+          List(1.8, 2.6),
+          List(1.2, 1.3),
+          List(1.2, 1.0),
+          List(0.0, 1.9)
         )
-      val expectedResult: List[Point] = List(Vector(1.800, 2.867), Vector(1.060, 1.140))
+      val expectedResult: List[Point] = List(List(1.800, 2.867), List(1.060, 1.140))
       val result: List[Point] = runKMeansClustering(points, k)
 
       forAll(result.zip(expectedResult)) {
