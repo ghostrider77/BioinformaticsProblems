@@ -29,9 +29,9 @@ object BA5N {
           case lastNode :: rest =>
             findUnvisitedNeighbour(lastNode) match {
               case None => loop(lastNode :: acc, rest)
-              case Some(unvistedNeighbour) =>
-                visitStarted(unvistedNeighbour) = previsitId.next()
-                loop(acc, unvistedNeighbour :: previsitStack)
+              case Some(unvisitedNeighbour) =>
+                visitStarted(unvisitedNeighbour) = previsitId.next()
+                loop(acc, unvisitedNeighbour :: previsitStack)
           }
         }
 
