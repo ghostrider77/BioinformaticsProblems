@@ -78,4 +78,38 @@ class Chapter08Suite extends AnyFreeSpec with Matchers with Inspectors {
       }
     }
   }
+
+  "Implement the Soft k-Means Clustering Algorithm" - {
+    import TextbookTrack.Chapter08.BA8D.{Point, runSoftKMeansClustering}
+
+    "should return k centers calculated by the soft k-means algorithm" in {
+      val k: Int = 2
+      val beta: Double = 2.7
+      val points: List[Point] =
+        List(
+          List(1.3, 1.1),
+          List(1.3, 0.2),
+          List(0.6, 2.8),
+          List(3.0, 3.2),
+          List(1.2, 0.7),
+          List(1.4, 1.6),
+          List(1.2, 1.0),
+          List(1.2, 1.1),
+          List(0.6, 1.5),
+          List(1.8, 2.6),
+          List(1.2, 1.3),
+          List(1.2, 1.0),
+          List(0.0, 1.9)
+        )
+      val expectedResult: List[Point] = List(List(1.662, 2.623), List(1.075, 1.148))
+      val result: List[Point] = runSoftKMeansClustering(points, k, beta)
+
+      forAll(result.zip(expectedResult)) {
+        case (calculatedCenter, expectedCenter) =>
+          forAll(calculatedCenter.zip(expectedCenter)) {
+            case (p, q) => p shouldBe (q +- 1e-3)
+          }
+      }
+    }
+  }
 }
