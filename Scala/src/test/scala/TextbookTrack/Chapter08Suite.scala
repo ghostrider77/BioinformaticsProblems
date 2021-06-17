@@ -112,4 +112,33 @@ class Chapter08Suite extends AnyFreeSpec with Matchers with Inspectors {
       }
     }
   }
+
+  "Implement Hierarchical Clustering" - {
+    import TextbookTrack.Chapter08.BA8E.{Cluster, DistanceMatrix, readDistanceMatrix, runHierarchicalClustering}
+
+    "should apply hierarchical clustering to a distance matrix using D_{avg}" in {
+      val n: Int = 7
+      val lines: Iterator[String] =
+        Iterator(
+          "0.00 0.74 0.85 0.54 0.83 0.92 0.89",
+          "0.74 0.00 1.59 1.35 1.20 1.48 1.55",
+          "0.85 1.59 0.00 0.63 1.13 0.69 0.73",
+          "0.54 1.35 0.63 0.00 0.66 0.43 0.88",
+          "0.83 1.20 1.13 0.66 0.00 0.72 0.55",
+          "0.92 1.48 0.69 0.43 0.72 0.00 0.80",
+          "0.89 1.55 0.73 0.88 0.55 0.80 0.00"
+        )
+      val distanceMatrix: DistanceMatrix = readDistanceMatrix(lines, n)
+      val result: List[Cluster] = runHierarchicalClustering(distanceMatrix, n)
+      val clusterIds = result.map(_.content.map(_ + 1))
+      clusterIds shouldEqual List(
+        Vector(4, 6),
+        Vector(5, 7),
+        Vector(3, 4, 6),
+        Vector(1, 2),
+        Vector(5, 7, 3, 4, 6),
+        Vector(1, 2, 5, 7, 3, 4, 6)
+      )
+    }
+  }
 }
