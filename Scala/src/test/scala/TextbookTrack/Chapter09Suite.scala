@@ -32,4 +32,23 @@ class Chapter09Suite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Construct the Suffix Tree of a String" - {
+    import TextbookTrack.Chapter09.BA9C.SuffixTree
+
+    "should calculate the suffix tree of a string and print the edge labels" - {
+      "test case 1" in {
+        val text: String = "AATA$"
+        val tree = new SuffixTree(text)
+        tree.edges().toList should contain theSameElementsAs List("A", "$", "$", "TA$", "TA$", "ATA$")
+      }
+
+      "test case 2" in {
+        val text: String = "ATAAATG$"
+        val tree = new SuffixTree(text)
+        tree.edges().toList should contain theSameElementsAs
+          List("AAATG$", "G$", "T", "ATG$", "TG$", "A", "A", "AAATG$","G$", "T", "G$", "$")
+      }
+    }
+  }
 }
