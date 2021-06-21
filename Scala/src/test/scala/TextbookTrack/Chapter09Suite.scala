@@ -51,4 +51,28 @@ class Chapter09Suite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Find the Longest Repeat in a String" - {
+    import TextbookTrack.Chapter09.BA9D.{SuffixTree, findLongestRepeatInText}
+
+    "should calculate the longest substring of Text that appears in Text more than once" - {
+      "test case 1" in {
+        val text: String = "ATAAT$"
+        val tree = new SuffixTree(text)
+        findLongestRepeatInText(tree) shouldEqual "AT"
+      }
+
+      "test case 2" in {
+        val text: String = "ATCCTCTA$"
+        val tree = new SuffixTree(text)
+        Set("TC", "CT") should contain (findLongestRepeatInText(tree))
+      }
+
+      "test case 3" in {
+        val text: String = "ATATCGTTTTATCGTT$"
+        val tree = new SuffixTree(text)
+        findLongestRepeatInText(tree) shouldEqual "TATCGTT"
+      }
+    }
+  }
 }

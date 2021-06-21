@@ -1,16 +1,17 @@
 package TextbookTrack.Chapter09
 
-object BA9C {
+object BA9D {
   import scala.annotation.tailrec
   import scala.collection.mutable.{Map => MutableMap}
 
   final case class Edge(nodeTo: Int, startIx: Int, length: Int)
 
-  class SuffixTree(text: String) {
+  class SuffixTree(val text: String) {
     private val size: Int = text.length
     private val nodeIdGenerator: Iterator[Int] = Iterator.from(0)
-    private val root: Int = nodeIdGenerator.next()
-    private val adjacencyList: Map[Int, List[Edge]] = buildSuffixTree()
+
+    val root: Int = nodeIdGenerator.next()
+    val adjacencyList: Map[Int, List[Edge]] = buildSuffixTree()
 
     def edges(): Iterator[String] =
       adjacencyList
@@ -72,10 +73,41 @@ object BA9C {
     }
   }
 
+  private def updateLongestRepeat(longestRepeat: String, nodes: Set[(Int, String)]): String =
+    nodes.foldLeft(longestRepeat){ case (acc, (_, string)) => if (string.length > acc.length) string else acc }
+
+  private def hasAtLeastTwoChildren(suffixTree: SuffixTree, node: Int): Boolean =
+    suffixTree.adjacencyList.getOrElse(node, Nil).lengthCompare(2) >= 0
+
+  private def getValidNeighbourNodes(suffixTree: SuffixTree, node: Int, spelledString: String): List[(Int, String)] =
+    suffixTree
+      .adjacencyList
+      .getOrElse(node, Nil)
+      .withFilter{ case Edge(nodeTo, _, _) => hasAtLeastTwoChildren(suffixTree, nodeTo) }
+      .map{ case Edge(nodeTo, startIx, length) =>
+        (nodeTo, spelledString + suffixTree.text.slice(startIx, startIx + length))
+      }
+
+  def findLongestRepeatInText(suffixTree: SuffixTree): String = {
+    @tailrec
+    def loop(longestRepeat: String, currentNodes: Set[(Int, String)]): String = {
+      if (currentNodes.isEmpty) longestRepeat
+      else {
+        val nextNodes: Set[(Int, String)] =
+          currentNodes.flatMap{ case (node, spelledString) => getValidNeighbourNodes(suffixTree, node, spelledString) }
+        loop(updateLongestRepeat(longestRepeat, nextNodes), nextNodes)
+      }
+    }
+
+    val emptyString: String = ""
+    loop(emptyString, Set((suffixTree.root, emptyString)))
+  }
+
   def main(args: Array[String]): Unit = {
     val reader: Iterator[String] = scala.io.Source.stdin.getLines()
     val text: String = reader.next()
-    val tree = new SuffixTree(text)
-    tree.edges().foreach(println)
+    val tree = new SuffixTree(text + '$')
+    val result: String = findLongestRepeatInText(tree)
+    println(result)
   }
 }

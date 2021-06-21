@@ -1,4 +1,4 @@
-# Construct the Suffix Tree of a String
+# Find the Longest Repeat in a String
 import itertools as it
 import sys
 
@@ -14,6 +14,18 @@ class SuffixTree:
         self._node_id_generator = it.count()
         self._root = next(self._node_id_generator)
         self._adjacency_list = self._build_suffix_tree()
+
+    @property
+    def text(self):
+        return self._text
+
+    @property
+    def root(self):
+        return self._root
+
+    @property
+    def adjacency_list(self):
+        return self._adjacency_list
 
     def edges(self):
         for edge_labels in self._adjacency_list.values():
@@ -69,12 +81,50 @@ class SuffixTree:
         return None
 
 
+def has_at_least_two_children(suffix_tree, node):
+    return len(suffix_tree.adjacency_list.get(node, [])) >= 2
+
+
+def get_valid_neighbour_nodes(suffix_tree, node, spelled_string):
+    valid_neighbours = []
+    edges = suffix_tree.adjacency_list.get(node, [])
+    for neighbour, substring_start, substring_length in edges:
+        if has_at_least_two_children(suffix_tree, neighbour):
+            edge_label = suffix_tree.text[substring_start:substring_start+substring_length]
+            valid_neighbours.append((neighbour, spelled_string + edge_label))
+    return valid_neighbours
+
+
+def update_longest_repeat(longest_repeat, nodes):
+    length = len(longest_repeat)
+    for _, string in nodes:
+        if len(string) > length:
+            longest_repeat = string
+            length = len(longest_repeat)
+
+    return longest_repeat
+
+
+def find_longest_repeat_in_text(suffix_tree):
+    longest_repeat = ''
+    current_nodes = {(suffix_tree.root, longest_repeat)}
+    while current_nodes:
+        next_nodes = set()
+        for node, spelled_string in current_nodes:
+            next_nodes.update(get_valid_neighbour_nodes(suffix_tree, node, spelled_string))
+
+        longest_repeat = update_longest_repeat(longest_repeat, next_nodes)
+        current_nodes = next_nodes
+
+    return longest_repeat
+
+
 def main():
     reader = sys.stdin
     text = next(reader).rstrip()
-    tree = SuffixTree(text)
-    for edge_label in tree.edges():
-        print(edge_label)
+    tree = SuffixTree(text + '$')
+    result = find_longest_repeat_in_text(tree)
+    print(result)
 
 
 if __name__ == '__main__':
