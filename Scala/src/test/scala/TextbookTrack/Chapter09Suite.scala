@@ -75,4 +75,38 @@ class Chapter09Suite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Find the Longest Substring Shared by Two Strings" - {
+    import TextbookTrack.Chapter09.BA9E.findLongestSharedSubstring
+
+    "should calculate the longest shared substring of two strings" - {
+      "test case 1" in {
+        val text1: String = "ABAB"
+        val text2: String = "BABA"
+        val substring: String = findLongestSharedSubstring(text1, text2)
+
+        substring should have length 3
+        text1 should include (substring)
+        text2 should include (substring)
+      }
+
+      "test case 2" in {
+        val text1: String = "TCGGTAGATTGCGCCCACTC"
+        val text2: String = "AGGGGCTCGCAGTGTAAGAA"
+        val substring: String = findLongestSharedSubstring(text1, text2)
+
+        substring should have length 3
+        text1 should include (substring)
+        text2 should include (substring)
+      }
+
+      "test case 3" in {
+        val text1: String = "CCCCCCGGCATATATCGGCCCCCC"
+        val text2: String = "GGGGGGATATATGGGGTCATCTTTTTTT"
+        val substring: String = findLongestSharedSubstring(text1, text2)
+
+        substring shouldEqual "ATATAT"
+      }
+    }
+  }
 }
