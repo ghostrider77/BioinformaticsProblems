@@ -109,4 +109,35 @@ class Chapter09Suite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Construct the Suffix Array of a String" - {
+    import TextbookTrack.Chapter09.BA9G.computeSuffixArray
+
+    "should calculate the suffix array of a string" - {
+      "test case 1" in {
+        val text: String = "ABABAA$"
+        computeSuffixArray(text) shouldEqual Vector(6, 5, 4, 2, 0, 3, 1)
+      }
+
+      "test case 2" in {
+        val text: String = "AAA$"
+        computeSuffixArray(text) shouldEqual Vector(3, 2, 1, 0)
+      }
+
+      "test case 3" in {
+        val text: String = "GAC$"
+        computeSuffixArray(text) shouldEqual Vector(3, 1, 2, 0)
+      }
+
+      "test case 4" in {
+        val text: String = "GAGAGAGA$"
+        computeSuffixArray(text) shouldEqual Vector(8, 7, 5, 3, 1, 6, 4, 2, 0)
+      }
+
+      "test case 5" in {
+        val text: String = "AACGATAGCGGTAGA$"
+        computeSuffixArray(text) shouldEqual Vector(15, 14, 0, 1, 12, 6, 4, 2, 8, 13, 3, 7, 9, 10, 11, 5)
+      }
+    }
+  }
 }
