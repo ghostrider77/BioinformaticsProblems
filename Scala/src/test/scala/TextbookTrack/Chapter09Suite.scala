@@ -164,4 +164,30 @@ class Chapter09Suite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Construct the Burrows-Wheeler Transform of a String" - {
+    import TextbookTrack.Chapter09.BA9I.calcBurrowsWheelerTransform
+
+    "Should construct the Burrows-Wheeler transform of a string" - {
+      "test case 1" in {
+        val text: String = "AA$"
+        calcBurrowsWheelerTransform(text) shouldEqual "AA$"
+      }
+
+      "test case 2" in {
+        val text: String = "ACACACAC$"
+        calcBurrowsWheelerTransform(text) shouldEqual "CCCC$AAAA"
+      }
+
+      "test case 3" in {
+        val text: String = "AGACATA$"
+        calcBurrowsWheelerTransform(text) shouldEqual "ATG$CAAA"
+      }
+
+      "test case 4" in {
+        val text: String = "GCGTGCCTGGTCA$"
+        calcBurrowsWheelerTransform(text) shouldEqual "ACTGGCT$TGCGGC"
+      }
+    }
+  }
 }
