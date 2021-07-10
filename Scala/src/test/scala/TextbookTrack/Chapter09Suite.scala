@@ -140,4 +140,28 @@ class Chapter09Suite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Pattern Matching with the Suffix Array" - {
+    import TextbookTrack.Chapter09.BA9H.multiplePatternMatching
+
+    "Should find all starting positions in text where a string from Patterns appears as a substring" - {
+      "test case 1" in {
+        val text: String = "AATCGGGTTCAATCGGGGT$"
+        val patterns: List[String] = List("ATCG", "GGGT")
+        multiplePatternMatching(text, patterns) shouldEqual Set(1, 4, 11, 15)
+      }
+
+      "test case 2" in {
+        val text: String = "ATATATA$"
+        val patterns: List[String] = List("ATA", "ATAT")
+        multiplePatternMatching(text, patterns) shouldEqual Set(0, 2, 4)
+      }
+
+      "test case 3" in {
+        val text: String = "AAA"
+        val patterns: List[String] = List("A")
+        multiplePatternMatching(text, patterns) shouldEqual Set(0, 1, 2)
+      }
+    }
+  }
 }
