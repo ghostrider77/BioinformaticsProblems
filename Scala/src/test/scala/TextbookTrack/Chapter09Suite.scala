@@ -211,4 +211,22 @@ class Chapter09Suite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Generate the Last-to-First Mapping of a String" - {
+    import TextbookTrack.Chapter09.BA9K.calcLastToFirstMapping
+
+    "Should calculate the position of a symbol in FirstColumn given its position at index `ix` in LastColumn" - {
+      "test case 1" in {
+        val transformed: String = "T$GACCA"
+        val ix: Int = 3
+        calcLastToFirstMapping(transformed.toList, ix) shouldEqual 1
+      }
+
+      "test case 2" in {
+        val text: String = "SMNPBNNAAAAA$A"
+        val ix: Int = 2
+        calcLastToFirstMapping(text.toList, ix) shouldEqual 9
+      }
+    }
+  }
 }
