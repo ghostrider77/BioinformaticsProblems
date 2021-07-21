@@ -229,4 +229,34 @@ class Chapter09Suite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Implement BWMatching" - {
+    import TextbookTrack.Chapter09.BA9L.performPatternMatching
+
+    "Should counts the total number of matches of pattern in pext for each pattern" - {
+      "test case 1" in {
+        val transformed: String = "TCCTCTATGAGATCCTATTCTATGAAACCTTCA$GACCAAAATTCTCCGGC"
+        val patterns: List[String] = List("CCT", "CAC", "GAG", "CAG", "ATC")
+        performPatternMatching(transformed.toList, patterns) shouldEqual List(2, 1, 1, 0, 1)
+      }
+
+      "test case 2" in {
+        val transformed: String = "AGGGAA$"
+        val patterns: List[String] = List("GA")
+        performPatternMatching(transformed.toList, patterns) shouldEqual List(3)
+      }
+
+      "test case 3" in {
+        val transformed: String = "ATT$AA"
+        val patterns: List[String] = List("ATA", "A")
+        performPatternMatching(transformed.toList, patterns) shouldEqual List(2, 3)
+      }
+
+      "test case 4" in {
+        val transformed: String = "AT$TCTATG"
+        val patterns: List[String] = List("TCT", "TATG")
+        performPatternMatching(transformed.toList, patterns) shouldEqual List(0, 0)
+      }
+    }
+  }
 }
