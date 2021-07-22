@@ -295,4 +295,14 @@ class Chapter09Suite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Construct the Partial Suffix Array of a String" - {
+    import TextbookTrack.Chapter09.BA9Q.computePartialSuffixArray
+
+    "Should retrieve SuffixArray_k(Text) in the form of a list of ordered pairs (i, SuffixArray(i))" in {
+      val text: String = "PANAMABANANAS$"
+      val k: Int = 5
+      computePartialSuffixArray(text, k) shouldEqual List((1, 5), (11, 10), (12, 0))
+    }
+  }
 }
