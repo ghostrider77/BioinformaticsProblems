@@ -296,6 +296,36 @@ class Chapter09Suite extends AnyFreeSpec with Matchers {
     }
   }
 
+  "Implement TreeColoring" - {
+    import TextbookTrack.Chapter09.BA9P.{NodeColor, performNodeColoring}
+    import scala.language.implicitConversions
+
+    implicit def string2NodeColor(color: String): NodeColor = NodeColor(color)
+
+    "Should retrieve the color labels for all nodes of a tree" - {
+      "test case 1" in {
+        val adjacencyList: Map[Int, List[Int]] = Map(2 -> List(0, 1), 5 -> List(3, 2), 7 -> List(4, 5, 6))
+        val leafColors: Map[Int, NodeColor] = Map(0 -> "red", 1 -> "red", 3 -> "blue", 4 -> "blue", 6 -> "red")
+        performNodeColoring(adjacencyList, leafColors).view.mapValues(_.toString).toMap shouldEqual
+          Map(0 -> "red", 1 -> "red", 2 -> "red", 3 -> "blue", 4 -> "blue", 5 -> "purple", 6 -> "red", 7 -> "purple")
+      }
+
+      "test case 2" in {
+        val adjacencyList: Map[Int, List[Int]] = Map(1 -> List(3), 3 -> List(2), 2 -> List(4), 4 -> List(0, 5))
+        val leafColors: Map[Int, NodeColor] = Map(0 -> "red", 5 -> "blue")
+        performNodeColoring(adjacencyList, leafColors).view.mapValues(_.toString).toMap shouldEqual
+          Map(0 -> "red", 1 -> "purple", 2 -> "purple", 3 -> "purple", 4 -> "purple", 5 -> "blue")
+      }
+
+      "test case 3" in {
+        val adjacencyList: Map[Int, List[Int]] = Map(1 -> List(3), 3 -> List(2), 2 -> List(4), 4 -> List(0, 5))
+        val leafColors: Map[Int, NodeColor] = Map(0 -> "red", 5 -> "red")
+        performNodeColoring(adjacencyList, leafColors).view.mapValues(_.toString).toMap shouldEqual
+          Map(0 -> "red", 1 -> "red", 2 -> "red", 3 -> "red", 4 -> "red", 5 -> "red")
+      }
+    }
+  }
+
   "Construct the Partial Suffix Array of a String" - {
     import TextbookTrack.Chapter09.BA9Q.computePartialSuffixArray
 
