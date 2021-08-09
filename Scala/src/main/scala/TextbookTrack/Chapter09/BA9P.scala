@@ -73,6 +73,6 @@ object BA9P {
     val adjacencyList: Map[Int, List[Int]] = readEdges(reader)
     val nodeColors: Map[Int, NodeColor] = readLeafColors(reader)
     val result: Map[Int, NodeColor] = performNodeColoring(adjacencyList, nodeColors)
-    result.foreach { case (node, color) => println(s"$node: $color") }
+    result.foreach{ case (node, color) => println(s"$node: $color") }
   }
 }

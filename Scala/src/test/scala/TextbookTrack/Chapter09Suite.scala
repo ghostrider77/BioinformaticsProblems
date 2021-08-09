@@ -335,4 +335,27 @@ class Chapter09Suite extends AnyFreeSpec with Matchers {
       computePartialSuffixArray(text, k) shouldEqual List((1, 5), (11, 10), (12, 0))
     }
   }
+
+  "Construct a Suffix Tree from a Suffix Array" - {
+    import TextbookTrack.Chapter09.BA9R.SuffixTree
+
+    "Should construct the suffix tree from the suffix array and LCP array of a string." - {
+      "test case 1" in {
+        val text: String = "GTAGT$"
+        val suffixArray: List[Int] = List(5, 2, 3, 0, 4, 1)
+        val lcArray: List[Int] = List(0, 0, 0, 2, 0, 1)
+        val tree = new SuffixTree(text, suffixArray, lcArray)
+        tree.edges().toList should contain theSameElementsAs List("$", "T", "AGT$", "$", "AGT$", "GT", "$", "AGT$")
+      }
+
+      "test case 2" in {
+        val text: String = "ATAAATG$"
+        val suffixArray: List[Int] = List(7, 2, 3, 0, 4, 6, 1, 5)
+        val lcArray: List[Int] = List(0, 0, 2, 1, 2, 0, 0, 1)
+        val tree = new SuffixTree(text, suffixArray, lcArray)
+        tree.edges().toList should contain theSameElementsAs
+          List("$", "A", "A", "G$", "G$", "G$", "T", "T", "ATG$", "TG$", "AAATG$", "AAATG$")
+      }
+    }
+  }
 }
