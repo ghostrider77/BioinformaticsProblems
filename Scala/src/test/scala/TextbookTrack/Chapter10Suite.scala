@@ -57,4 +57,33 @@ class Chapter10Suite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Compute the Probability of a String Emitted by an HMM" - {
+    import TextbookTrack.Chapter10.BA10D.{Label, ProbabilityMatrix, HMM, calcProbabilityOfEmittedString}
+
+    "Should calculate the probability Pr(x) that the HMM emits x" - {
+      "test case 1" in {
+        val string: String = "xzyyzzyzyy"
+        val states = Label(Vector('A', 'B'))
+        val alphabet = Label(Vector('x', 'y', 'z'))
+        val transition = ProbabilityMatrix(states, states, Vector(Vector(0.303, 0.697), Vector(0.831, 0.169)))
+        val emission =
+          ProbabilityMatrix(states, alphabet, Vector(Vector(0.533, 0.065, 0.402), Vector(0.342, 0.334, 0.324)))
+        val hmm = HMM(alphabet, states, transition, emission)
+        calcProbabilityOfEmittedString(hmm, string) shouldBe (1.1005510319694847e-06 +- 1e-12)
+      }
+
+      "test case 2" in {
+        val string: String =
+          "zxxxzyyxyzyxyyxzzxzyyxzzxyxxzyzzyzyzzyxxyzxxzyxxzxxyzzzzzzzxyzyxzzyxzzyzxyyyyyxzzzyzxxyyyzxyyxyzyyxz"
+        val states = Label(Vector('A', 'B'))
+        val alphabet = Label(Vector('x', 'y', 'z'))
+        val transition = ProbabilityMatrix(states, states, Vector(Vector(0.994, 0.006), Vector(0.563, 0.437)))
+        val emission =
+          ProbabilityMatrix(states, alphabet, Vector(Vector(0.55, 0.276, 0.174), Vector(0.311, 0.368, 0.321)))
+        val hmm = HMM(alphabet, states, transition, emission)
+        calcProbabilityOfEmittedString(hmm, string) shouldBe (4.08210708381e-55 +- 1e-61)
+      }
+    }
+  }
 }
