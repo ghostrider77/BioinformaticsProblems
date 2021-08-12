@@ -1,9 +1,10 @@
 package TextbookTrack
 
+import org.scalatest.Inspectors
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 
-class Chapter10Suite extends AnyFreeSpec with Matchers {
+class Chapter10Suite extends AnyFreeSpec with Matchers with Inspectors {
   "Compute the Probability of a Hidden Path" - {
     import TextbookTrack.Chapter10.BA10A.{States, Transition, calcProbabilityOfHiddenPath}
 
@@ -83,6 +84,70 @@ class Chapter10Suite extends AnyFreeSpec with Matchers {
           ProbabilityMatrix(states, alphabet, Vector(Vector(0.55, 0.276, 0.174), Vector(0.311, 0.368, 0.321)))
         val hmm = HMM(alphabet, states, transition, emission)
         calcProbabilityOfEmittedString(hmm, string) shouldBe (4.08210708381e-55 +- 1e-61)
+      }
+    }
+  }
+
+  "HMM Parameter Estimation Problem" - {
+    import TextbookTrack.Chapter10.BA10H.{Label, HMM, estimateHmmParameters}
+
+    "Should return a matrix of transition probabilities Transition and a matrix of emission probabilities Emission" - {
+      "test case 1" in {
+        val string: String = "yzzzyxzxxx"
+        val alphabet = Label(Vector('x', 'y', 'z'))
+        val hiddenPath: String = "BBABABABAB"
+        val states = Label(Vector('A', 'B', 'C'))
+        val HMM(_, _, transition, emission) = estimateHmmParameters(string, hiddenPath, alphabet, states)
+
+        val expectedTransition: Vector[Vector[Double]] =
+          Vector(Vector(0.0, 1.0, 0.0), Vector(0.8, 0.2, 0.0), Vector(0.333, 0.333, 0.333))
+
+        forAll (transition.probabilities.toVector.zip(expectedTransition)){
+          case (row, expectedRow) =>
+            forAll (row.toVector.zip(expectedRow)) {
+              case (p, expectedP) => p shouldBe (expectedP +- 5e-4)
+            }
+        }
+
+        val expectedEmission: Vector[Vector[Double]] =
+          Vector(Vector(0.25, 0.25, 0.5), Vector(0.5, 0.167, 0.333), Vector(0.333, 0.333, 0.333))
+
+        forAll (emission.probabilities.toVector.zip(expectedEmission)){
+          case (row, expectedRow) =>
+            forAll (row.toVector.zip(expectedRow)) {
+              case (p, expectedP) => p shouldBe (expectedP +- 5e-4)
+            }
+        }
+      }
+
+      "test case 2" in {
+        val string: String =
+          "yyzzzyzzyxyxzxyyzzzzyxyxxyyxyxzzyyyzyyyyyxxzzxxyxyxxxzxxxxxxzyzxxxzzxzyzxxxzxzxxxxzyzyxxyxzxxxxxxyxx"
+        val alphabet = Label(Vector('x', 'y', 'z'))
+        val hiddenPath: String =
+          "BABACBABACAACBBBBCBBBCCACCABAABCAAACCACCBBBCBCBCCABBBCAABBCCABBCCBAABABACCCAACCAAABACCBCAABBCCACCABC"
+        val states = Label(Vector('A', 'B', 'C'))
+        val HMM(_, _, transition, emission) = estimateHmmParameters(string, hiddenPath, alphabet, states)
+
+        val expectedTransition: Vector[Vector[Double]] =
+          Vector(Vector(0.313, 0.375, 0.313), Vector(0.273, 0.364, 0.364), Vector(0.382, 0.235, 0.382))
+
+        forAll (transition.probabilities.toVector.zip(expectedTransition)){
+          case (row, expectedRow) =>
+            forAll (row.toVector.zip(expectedRow)) {
+              case (p, expectedP) => p shouldBe (expectedP +- 5e-4)
+            }
+        }
+
+        val expectedEmission: Vector[Vector[Double]] =
+          Vector(Vector(0.344, 0.406, 0.25), Vector(0.455, 0.242, 0.303), Vector(0.543, 0.2, 0.257))
+
+        forAll (emission.probabilities.toVector.zip(expectedEmission)){
+          case (row, expectedRow) =>
+            forAll (row.toVector.zip(expectedRow)) {
+              case (p, expectedP) => p shouldBe (expectedP +- 5e-4)
+            }
+        }
       }
     }
   }
