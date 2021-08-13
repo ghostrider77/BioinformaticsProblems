@@ -151,4 +151,37 @@ class Chapter10Suite extends AnyFreeSpec with Matchers with Inspectors {
       }
     }
   }
+
+  "Implement Viterbi Learning" - {
+    import TextbookTrack.Chapter10.BA10I.{Label, HMM, ProbabilityMatrix, runViterbiLearning}
+
+    "Should learn a matrix of transition probabilities Transition and a matrix of emission probabilities Emission" in {
+      val string: String =
+        "xxxzyzzxxzxyzxzxyxxzyzyzyyyyzzxxxzzxzyzzzxyxzzzxyzzxxxxzzzxyyxzzzzzyzzzxxzzxxxyxyzzyxzxxxyxzyxxyzyxz"
+      val alphabet = Label(Vector('x', 'y', 'z'))
+      val states = Label(Vector('A', 'B'))
+      val transition = new ProbabilityMatrix(states, states, Some(Array(Array(0.582, 0.418), Array(0.272, 0.728))))
+      val emission =
+        new ProbabilityMatrix(states, alphabet, Some(Array(Array(0.129, 0.35, 0.52), Array(0.422, 0.151, 0.426))))
+      val hmm = HMM(alphabet, states, transition, emission)
+      val result: HMM = runViterbiLearning(hmm, string, n = 100)
+
+      val expectedTransition: Vector[Vector[Double]] = Vector(Vector(0.875, 0.125), Vector(0.011, 0.989))
+      forAll (result.transition.probabilities.toVector.zip(expectedTransition)){
+        case (row, expectedRow) =>
+          forAll (row.toVector.zip(expectedRow)) {
+            case (p, expectedP) => p shouldBe (expectedP +- 5e-4)
+          }
+      }
+
+      val expectedEmission: Vector[Vector[Double]] = Vector(Vector(0.0, 0.75, 0.25), Vector(0.402, 0.174, 0.424))
+
+      forAll (result.emission.probabilities.toVector.zip(expectedEmission)){
+        case (row, expectedRow) =>
+          forAll (row.toVector.zip(expectedRow)) {
+            case (p, expectedP) => p shouldBe (expectedP +- 5e-4)
+          }
+      }
+    }
+  }
 }
