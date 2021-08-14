@@ -44,8 +44,6 @@ object BA10I {
 
     def update(row: Char, col: Char, value: Double): Unit = probabilities(rowLabels(row))(columnLabels(col)) = value
 
-    def increment(row: Char, col: Char): Unit = probabilities(rowLabels(row))(columnLabels(col)) += 1
-
     def rowSum(row: Char): Double = probabilities(rowLabels(row)).sum
   }
 
@@ -87,7 +85,7 @@ object BA10I {
       .sliding(2)
       .map(_.toList)
       .collect { case List(stateFrom, stateTo) => (stateFrom, stateTo) }
-      .foreach { case (stateFrom, stateTo) => transition.increment(stateFrom, stateTo) }
+      .foreach { case (stateFrom, stateTo) => transition(stateFrom, stateTo) += 1 }
 
     for {
       s1 <- states
@@ -105,7 +103,7 @@ object BA10I {
                                             alphabet: Label,
                                             states: Label): ProbabilityMatrix = {
     val emission = new ProbabilityMatrix(states, alphabet)
-    hiddenPath.lazyZip(emittedString).foreach { case (state, char) => emission.increment(state, char) }
+    hiddenPath.lazyZip(emittedString).foreach { case (state, char) => emission(state, char) += 1 }
 
     for {
       state <- states
