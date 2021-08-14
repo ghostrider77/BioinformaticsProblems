@@ -3,6 +3,7 @@ package TextbookTrack.Chapter10
 object BA10H {
   private type Matrix = Array[Array[Double]]
   private val Digits: Int = 3
+  private val Epsilon: Double = 1e-10
 
   case class Label(labels: Vector[Char]) {
     private val labelIndices: Map[Char, Int] = labels.iterator.zipWithIndex.toMap
@@ -32,7 +33,7 @@ object BA10H {
 
     private def initializeMatrix(probs: Option[Matrix]): Matrix = probs match {
       case Some(matrix) => matrix
-      case None => Array.fill(nrRows, nrCols)(0.0)
+      case None => Array.fill(nrRows, nrCols)(Epsilon)
     }
 
     def apply(row: Char, col: Char): Double = probabilities(rowLabels(row))(columnLabels(col))
@@ -73,9 +74,7 @@ object BA10H {
       s1 <- states
       rowSum: Double = transition.rowSum(s1)
       s2 <- states
-    } {
-      transition(s1, s2) = if (rowSum == 0) 1.0 / states.size else transition(s1, s2) / rowSum
-    }
+    } transition(s1, s2) /= rowSum
 
     transition
   }
@@ -91,9 +90,7 @@ object BA10H {
       state <- states
       rowSum: Double = emission.rowSum(state)
       letter <- alphabet
-    } {
-      emission(state, letter) = if (rowSum == 0) 1.0 / alphabet.size else emission(state, letter) / rowSum
-    }
+    } emission(state, letter) /= rowSum
 
     emission
   }

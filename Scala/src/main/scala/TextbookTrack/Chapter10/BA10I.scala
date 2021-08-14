@@ -91,9 +91,7 @@ object BA10I {
       s1 <- states
       rowSum: Double = transition.rowSum(s1)
       s2 <- states
-    } {
-      transition(s1, s2) /= rowSum
-    }
+    } transition(s1, s2) /= rowSum
 
     transition
   }
@@ -109,9 +107,7 @@ object BA10I {
       state <- states
       rowSum: Double = emission.rowSum(state)
       letter <- alphabet
-    } {
-      emission(state, letter) /= rowSum
-    }
+    } emission(state, letter) /= rowSum
 
     emission
   }

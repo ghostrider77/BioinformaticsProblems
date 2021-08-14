@@ -3,6 +3,9 @@ import sys
 
 from collections import namedtuple
 
+EPSILON = 1e-10
+DIGITS = 3
+
 HMM = namedtuple('HMM', ['alphabet', 'states', 'transition', 'emission'])
 
 
@@ -44,7 +47,7 @@ class ProbabilityMatrix:
         lines = ['\t' + '\t'.join(self._column_labels)]
         for label in self._row_labels:
             probs = self._probabilities[self._row_labels[label]]
-            row = '\t'.join(str(round(p, 3)) for p in probs)
+            row = '\t'.join(str(round(p, DIGITS)) for p in probs)
             lines.append(f'{label}\t{row}')
         return '\n'.join(lines)
 
@@ -52,7 +55,7 @@ class ProbabilityMatrix:
         if probabilities is not None:
             return probabilities
 
-        return [[0.0] * self.nr_cols for _ in range(self.nr_rows)]
+        return [[EPSILON] * self.nr_cols for _ in range(self.nr_rows)]
 
     def rowsum(self, label):
         return sum(self._probabilities[self._row_labels[label]])
@@ -85,10 +88,7 @@ def estimate_transition_probabilities(hidden_path, states):
     for s1 in states:
         rowsum = transition.rowsum(s1)
         for s2 in states:
-            if rowsum == 0:
-                transition[s1, s2] = 1 / states.size
-            else:
-                transition[s1, s2] /= rowsum
+            transition[s1, s2] /= rowsum
     return transition
 
 
@@ -100,10 +100,7 @@ def estimate_emission_probabilities(emitted_string, hidden_path, alphabet, state
     for state in states:
         rowsum = emission.rowsum(state)
         for letter in alphabet:
-            if rowsum == 0:
-                emission[state, letter] = 1 / alphabet.size
-            else:
-                emission[state, letter] /= rowsum
+            emission[state, letter] /= rowsum
     return emission
 
 
