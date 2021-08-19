@@ -184,4 +184,90 @@ class Chapter10Suite extends AnyFreeSpec with Matchers with Inspectors {
       }
     }
   }
+
+  "Solve the Soft Decoding Problem" - {
+    import TextbookTrack.Chapter10.BA10J.{Label, HMM, ProbabilityMatrix, solveSoftDecodingProblem}
+
+    "Should calculate the probability Pr(pi = k | x_i) that the HMM was in state k at step i." - {
+      "test case 1" in {
+        val string: String = "zyxxxxyxzz"
+        val alphabet = Label(Vector('x', 'y', 'z'))
+        val states = Label(Vector('A', 'B'))
+        val transition = ProbabilityMatrix(states, states, Array(Array(0.911, 0.089), Array(0.228, 0.772)))
+        val emission = ProbabilityMatrix(states, alphabet, Array(Array(0.356, 0.191, 0.453), Array(0.04, 0.467, 0.493)))
+        val hmm = HMM(alphabet, states, transition, emission)
+        val result: Array[Array[Double]] = solveSoftDecodingProblem(hmm, string)
+
+        val expectedConditionalProbabilities: Vector[Vector[Double]] =
+          Vector(
+            Vector(0.5438, 0.4562),
+            Vector(0.6492, 0.3508),
+            Vector(0.9647, 0.0353),
+            Vector(0.9936, 0.0064),
+            Vector(0.9957, 0.0043),
+            Vector(0.9891, 0.0109),
+            Vector(0.9154, 0.0846),
+            Vector(0.964, 0.036),
+            Vector(0.8737, 0.1263),
+            Vector(0.8167, 0.1833)
+          )
+
+        forAll(result.toVector.zip(expectedConditionalProbabilities)) {
+          case (row, expectedRow) =>
+            forAll(row.toVector.zip(expectedRow)) {
+              case (p, expectedP) => p shouldBe (expectedP +- 5e-5)
+            }
+        }
+      }
+
+      "test case 2" in {
+        val string: String = "xyyzxzyxyy"
+        val alphabet = Label(Vector('x', 'y', 'z'))
+        val states = Label(Vector('A', 'B', 'C', 'D'))
+        val transition = ProbabilityMatrix(
+          rowLabels = states,
+          columnLabels = states,
+          probabilities = Array(
+            Array(0.401, 0.009, 0.195, 0.396),
+            Array(0.375, 0.237, 0.269, 0.119),
+            Array(0.283, 0.25, 0.259, 0.207),
+            Array(0.108, 0.529, 0.107, 0.256)
+          )
+        )
+        val emission = ProbabilityMatrix(
+          rowLabels = states,
+          columnLabels = alphabet,
+          probabilities = Array(
+            Array(0.414, 0.335, 0.251),
+            Array(0.233, 0.172, 0.596),
+            Array(0.284, 0.355, 0.361),
+            Array(0.028, 0.638, 0.334)
+          )
+        )
+        val hmm = HMM(alphabet, states, transition, emission)
+        val result: Array[Array[Double]] = solveSoftDecodingProblem(hmm, string)
+
+        val expectedConditionalProbabilities: Vector[Vector[Double]] =
+          Vector(
+            Vector(0.5003, 0.2114, 0.2662, 0.0222),
+            Vector(0.3648, 0.053, 0.1909, 0.3913),
+            Vector(0.1511, 0.1251, 0.1553, 0.5685),
+            Vector(0.1297, 0.5359, 0.1542, 0.1802),
+            Vector(0.4414, 0.2628, 0.2673, 0.0285),
+            Vector(0.3031, 0.2213, 0.2339, 0.2417),
+            Vector(0.2789, 0.1536, 0.2139, 0.3537),
+            Vector(0.5088, 0.269, 0.1975, 0.0247),
+            Vector(0.3695, 0.0578, 0.1978, 0.3748),
+            Vector(0.2231, 0.1356, 0.1658, 0.4755)
+          )
+
+        forAll(result.toVector.zip(expectedConditionalProbabilities)) {
+          case (row, expectedRow) =>
+            forAll(row.toVector.zip(expectedRow)) {
+              case (p, expectedP) => p shouldBe (expectedP +- 5e-5)
+            }
+        }
+      }
+    }
+  }
 }
