@@ -270,4 +270,37 @@ class Chapter10Suite extends AnyFreeSpec with Matchers with Inspectors {
       }
     }
   }
+
+  "Implement Baum-Welch Learning" - {
+    import TextbookTrack.Chapter10.BA10K.{Label, HMM, ProbabilityMatrix, runBaumWelchLearning}
+
+    "Should calculate transition and emission probabilities that maximizes Pr(x, pi) over all possible transition " +
+      "and emission matrices and over all hidden paths pi." in {
+      val string: String = "xzyyzyzyxy"
+      val alphabet = Label(Vector('x', 'y', 'z'))
+      val states = Label(Vector('A', 'B'))
+      val transition = new ProbabilityMatrix(states, states, Some(Array(Array(0.019, 0.981), Array(0.668, 0.332))))
+      val emission =
+        new ProbabilityMatrix(states, alphabet, Some(Array(Array(0.175, 0.003, 0.821), Array(0.196, 0.512, 0.293))))
+      val hmm = HMM(alphabet, states, transition, emission)
+      val result: HMM = runBaumWelchLearning(hmm, string, n = 10)
+
+      val expectedTransition: Vector[Vector[Double]] = Vector(Vector(0.0, 1.0), Vector(0.786, 0.214))
+      forAll (result.transition.probabilities.toVector.zip(expectedTransition)){
+        case (row, expectedRow) =>
+          forAll (row.toVector.zip(expectedRow)) {
+            case (p, expectedP) => p shouldBe (expectedP +- 5e-4)
+          }
+      }
+
+      val expectedEmission: Vector[Vector[Double]] = Vector(Vector(0.242, 0.0, 0.758), Vector(0.172, 0.828, 0.0))
+
+      forAll (result.emission.probabilities.toVector.zip(expectedEmission)) {
+        case (row, expectedRow) =>
+          forAll(row.toVector.zip(expectedRow)) {
+            case (p, expectedP) => p shouldBe (expectedP +- 5e-4)
+          }
+      }
+    }
+  }
 }
