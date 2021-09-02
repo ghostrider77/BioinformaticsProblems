@@ -4,6 +4,10 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 
 class Chapter11Suite extends AnyFreeSpec with Matchers {
+  object TestMassTable {
+    val massTable: Map[Char, Int] = Map('X' -> 4, 'Z' -> 5)
+  }
+
   "Construct the Graph of a Spectrum" - {
     import TextbookTrack.Chapter11.BA11A.Graph
 
@@ -37,6 +41,17 @@ class Chapter11Suite extends AnyFreeSpec with Matchers {
       val spectrum: List[Int] = List(57, 71, 154, 185, 301, 332, 415, 429, 486)
       val result: Option[String] = decodeAnIdealSpectrum(spectrum)
       Set(Some("GPFNA"), Some("ANFPG")) should contain (result)
+    }
+  }
+
+  "Convert a Peptide into a Peptide Vector" - {
+    import TextbookTrack.Chapter11.BA11C.calcPeptideVector
+    import TestMassTable.massTable
+
+    "Should calculate the peptide vector of a peptide" in {
+      val peptide: String = "XZZXX"
+      val result: List[Int] = calcPeptideVector(peptide, massTable)
+      result shouldEqual List(0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1)
     }
   }
 }
