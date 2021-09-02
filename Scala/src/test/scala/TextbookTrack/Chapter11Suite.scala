@@ -54,4 +54,15 @@ class Chapter11Suite extends AnyFreeSpec with Matchers {
       result shouldEqual List(0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1)
     }
   }
+
+  "Convert a Peptide Vector into a Peptide" - {
+    import TextbookTrack.Chapter11.BA11D.restorePeptideFromPeptideVector
+    import TestMassTable.massTable
+
+    "Should recreate the peptide form the peptide vector" in {
+      val peptideVector: List[Int] = List(0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+      val result: Option[String] = restorePeptideFromPeptideVector(peptideVector, massTable)
+      result shouldBe Some("XZZXX")
+    }
+  }
 }
