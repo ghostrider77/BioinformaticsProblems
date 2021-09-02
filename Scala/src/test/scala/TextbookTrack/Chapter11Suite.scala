@@ -29,4 +29,14 @@ class Chapter11Suite extends AnyFreeSpec with Matchers {
       graph.edges.toList should contain theSameElementsAs expectedEdges
     }
   }
+
+  "Implement DecodingIdealSpectrum" - {
+    import TextbookTrack.Chapter11.BA11B.decodeAnIdealSpectrum
+
+    "Should compute the graph of a spectrum" in {
+      val spectrum: List[Int] = List(57, 71, 154, 185, 301, 332, 415, 429, 486)
+      val result: Option[String] = decodeAnIdealSpectrum(spectrum)
+      Set(Some("GPFNA"), Some("ANFPG")) should contain (result)
+    }
+  }
 }
