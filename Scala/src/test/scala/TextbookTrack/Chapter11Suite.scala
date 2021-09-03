@@ -65,4 +65,15 @@ class Chapter11Suite extends AnyFreeSpec with Matchers {
       result shouldBe Some("XZZXX")
     }
   }
+
+  "Sequence a Peptide" - {
+    import TextbookTrack.Chapter11.BA11E.runPeptideSequencing
+    import TestMassTable.massTable
+
+    "Should return a peptide with maximum score against spectrum" in {
+      val spectrum: List[Int] = List(0, 0, 0, 4, -2, -3, -1, -7, 6, 5, 3, 2, 1, 9, 3, -8, 0, 3, 1, 2, 1, 0)
+      val result: String = runPeptideSequencing(spectrum, massTable)
+      result shouldEqual "XZZXX"
+    }
+  }
 }
