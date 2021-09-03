@@ -76,4 +76,16 @@ class Chapter11Suite extends AnyFreeSpec with Matchers {
       result shouldEqual "XZZXX"
     }
   }
+
+  "Find a Highest-Scoring Peptide in a Proteome against a Spectrum" - {
+    import TextbookTrack.Chapter11.BA11F.findHighestScoringPeptideInProteome
+    import TestMassTable.massTable
+
+    "Should find a peptide from a proteome with maximum score against a spectrum" in {
+      val spectrum: Vector[Int] = Vector(0, 0, 0, 4, -2, -3, -1, -7, 6, 5, 3, 2, 1, 9, 3, -8, 0, 3, 1, 2, 1, 8)
+      val proteome: String = "XZZXZXXXZXZZXZXXZ"
+      val result: String = findHighestScoringPeptideInProteome(spectrum, proteome, massTable)
+      result shouldEqual "ZXZXX"
+    }
+  }
 }
