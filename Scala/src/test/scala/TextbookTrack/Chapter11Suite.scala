@@ -88,4 +88,21 @@ class Chapter11Suite extends AnyFreeSpec with Matchers {
       result shouldEqual "ZXZXX"
     }
   }
+
+  "Implement PSMSearch" - {
+    import TextbookTrack.Chapter11.BA11G.findPeptideSpectrumMatchPairs
+    import TestMassTable.massTable
+
+    "Should find all unique peptide-spectrum matches scoring at least as high as threshold" in {
+      val spectra: Vector[Vector[Int]] =
+        Vector(
+          Vector(-1, 5, -4, 5, 3, -1, -4, 5, -1, 0, 0, 4, -1, 0, 1, 4, 4, 4),
+          Vector(-4, 2, -2, -4, 4, -5, -1, 4, -1, 2, 5, -3, -1, 3, 2, -3)
+        )
+      val proteome: String = "XXXZXZXXZXZXXXZXXZX"
+      val threshold: Int = 5
+      val result: Set[String] = findPeptideSpectrumMatchPairs(spectra, proteome, threshold, massTable)
+      result shouldEqual Set("XZXZ")
+    }
+  }
 }
