@@ -105,4 +105,30 @@ class Chapter11Suite extends AnyFreeSpec with Matchers {
       result shouldEqual Set("XZXZ")
     }
   }
+
+  "Compute the Size of a Spectral Dictionary" - {
+    import TextbookTrack.Chapter11.BA11H.calcSpectralDictionarySize
+    import TestMassTable.massTable
+
+    "Should find the size of the spectral dictionary for a given spectrum and score threshold" in {
+      val spectrum: Vector[Int] = Vector(4, -3, -2, 3, 3, -4, 5, -3, -1, -1, 3, 4, 1, 3)
+      val threshold: Int = 1
+      val maxScore: Int = 8
+      val result: Int = calcSpectralDictionarySize(spectrum, massTable, threshold, maxScore)
+      result shouldEqual 3
+    }
+  }
+
+  "Compute the Probability of a Spectral Dictionary" - {
+    import TextbookTrack.Chapter11.BA11I.calcProbabilityOfSpectralDictionary
+    import TestMassTable.massTable
+
+    "Should find the size of the spectral dictionary for a given spectrum and score threshold" in {
+      val spectrum: Vector[Int] = Vector(4, -3, -2, 3, 3, -4, 5, -3, -1, -1, 3, 4, 1, 3)
+      val threshold: Int = 1
+      val maxScore: Int = 8
+      val result: Double = calcProbabilityOfSpectralDictionary(spectrum, massTable, threshold, maxScore)
+      result shouldBe (0.375 +- 1e-8)
+    }
+  }
 }
