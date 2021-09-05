@@ -131,4 +131,17 @@ class Chapter11Suite extends AnyFreeSpec with Matchers {
       result shouldBe (0.375 +- 1e-8)
     }
   }
+
+  "Find a Highest-Scoring Modified Peptide against a Spectrum" - {
+    import TextbookTrack.Chapter11.BA11J.solveSpectralAlignmentProblem
+    import TestMassTable.massTable
+
+    "Should find a modified variant of a peptide that maximizes the peptide-spectrum score among all variants of the " +
+      "peptides with up to k modifications" in {
+      val peptide: String = "XXZ"
+      val spectrum: Vector[Int] = Vector(4, -3, -2, 3, 3, -4, 5, -3, -1, -1, 3, 4, 1, 3)
+      val k: Int = 2
+      solveSpectralAlignmentProblem(peptide, spectrum, massTable, k) shouldEqual "XX(-1)Z(+2)"
+    }
+  }
 }
