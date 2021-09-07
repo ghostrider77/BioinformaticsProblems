@@ -3,14 +3,14 @@ package TextbookTrack.Chapter01
 object BA1B {
   def mostFrequentKMer(text: String, k: Int): List[String] = {
     val counts: Map[String, Int] = text.sliding(k).foldLeft(Map.empty[String, Int]) {
-      case (acc, k_mer) =>
-        val count: Int = acc.getOrElse(k_mer, 0)
-        acc.updated(k_mer, count + 1)
+      case (acc, kMer) =>
+        val count: Int = acc.getOrElse(kMer, 0)
+        acc.updated(kMer, count + 1)
     }
     val maxCount: Int = counts.valuesIterator.max
     counts
       .withFilter { case (_, count) => count == maxCount }
-      .map { case (k_mer, _) => k_mer }
+      .map { case (kMer, _) => kMer }
       .toList
   }
 
