@@ -22,4 +22,13 @@ class Chapter06Suite extends AnyFreeSpec with Matchers {
         )
     }
   }
+
+  "Compute the Number of Breakpoints in a Permutation" - {
+    import TextbookTrack.Chapter06.BA6B.{SignedPermutation, calcNrBreakpoints, readPermutation}
+
+    "Should return the number of breakpoints in a signed permutation" in {
+      val permutation: SignedPermutation = readPermutation("(+3 +4 +5 -12 -8 -7 -6 +1 +2 +10 +9 -11 +13 +14)")
+      calcNrBreakpoints(permutation) shouldEqual 8
+    }
+  }
 }
