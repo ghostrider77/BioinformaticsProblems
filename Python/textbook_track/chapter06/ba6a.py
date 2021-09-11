@@ -1,4 +1,4 @@
-# Find the Minimum Number of Coins Needed to Make Change
+# Implement GreedySorting to Sort a Permutation by Reversals
 import itertools as it
 import sys
 
