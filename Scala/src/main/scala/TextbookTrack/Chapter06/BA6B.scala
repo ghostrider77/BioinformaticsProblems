@@ -1,8 +1,6 @@
 package TextbookTrack.Chapter06
 
 object BA6B {
-  import scala.language.implicitConversions
-
   sealed trait Sign
   final case object Plus extends Sign {
     override def toString: String = "+"
@@ -24,6 +22,8 @@ object BA6B {
 
     val value: Int = if (sign == Plus) number else -number
 
+    def toInt: Int = value
+
     def +(that: SignedNumber): SignedNumber = {
       val result: Int = this.value + that.value
       if (result < 0) SignedNumber(Minus, math.abs(result))
@@ -42,8 +42,6 @@ object BA6B {
 
     def apply(ix: Int): SignedNumber = permutation(ix)
   }
-
-  implicit def toInt(s: SignedNumber): Int = s.value
 
   def readPermutation(line: String): SignedPermutation = {
     val permutations: Vector[SignedNumber] =
@@ -75,7 +73,7 @@ object BA6B {
       .iterator
       .sliding(2)
       .collect{ case Seq(a, b) => (a, b) }
-      .count{ case (a, b) => (b - a: Int) != 1 }
+      .count{ case (a, b) => (b - a).toInt != 1 }
   }
 
   def main(args: Array[String]): Unit = {
