@@ -31,4 +31,15 @@ class Chapter06Suite extends AnyFreeSpec with Matchers {
       calcNrBreakpoints(permutation) shouldEqual 8
     }
   }
+
+  "Find All Shared k-mers of a Pair of Strings" - {
+    import TextbookTrack.Chapter06.BA6E.calcSharedKMers
+
+    "Should return the starting indices of all shared k-mers including reverse complements" in {
+      val k: Int = 3
+      val s1: String = "AAACTCATC"
+      val s2: String = "TTTCAAATC"
+      calcSharedKMers(s1, s2, k) should contain theSameElementsAs List((0, 4), (0, 0), (4, 2), (6, 6))
+    }
+  }
 }
