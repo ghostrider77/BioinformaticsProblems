@@ -42,4 +42,14 @@ class Chapter06Suite extends AnyFreeSpec with Matchers {
       calcSharedKMers(s1, s2, k) should contain theSameElementsAs List((0, 4), (0, 0), (4, 2), (6, 6))
     }
   }
+
+  "Implement ChromosomeToCycle" - {
+    import TextbookTrack.Chapter06.BA6F.{Chromosome, Cycle, readChromosome, chromosomeToCycle}
+
+    "Should convert a chromosome of n synteny blocks to a cycle of 2n nodes" in {
+      val chromosome: Chromosome = readChromosome("(+1 -2 -3 +4)")
+      val result: Cycle = chromosomeToCycle(chromosome)
+      result.toString shouldEqual "(1 2 4 3 6 5 7 8)"
+    }
+  }
 }
