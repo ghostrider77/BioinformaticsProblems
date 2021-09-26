@@ -52,4 +52,14 @@ class Chapter06Suite extends AnyFreeSpec with Matchers {
       result.toString shouldEqual "(1 2 4 3 6 5 7 8)"
     }
   }
+
+  "Implement CycleToChromosome" - {
+    import TextbookTrack.Chapter06.BA6G.{Chromosome, Cycle, readCycle, cycleToChromosome}
+
+    "Should convert a cycle of 2n nodes into a Chromosome of n synteny blocks" in {
+      val cycle: Cycle = readCycle("(1 2 4 3 6 5 7 8)")
+      val result: Chromosome = cycleToChromosome(cycle)
+      result.toString shouldEqual "(+1 -2 -3 +4)"
+    }
+  }
 }
