@@ -62,4 +62,14 @@ class Chapter06Suite extends AnyFreeSpec with Matchers {
       result.toString shouldEqual "(+1 -2 -3 +4)"
     }
   }
+
+  "Implement ColoredEdges" - {
+    import TextbookTrack.Chapter06.BA6H.{Edge, Genome, readGenome, calcColoredEdges}
+
+    "Should find the colored edges in a genome" in {
+      val genome: Genome = readGenome("(+1 -2 -3)(+4 +5 -6)")
+      val result: List[Edge] = calcColoredEdges(genome)
+      result shouldEqual List(Edge(2, 4), Edge(3, 6), Edge(5, 1), Edge(8, 9), Edge(10, 12), Edge(11, 7))
+    }
+  }
 }
