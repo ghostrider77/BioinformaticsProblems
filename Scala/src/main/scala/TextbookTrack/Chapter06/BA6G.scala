@@ -13,7 +13,7 @@ object BA6G {
     def apply(char: Char): Sign = char match {
       case '+' => Plus
       case '-' => Minus
-      case _ => throw new Exception("Unknow sign.")
+      case _ => throw new Exception("Unknown sign.")
     }
   }
 
