@@ -72,4 +72,14 @@ class Chapter06Suite extends AnyFreeSpec with Matchers {
       result shouldEqual List(Edge(2, 4), Edge(3, 6), Edge(5, 1), Edge(8, 9), Edge(10, 12), Edge(11, 7))
     }
   }
+
+  "Implement GraphToGenome" - {
+    import TextbookTrack.Chapter06.BA6I.{Edge, Genome, graphToGenome}
+
+    "Should reconstruct the genome from colored edges in genome graph" in {
+      val edges: List[Edge] = List(Edge(2, 4), Edge(3, 6), Edge(5, 1), Edge(7, 9), Edge(10, 12), Edge(11, 8))
+      val result: Genome = graphToGenome(edges)
+      result.toString shouldEqual "(+1 -2 -3)(-4 +5 -6)"
+    }
+  }
 }
