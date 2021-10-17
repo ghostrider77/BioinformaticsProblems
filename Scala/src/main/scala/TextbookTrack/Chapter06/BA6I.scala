@@ -72,15 +72,11 @@ object BA6I {
              edges: List[Edge]): List[Cycle] = edges match {
       case Nil => cycles.reverse
       case Edge(a, b) :: rest =>
-        val start: Int = startNode match {
-          case None => a
-          case Some(node) => node
-        }
+        val start: Int = startNode.getOrElse(a)
         val potentialLast: Int = if (b % 2 == 0) b - 1 else b + 1
         if (potentialLast == start) {
           val nodes: List[Int] = b :: (a :: currentNodes).reverse
-          val cycle: Cycle = Cycle(nodes.toVector)
-          loop(cycle :: cycles, Nil, None, rest)
+          loop(Cycle(nodes.toVector) :: cycles, Nil, None, rest)
         } else loop(cycles, b :: a :: currentNodes, Some(start), rest)
     }
 
