@@ -88,4 +88,14 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       calcMajorityElements(arrays, n) shouldEqual List(5, 7, -1, -1)
     }
   }
+
+  "Merge Two Sorted Arrays" - {
+    import AlgorithmicHeights.MER.mergeSortedLists
+
+    "should return a sorted array containing the elements of the two input arrays" in {
+      val xs: List[Int] = List(2, 4, 10, 18)
+      val ys: List[Int] = List(-5, 11, 12)
+      mergeSortedLists(xs, ys) shouldEqual List(-5, 2, 4, 10, 11, 12, 18)
+    }
+  }
 }
