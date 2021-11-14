@@ -54,4 +54,22 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Double-Degree Array" - {
+    import AlgorithmicHeights.DDEG.{Edge, calcDoubleDegreeArray}
+
+    "should calculate for each node the sum of degrees of its neighbours" - {
+      "test case 1" in {
+        val nrNodes: Int = 5
+        val edges: List[Edge] = List(Edge(1, 2), Edge(2, 3), Edge(4, 3), Edge(2, 4))
+        calcDoubleDegreeArray(nrNodes, edges) shouldEqual List(3, 5, 5, 5, 0)
+      }
+
+      "test case 2" in {
+        val nrNodes: Int = 5
+        val edges: List[Edge] = List(Edge(1, 2), Edge(2, 3), Edge(2, 5), Edge(3, 5))
+        calcDoubleDegreeArray(nrNodes, edges) shouldEqual List(3, 5, 5, 0, 5)
+      }
+    }
+  }
 }
