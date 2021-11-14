@@ -1,6 +1,6 @@
 package AlgorithmicHeights
 
-object Bins {
+object BINS {
   import scala.annotation.tailrec
 
   private def convertToIntVector(line: String): Vector[Int] = line.split(" ").map(_.toInt).toVector

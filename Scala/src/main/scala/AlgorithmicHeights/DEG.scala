@@ -1,6 +1,6 @@
 package AlgorithmicHeights
 
-object Deg {
+object DEG {
   final case class Edge(a: Int, b: Int)
 
   class Graph(val nrNodes: Int, edgeList: List[Edge]) {

@@ -1,6 +1,6 @@
 package AlgorithmicHeights
 
-object Fibo {
+object FIBO {
   def fibonacci(n: Int): Int =
     (0 until n).foldLeft((0, 1)){ case ((a, b), _) => (b, a + b) }._1
 
