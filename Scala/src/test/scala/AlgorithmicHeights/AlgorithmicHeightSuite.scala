@@ -72,4 +72,20 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Majority Element" - {
+    import AlgorithmicHeights.MAJ.calcMajorityElements
+
+    "should output an element of an array occurring strictly more than n/2 times if such element exists" in {
+      val n: Int = 8
+      val arrays: List[List[Int]] =
+        List(
+          List(5, 5, 5, 5, 5, 5, 5, 5),
+          List(8, 7, 7, 7, 1, 7, 3, 7),
+          List(7, 1, 6, 5, 10, 100, 1000, 1),
+          List(5, 1, 6, 7, 1, 1, 10, 1)
+      )
+      calcMajorityElements(arrays, n) shouldEqual List(5, 7, -1, -1)
+    }
+  }
 }
