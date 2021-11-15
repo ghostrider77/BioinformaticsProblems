@@ -98,4 +98,19 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       mergeSortedLists(xs, ys) shouldEqual List(-5, 2, 4, 10, 11, 12, 18)
     }
   }
+
+  "2SUM" - {
+    import AlgorithmicHeights.TSUM.findZeroSumIndexPairs
+
+    "should output two different indices 1<=p<q<=n such that A[p]=−A[q] if exist, and -1 otherwise" in {
+      val arrays: List[List[Int]] =
+        List(
+          List(2, -3, 4, 10, 5),
+          List(8, 2, 4, -2, -8),
+          List(-5, 2, 3, 2, -4),
+          List(5, 4, -5, 6, 8)
+        )
+      findZeroSumIndexPairs(arrays).map(_.toString) shouldEqual List("-1", "2 4", "-1", "1 3")
+    }
+  }
 }
