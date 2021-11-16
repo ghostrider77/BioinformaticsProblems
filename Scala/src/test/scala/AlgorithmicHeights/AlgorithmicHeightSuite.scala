@@ -113,4 +113,15 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       findZeroSumIndexPairs(arrays).map(_.toString) shouldEqual List("-1", "2 4", "-1", "1 3")
     }
   }
+
+  "Breadth-First Search" - {
+    import AlgorithmicHeights.BFS.{DirectedGraph, Edge}
+
+    "should calculate the shortest paths from node 1 to any other nodes" in {
+      val nrNodes: Int = 6
+      val edges: List[Edge] = List(Edge(4, 6), Edge(6, 5), Edge(4, 3), Edge(3, 5), Edge(2, 1), Edge(1, 4))
+      val graph = new DirectedGraph(nrNodes, edges)
+      graph.breadthFirstSearch(startNode = 1) shouldEqual List(0, -1, 2, 1, 3, 2)
+    }
+  }
 }
