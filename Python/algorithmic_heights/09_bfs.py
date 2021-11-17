@@ -1,4 +1,4 @@
-# Double-Degree Array
+# Breadth-First Search
 import sys
 
 from collections import defaultdict, deque

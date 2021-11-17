@@ -100,7 +100,7 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
   }
 
   "2SUM" - {
-    import AlgorithmicHeights.TSUM.findZeroSumIndexPairs
+    import AlgorithmicHeights.SUM2.findZeroSumIndexPairs
 
     "should output two different indices 1<=p<q<=n such that A[p]=−A[q] if exist, and -1 otherwise" in {
       val arrays: List[List[Int]] =
@@ -122,6 +122,47 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       val edges: List[Edge] = List(Edge(4, 6), Edge(6, 5), Edge(4, 3), Edge(3, 5), Edge(2, 1), Edge(1, 4))
       val graph = new DirectedGraph(nrNodes, edges)
       graph.breadthFirstSearch(startNode = 1) shouldEqual List(0, -1, 2, 1, 3, 2)
+    }
+  }
+
+  "Connected Components" - {
+    import AlgorithmicHeights.CC.{Edge, Graph}
+
+    "should calculate the number of connected components in an udirected simple graph" - {
+      "test case 1" in {
+        val nrNodes: Int = 12
+        val edges: List[Edge] =
+          List(
+            Edge(1, 2),
+            Edge(1, 5),
+            Edge(5, 9),
+            Edge(5, 10),
+            Edge(9, 10),
+            Edge(3, 4),
+            Edge(3, 7),
+            Edge(3, 8),
+            Edge(4, 8),
+            Edge(7, 11),
+            Edge(8, 11),
+            Edge(11, 12),
+            Edge(8, 12)
+          )
+        val graph = new Graph(nrNodes, edges)
+        graph.connectedComponents should have length 3
+      }
+
+      "test case 2" in {
+        val nrNodes: Int = 4
+        val edges: List[Edge] =
+          List(
+            Edge(1, 3),
+            Edge(2, 3),
+            Edge(1, 4),
+            Edge(2, 4)
+          )
+        val graph = new Graph(nrNodes, edges)
+        graph.connectedComponents should have length 1
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 package AlgorithmicHeights
 
-object TSUM {
+object SUM2 {
   import scala.annotation.tailrec
 
   sealed trait Result
