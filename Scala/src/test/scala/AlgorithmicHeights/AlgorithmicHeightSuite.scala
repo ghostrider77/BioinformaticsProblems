@@ -4,6 +4,16 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 
 class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
+  object Helpers {
+    def isMaxHeap(array: Array[Int], n: Int): Boolean = {
+      def maxHeapProperty(ix: Int): Boolean = {
+        val leftChildRelation: Boolean = if (2*ix + 1 < n) array(ix) >= array(2*ix + 1) else true
+        val rightChildRelation: Boolean = if (2*ix + 2 < n) array(ix) >= array(2*ix + 2) else true
+        leftChildRelation && rightChildRelation
+      }
+      (0 until n / 2).forall(maxHeapProperty)
+    }
+  }
 
   "Fibonacci Numbers" - {
     import AlgorithmicHeights.FIBO.fibonacci
@@ -163,6 +173,18 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
         val graph = new Graph(nrNodes, edges)
         graph.connectedComponents should have length 1
       }
+    }
+  }
+
+  "Building a Heap" - {
+    import AlgorithmicHeights.HEA.heapify
+    import Helpers.isMaxHeap
+
+    "should modify the input array such that the new one satisfies the max-heap property" in {
+      val n: Int = 5
+      val array: Array[Int] = Array(1, 3, 5, 7, 2)
+      heapify(array, n)
+      isMaxHeap(array, n) shouldBe true
     }
   }
 }
