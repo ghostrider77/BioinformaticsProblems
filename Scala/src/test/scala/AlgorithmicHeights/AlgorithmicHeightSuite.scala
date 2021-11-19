@@ -187,4 +187,13 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       isMaxHeap(array, n) shouldBe true
     }
   }
+
+  "Merge Sort" - {
+    import AlgorithmicHeights.MS.mergeSort
+
+    "should return the sorted array" in {
+      val xs: List[Int] = List(20, 19, 35, -18, 17, -20, 20, 1, 4, 4)
+      mergeSort(xs, xs.length) shouldBe sorted
+    }
+  }
 }
