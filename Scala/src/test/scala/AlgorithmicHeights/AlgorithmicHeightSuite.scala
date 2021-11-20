@@ -13,6 +13,12 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       }
       (0 until n / 2).forall(maxHeapProperty)
     }
+
+    def is2WayPartitioned(array: Array[Int], pivot: Int): Boolean = {
+      val ix: Int = array.lastIndexOf(pivot)
+      val (smaller, larger): (Array[Int], Array[Int]) = array.splitAt(ix + 1)
+      smaller.forall(_ <= pivot) && larger.forall(_ > pivot)
+    }
   }
 
   "Fibonacci Numbers" - {
@@ -194,6 +200,51 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
     "should return the sorted array" in {
       val xs: List[Int] = List(20, 19, 35, -18, 17, -20, 20, 1, 4, 4)
       mergeSort(xs, xs.length) shouldBe sorted
+    }
+  }
+
+  "2-Way Partition" - {
+    import AlgorithmicHeights.PAR.twoWayPartitioning
+    import Helpers.is2WayPartitioned
+
+    "should partition the input array according to the head as the pivot element" - {
+      "test case 1" in {
+        val n: Int = 9
+        val array: Array[Int] = Array(7, 2, 5, 6, 1, 3, 9, 4, 8)
+        val pivotElem: Int = array(0)
+        twoWayPartitioning(array, pivotElem, n)
+        is2WayPartitioned(array, pivotElem) shouldBe true
+      }
+
+      "test case 2" in {
+        val n: Int = 7
+        val array: Array[Int] = Array(7, 2, 1, 8, 7, 10, 3)
+        val pivotElem: Int = array(0)
+        twoWayPartitioning(array, pivotElem, n)
+        is2WayPartitioned(array, pivotElem) shouldBe true
+      }
+    }
+  }
+
+  "3SUM" - {
+    import AlgorithmicHeights.SUM3.findZeroSumIndexPairs
+
+    "should output 3 different indices 1<=p<q<r<=n such that A[p]+A[q]+A[r]=0 if exist, and -1 otherwise" - {
+      "test case 1" in {
+        val arrays: List[List[Int]] =
+          List(
+            List(2, -3, 4, 10, 5),
+            List(8, -6, 4, -2, -8),
+            List(-5, 2, 3, 2, -4),
+            List(2, 4, -5, 6, 8)
+          )
+        findZeroSumIndexPairs(arrays).map(_.toString) shouldEqual List("-1", "1 2 4", "1 2 3", "-1")
+      }
+
+      "test case 2" in {
+        val arrays: List[List[Int]] = List(List(-1, 1, 1, 2))
+        findZeroSumIndexPairs(arrays).map(_.toString) shouldEqual List("-1")
+      }
     }
   }
 }
