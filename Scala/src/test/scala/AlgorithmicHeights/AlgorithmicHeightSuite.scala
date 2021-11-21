@@ -247,4 +247,17 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Testing Bipartiteness" - {
+    import AlgorithmicHeights.BIP.{Edge, Graph, testBipartiteness}
+
+    "should test if an undirected simple graph is bipartite" in {
+      val n1: Int = 3
+      val edges1: List[Edge] = List(Edge(1, 2), Edge(3, 2), Edge(3, 1))
+      val n2: Int = 4
+      val edges2: List[Edge] = List(Edge(1, 4), Edge(3, 1), Edge(1, 2))
+      val graphs: List[Graph] = List(new Graph(n1, edges1), new Graph(n2, edges2))
+      testBipartiteness(graphs) shouldEqual List(false, true)
+    }
+  }
 }
