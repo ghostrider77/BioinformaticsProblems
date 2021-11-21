@@ -260,4 +260,18 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       testBipartiteness(graphs) shouldEqual List(false, true)
     }
   }
+
+  "Testing Acyclicity" - {
+    import AlgorithmicHeights.DAG.{Edge, DirectedGraph, testAcyclicity}
+
+    "should test if a directed simple graph does not have any cycle" in {
+      val graphs: List[DirectedGraph] =
+        List(
+          new DirectedGraph(2, List(Edge(1, 2))),
+          new DirectedGraph(4, List(Edge(4, 1), Edge(1, 2), Edge(2, 3), Edge(3, 1))),
+          new DirectedGraph(4, List(Edge(4, 3), Edge(3, 2), Edge(2, 1)))
+        )
+      testAcyclicity(graphs) shouldEqual List(true, false, true)
+    }
+  }
 }
