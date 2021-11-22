@@ -274,4 +274,26 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       testAcyclicity(graphs) shouldEqual List(true, false, true)
     }
   }
+
+  "Dijkstra's Algorithm" - {
+    import AlgorithmicHeights.DIJ.{Edge, DirectedGraph, calcShortestDistances}
+
+    "should return the length of a shortest path from the vertex 1 to the vertex i" in {
+      val edges: List[Edge] =
+        List(
+          Edge(3, 4, 4),
+          Edge(1, 2, 4),
+          Edge(1, 3, 2),
+          Edge(2, 3, 3),
+          Edge(6, 3, 2),
+          Edge(3, 5, 5),
+          Edge(5, 4, 1),
+          Edge(3, 2, 1),
+          Edge(2, 4, 2),
+          Edge(2, 5, 3)
+        )
+      val graph = new DirectedGraph(6, edges)
+      calcShortestDistances(graph, sourceNode = 1) shouldEqual List(0, 3, 2, 5, 6, -1)
+    }
+  }
 }
