@@ -7,10 +7,11 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
   object Helpers {
     def isMaxHeap(array: Array[Int], n: Int): Boolean = {
       def maxHeapProperty(ix: Int): Boolean = {
-        val leftChildRelation: Boolean = if (2*ix + 1 < n) array(ix) >= array(2*ix + 1) else true
-        val rightChildRelation: Boolean = if (2*ix + 2 < n) array(ix) >= array(2*ix + 2) else true
+        val leftChildRelation: Boolean = if (2 * ix + 1 < n) array(ix) >= array(2 * ix + 1) else true
+        val rightChildRelation: Boolean = if (2 * ix + 2 < n) array(ix) >= array(2 * ix + 2) else true
         leftChildRelation && rightChildRelation
       }
+
       (0 until n / 2).forall(maxHeapProperty)
     }
 
@@ -100,7 +101,7 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
           List(8, 7, 7, 7, 1, 7, 3, 7),
           List(7, 1, 6, 5, 10, 100, 1000, 1),
           List(5, 1, 6, 7, 1, 1, 10, 1)
-      )
+        )
       calcMajorityElements(arrays, n) shouldEqual List(5, 7, -1, -1)
     }
   }
@@ -294,6 +295,17 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
         )
       val graph = new DirectedGraph(6, edges)
       calcShortestDistances(graph, sourceNode = 1) shouldEqual List(0, 3, 2, 5, 6, -1)
+    }
+  }
+
+  "Heap Sort" - {
+    import AlgorithmicHeights.HS.heapsort
+
+    "should sort the array in-place by using heapsort" in {
+      val n: Int = 9
+      val array: Array[Int] = Array(2, 6, 7, 1, 3, 5, 4, 8, 9)
+      heapsort(array, n)
+      array shouldBe sorted
     }
   }
 }
