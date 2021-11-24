@@ -308,4 +308,15 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       array shouldBe sorted
     }
   }
+
+  "Counting Inversions" - {
+    import AlgorithmicHeights.INV.countInversions
+
+    "should return the number of inversions in the input array" in {
+      val n: Int = 6
+      val xs: List[Int] = List(-6, 1, 15, 8, 10)
+      val (_, result): (List[Int], Long) = countInversions(xs, 6)
+      result shouldEqual 2L
+    }
+  }
 }
