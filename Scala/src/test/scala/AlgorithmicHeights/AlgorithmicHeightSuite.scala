@@ -350,4 +350,17 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Square in a Graph" - {
+    import AlgorithmicHeights.SQ.{Edge, Graph, haveGraphsSquares}
+
+    "should check if a simple undirected graph contains a simple cycle of length 4" in {
+      val graphs: List[Graph] =
+        List(
+          new Graph(4, List(Edge(3, 4), Edge(4, 2), Edge(3, 2), Edge(3, 1), Edge(1, 2))),
+          new Graph(4, List(Edge(1, 2), Edge(3, 4), Edge(2, 4), Edge(4, 1)))
+        )
+      haveGraphsSquares(graphs) shouldEqual List(true, false)
+    }
+  }
 }
