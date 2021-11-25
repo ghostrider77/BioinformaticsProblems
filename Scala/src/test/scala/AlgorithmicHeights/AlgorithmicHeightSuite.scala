@@ -20,6 +20,14 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       val (smaller, larger): (Array[Int], Array[Int]) = array.splitAt(ix + 1)
       smaller.forall(_ <= pivot) && larger.forall(_ > pivot)
     }
+
+    def is3WayPartitioned(array: Array[Int], pivot: Int): Boolean = {
+      val firstIx: Int = array.indexOf(pivot)
+      val lastIx: Int = array.lastIndexOf(pivot)
+      (array.take(firstIx).forall(_ < pivot)
+        && array.slice(firstIx, lastIx + 1).forall(_ == pivot)
+        && array.drop(lastIx + 1).forall(_ > pivot))
+    }
   }
 
   "Fibonacci Numbers" - {
@@ -315,8 +323,31 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
     "should return the number of inversions in the input array" in {
       val n: Int = 6
       val xs: List[Int] = List(-6, 1, 15, 8, 10)
-      val (_, result): (List[Int], Long) = countInversions(xs, 6)
+      val (_, result): (List[Int], Long) = countInversions(xs, n)
       result shouldEqual 2L
+    }
+  }
+
+  "3-Way Partition" - {
+    import AlgorithmicHeights.PAR3.threeWayPartitioning
+    import Helpers.is3WayPartitioned
+
+    "should 3-way partition the input array according to the head as the pivot element" - {
+      "test case 1" in {
+        val n: Int = 9
+        val array: Array[Int] = Array(4, 5, 6, 4, 1, 2, 5, 7, 4)
+        val pivotElem: Int = array(0)
+        threeWayPartitioning(array, pivotElem, n)
+        is3WayPartitioned(array, pivotElem) shouldBe true
+      }
+
+      "test case 2" in {
+        val n: Int = 9
+        val array: Array[Int] = Array(7, 7, 1, 7, 7, 9, 8, 2, 7)
+        val pivotElem: Int = array(0)
+        threeWayPartitioning(array, pivotElem, n)
+        is3WayPartitioned(array, pivotElem) shouldBe true
+      }
     }
   }
 }
