@@ -363,4 +363,31 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       haveGraphsSquares(graphs) shouldEqual List(true, false)
     }
   }
+
+  "Bellman-Ford Algorithm" - {
+    import AlgorithmicHeights.BF.{Edge, DirectedGraph, runBellmanFordAlgorithm}
+
+    "should return the length of a shortest paths from vertex 1 to vertex i where weights can be negative" in {
+      val edges: List[Edge] =
+        List(
+          Edge(1, 2, 10),
+          Edge(3, 2, 1),
+          Edge(3, 4, 1),
+          Edge(4, 5, 3),
+          Edge(5, 6, -1),
+          Edge(7, 6, -1),
+          Edge(8, 7, 1),
+          Edge(1, 8, 8),
+          Edge(7, 2, -4),
+          Edge(2, 6, 2),
+          Edge(6, 3, -2),
+          Edge(9, 5, -10),
+          Edge(9, 4, 7)
+        )
+      val graph = new DirectedGraph(9, edges)
+      val result: List[Double] = runBellmanFordAlgorithm(graph, node = 1)
+      result.last.isPosInfinity shouldBe true
+      result.dropRight(1).map(_.toInt) shouldEqual List(0, 5, 5, 6, 9, 7, 9,8)
+    }
+  }
 }
