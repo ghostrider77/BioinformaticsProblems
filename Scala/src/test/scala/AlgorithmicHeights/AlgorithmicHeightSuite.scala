@@ -390,4 +390,18 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       result.dropRight(1).map(_.toInt) shouldEqual List(0, 5, 5, 6, 9, 7, 9,8)
     }
   }
+
+  "Shortest Cycle Through a Given Edge" - {
+    import AlgorithmicHeights.CTE.{DirectedGraph, Edge, calcShortestCycleThroughGivenEdge}
+
+    "should output the length of a shortest cycle going through the first specified edge" in {
+      val n1: Int = 4
+      val edges1: List[Edge] = List(Edge(2, 4, 2), Edge(3, 2, 1), Edge(1, 4, 3), Edge(2, 1, 10), Edge(1, 3, 4))
+      val n2: Int = 4
+      val edges2: List[Edge] = List(Edge(3, 2, 1), Edge(2, 4, 2), Edge(4, 1, 3), Edge(2, 1, 10), Edge(1, 3, 4))
+      val graphs: List[(DirectedGraph, Edge)] =
+        List((new DirectedGraph(n1, edges1), edges1.head), (new DirectedGraph(n2, edges2), edges2.head))
+      calcShortestCycleThroughGivenEdge(graphs) shouldEqual List(-1, 10)
+    }
+  }
 }
