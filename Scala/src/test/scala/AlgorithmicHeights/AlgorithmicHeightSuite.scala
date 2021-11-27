@@ -404,4 +404,14 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       calcShortestCycleThroughGivenEdge(graphs) shouldEqual List(-1, 10)
     }
   }
+
+  "Median" - {
+    import AlgorithmicHeights.MED.findKthSmallestElement
+
+    "should find the kth smallest element of an array" in {
+      val n: Int = 11
+      val array: Array[Int] = Array(2, 36, 5, 21, 8, 13, 11, 20, 5, 4, 1)
+      (1 to n).map(findKthSmallestElement(array.clone(), n, _)).toArray shouldEqual array.sorted
+    }
+  }
 }
