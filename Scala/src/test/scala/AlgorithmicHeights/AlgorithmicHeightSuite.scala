@@ -414,4 +414,15 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       (1 to n).map(findKthSmallestElement(array.clone(), n, _)).toArray shouldEqual array.sorted
     }
   }
+
+  "Partial Sort" - {
+    import AlgorithmicHeights.PS.partialSort
+
+    "should partially sort a given array" in {
+      val n: Int = 10
+      val array: Array[Int] = Array(4, -6, 7, 8, -9, 100, 12, 13, 56, 17)
+      val k: Int = 3
+      partialSort(array, n, k) shouldEqual Vector(-9, -6, 4)
+    }
+  }
 }
