@@ -425,4 +425,15 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       partialSort(array, n, k) shouldEqual Vector(-9, -6, 4)
     }
   }
+
+  "Topological Sorting" - {
+    import AlgorithmicHeights.TS.{Edge, DirectedGraph}
+
+    "should return a topological sorting of the nodes of a directed simple acyclic graph" in {
+      val nrNodes: Int = 4
+      val edges: List[Edge] = List(Edge(1, 2), Edge(3, 1), Edge(3, 2), Edge(4, 3), Edge(4, 2))
+      val graph = new DirectedGraph(nrNodes, edges)
+      graph.topologicalSorting shouldEqual List(4, 3, 1, 2)
+    }
+  }
 }
