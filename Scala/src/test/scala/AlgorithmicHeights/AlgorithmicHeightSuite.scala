@@ -436,4 +436,15 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       graph.topologicalSorting shouldEqual List(4, 3, 1, 2)
     }
   }
+
+  "Hamiltonian Path in DAG" - {
+    import AlgorithmicHeights.HDAG.{Edge, DirectedGraph, findHamiltonianPath}
+
+    "should return a Hamiltonian path in a directed simple acyclic graph if exists" in {
+      val graph1 = new DirectedGraph(3, List(Edge(1, 2), Edge(2, 3), Edge(1, 3)))
+      val graph2 = new DirectedGraph(4, List(Edge(4, 3), Edge(3, 2), Edge(4, 1)))
+      findHamiltonianPath(graph1) shouldBe Some(List(1, 2, 3))
+      findHamiltonianPath(graph2) shouldBe empty
+    }
+  }
 }
