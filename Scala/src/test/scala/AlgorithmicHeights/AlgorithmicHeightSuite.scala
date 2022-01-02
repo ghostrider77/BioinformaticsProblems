@@ -447,4 +447,30 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       findHamiltonianPath(graph2) shouldBe empty
     }
   }
+
+  "Negative Weight Cycle" - {
+    import AlgorithmicHeights.NWC.{Edge, DirectedGraph, hasNegativeCycle}
+
+    "should detect if graph contains a negative cycle" - {
+      "test case 1" in {
+        val graph = DirectedGraph(4, List(Edge(1, 4, 4), Edge(4, 2, 3), Edge(2, 3, 1), Edge(3, 1, 6), Edge(2, 1, -7)))
+        hasNegativeCycle(graph) shouldBe false
+      }
+
+      "test case 2" in {
+        val graph = DirectedGraph(3, List(Edge(1, 2, -8), Edge(2, 3, 20), Edge(3, 1, -1), Edge(3, 2, -30)))
+        hasNegativeCycle(graph) shouldBe true
+      }
+
+      "test case 3" in {
+        val graph = DirectedGraph(3, List(Edge(1, 2, -1), Edge(2, 3, 1), Edge(3, 1, 0)))
+        hasNegativeCycle(graph) shouldBe false
+      }
+
+      "test case 4" in {
+        val graph = DirectedGraph(3, List(Edge(1, 2, -1), Edge(2, 3, 1), Edge(3, 1, -1)))
+        hasNegativeCycle(graph) shouldBe true
+      }
+    }
+  }
 }
