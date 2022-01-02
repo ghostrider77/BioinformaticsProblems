@@ -484,4 +484,14 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       array shouldBe sorted
     }
   }
+
+  "Strongly Connected Components" - {
+    import AlgorithmicHeights.SCC.{Edge, calcStronglyConnectedComponents}
+
+    "should retrieve the number of strongly connected components in a directed graph" in {
+      val nrNodes: Int = 6
+      val edges: List[Edge] = List(Edge(4, 1), Edge(1, 2), Edge(2, 4), Edge(5, 6), Edge(3, 2), Edge(5, 3), Edge(3, 5))
+      calcStronglyConnectedComponents(nrNodes, edges) should have length 3
+    }
+  }
 }
