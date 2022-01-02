@@ -473,4 +473,15 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Quick Sort" - {
+    import AlgorithmicHeights.QS.quickSort
+
+    "should sort the array in-place by using quicksort" in {
+      val n: Int = 9
+      val array: Array[Int] = Array(2, 6, 7, 1, 3, 5, 4, 8, 9)
+      quickSort(array, n)
+      array shouldBe sorted
+    }
+  }
 }

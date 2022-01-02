@@ -1,6 +1,6 @@
 package AlgorithmicHeights
 
-object MED {
+object QS {
   import scala.annotation.tailrec
   import scala.util.Random
 
@@ -34,26 +34,27 @@ object MED {
     loop(currentIx = startIx, startIx = startIx, endIx = endIx)
   }
 
-  def findKthSmallestElement(array: Array[Int], n: Int, k: Int): Int = {
+  def quickSort(array: Array[Int], n: Int): Unit = {
     @tailrec
-    def loop(startIx: Int, endIx: Int): Int = {
-      val randomIx: Int = rng.between(startIx, endIx + 1)
-      val pivot: Int = array(randomIx)
-      val (middleStart, middleEnd): (Int, Int) = threeWayPartitioning(array, pivot, startIx, endIx)
-      if (k <= middleStart) loop(startIx, middleStart)
-      else if (k <= middleEnd) array(middleStart)
-      else loop(middleEnd, endIx)
+    def loop(stack: List[(Int, Int)]): Unit = stack match {
+      case Nil => ()
+      case (startIx, endIx) :: rest =>
+        if (startIx >= endIx) loop(rest)
+        else {
+          val randomIx: Int = rng.between(startIx, endIx + 1)
+          val pivot: Int = array(randomIx)
+          val (middleStart, middleEnd): (Int, Int) = threeWayPartitioning(array, pivot, startIx, endIx)
+          loop((startIx, middleStart - 1) :: (middleEnd, endIx) :: rest)
+        }
     }
-
-    loop(startIx = 0, endIx = n - 1)
+    loop(List((0, n - 1)))
   }
 
   def main(args: Array[String]): Unit = {
     val reader: Iterator[String] = scala.io.Source.stdin.getLines()
     val n: Int = reader.next().toInt
     val array: Array[Int] = convertToIntArray(reader.next())
-    val k: Int = reader.next().toInt
-    val result: Int = findKthSmallestElement(array, n, k)
-    println(result)
+    quickSort(array, n)
+    println(array.mkString(" "))
   }
 }
