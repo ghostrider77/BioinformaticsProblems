@@ -1,4 +1,4 @@
-# Strongly Connected Components
+# Semi-Connected Graph
 import itertools as it
 import sys
 
@@ -10,6 +10,7 @@ DFSResult = namedtuple('DFSResult', ['components', 'topological_ordering', 'prev
 class DirectedGraph:
     def __init__(self, nr_nodes, edge_list, ordered_nodes=None):
         self._nr_nodes = nr_nodes
+        self._edge_list = edge_list
         self._adjacency_list = self._build_adjacency_list(edge_list)
         if ordered_nodes is None:
             ordered_nodes = range(1, nr_nodes+1)
@@ -26,6 +27,10 @@ class DirectedGraph:
     @property
     def nr_nodes(self):
         return self._nr_nodes
+
+    @property
+    def edge_list(self):
+        return self._edge_list
 
     @property
     def ordered_nodes(self):
@@ -85,26 +90,53 @@ def read_edges(reader, nr_edges):
     return edges
 
 
-def create_graph_with_edges_reversed(nr_nodes, edge_list, postvisit_numbers):
-    reversed_edges = [(b, a) for a, b in edge_list]
-    node_order, _ = zip(*sorted(zip(range(1, nr_nodes+1), postvisit_numbers), key=lambda x: x[1], reverse=True))
-    return DirectedGraph(nr_nodes, reversed_edges, node_order)
+def read_graphs(reader, n):
+    graphs = []
+    for _ in range(n):
+        _ = next(reader)
+        nr_nodes, nr_edges = convert_to_intlist(next(reader))
+        edge_list = read_edges(reader, nr_edges)
+        graph = DirectedGraph(nr_nodes, edge_list)
+        graphs.append(graph)
+    return graphs
 
 
-def calc_strongly_connected_components(nr_nodes, edge_list):
-    graph = DirectedGraph(nr_nodes, edge_list)
+def create_graph_with_edges_reversed(graph, postvisit_numbers):
+    reversed_edges = [(b, a) for a, b in graph.edge_list]
+    node_order, _ = zip(*sorted(zip(range(1, graph.nr_nodes+1), postvisit_numbers), key=lambda x: x[1], reverse=True))
+    return DirectedGraph(graph.nr_nodes, reversed_edges, node_order)
+
+
+def component_has_incoming_edge(component, reversed_graph):
+    for node in component:
+        neighbours = reversed_graph.neighbours(node)
+        if any(neighbour not in component for neighbour in neighbours):
+            return True
+    return False
+
+
+def has_edge_from_source_to_next(source_component, next_component, graph):
+    for node in source_component:
+        if any(neighbour in next_component for neighbour in graph.neighbours(node)):
+            return True
+    return False
+
+
+def is_semi_connected(graph):
     dfs_result = depth_first_search(graph)
-    reversed_graph = create_graph_with_edges_reversed(nr_nodes, edge_list, dfs_result.postvisit_numbers)
+    reversed_graph = create_graph_with_edges_reversed(graph, dfs_result.postvisit_numbers)
     reversed_dfs = depth_first_search(reversed_graph)
-    return reversed_dfs.components
+    components = reversed_dfs.components
+    return all(has_edge_from_source_to_next(source_component, next_component, graph)
+               for source_component, next_component in zip(components, components[1:]))
 
 
 def main():
     reader = sys.stdin
-    nr_nodes, nr_edges = convert_to_intlist(next(reader))
-    edge_list = read_edges(reader, nr_edges)
-    components = calc_strongly_connected_components(nr_nodes, edge_list)
-    print(len(components))
+    nr_examples = int(next(reader))
+    graphs = read_graphs(reader, nr_examples)
+    result = map(is_semi_connected, graphs)
+    print(' '.join(map(lambda x: '1' if x else '-1', result)))
 
 
 if __name__ == '__main__':

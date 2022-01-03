@@ -102,7 +102,7 @@ def read_graphs(reader, n):
 
 
 def create_graph_with_edges_reversed(graph, postvisit_numbers):
-    reversed_edges = ([(b, a) for a, b in graph.edge_list])
+    reversed_edges = [(b, a) for a, b in graph.edge_list]
     node_order, _ = zip(*sorted(zip(range(1, graph.nr_nodes+1), postvisit_numbers), key=lambda x: x[1], reverse=True))
     return DirectedGraph(graph.nr_nodes, reversed_edges, node_order)
 

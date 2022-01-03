@@ -516,4 +516,26 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Semi-Connected Graph" - {
+    import AlgorithmicHeights.SC.{Edge, DirectedGraph, isSemiConnected}
+
+    "should test if a directed graph is semi-connected" - {
+      "test case 1" in {
+        val graph = new DirectedGraph(3, List(Edge(3, 2), Edge(2, 1)))
+        isSemiConnected(graph) shouldBe true
+      }
+
+      "test case 2" in {
+        val graph = new DirectedGraph(3, List(Edge(3, 2), Edge(1, 2)))
+        isSemiConnected(graph) shouldBe false
+      }
+
+      "test case 3" in {
+        val edges: List[Edge] = List(Edge(1, 2), Edge(2, 3), Edge(3, 1), Edge(3, 6), Edge(4, 3), Edge(4, 5), Edge(5, 4))
+        val graph = new DirectedGraph(6, edges)
+        isSemiConnected(graph) shouldBe true
+      }
+    }
+  }
 }

@@ -1,6 +1,6 @@
 package AlgorithmicHeights
 
-object GS {
+object SC {
   import scala.annotation.tailrec
   import scala.collection.mutable.ListBuffer
 
@@ -109,26 +109,27 @@ object GS {
     new DirectedGraph(graph.nrNodes, reversedEdges, Some(nodeOrder))
   }
 
-  private def componentHasIncomingEdge(component: Set[Int], reversedGraph: DirectedGraph): Boolean =
-    component.flatMap(reversedGraph.neighbours).exists(!component.contains(_))
+  private def hasEdgeFromSourceToNextComponent(source: Set[Int], next: Set[Int], graph: DirectedGraph): Boolean =
+    source.flatMap(graph.neighbours).exists(next.contains)
 
-  def getSourceNode(graph: DirectedGraph): Int = {
+  def isSemiConnected(graph: DirectedGraph): Boolean = {
     val DFSResult(_, _, _, postvisitNumbers) = depthFirstSearch(graph)
     val reversedGraph: DirectedGraph = createGraphWithEdgesReversed(graph, postvisitNumbers)
     val DFSResult(components, _, _, _) = depthFirstSearch(reversedGraph)
-    components match {
-      case Nil => -1
-      case sourceComponent :: rest =>
-        if (rest.forall(component => componentHasIncomingEdge(component.toSet, reversedGraph))) sourceComponent.head
-        else -1
-    }
+    components
+      .iterator
+      .map(_.toSet)
+      .sliding(2)
+      .map(_.toList)
+      .collect{ case List(source, next) => (source, next) }
+      .forall{ case (source, next) => hasEdgeFromSourceToNextComponent(source, next, graph) }
   }
 
   def main(args: Array[String]): Unit = {
     val reader: Iterator[String] = scala.io.Source.stdin.getLines()
     val nrExamples: Int = reader.next().toInt
     val graphs: List[DirectedGraph] = readGraphs(reader, nrExamples)
-    val result: List[Int] = graphs.map(getSourceNode)
-    println(result.mkString(" "))
+    val result: List[Boolean] = graphs.map(isSemiConnected)
+    println(result.map(if (_) 1 else -1).mkString(" "))
   }
 }
