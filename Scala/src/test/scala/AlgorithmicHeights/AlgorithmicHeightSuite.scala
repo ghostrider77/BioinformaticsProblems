@@ -538,4 +538,16 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
       }
     }
   }
+
+  "Shortest Paths in DAG" - {
+    import AlgorithmicHeights.SDAG.{Edge, DirectedGraph, findShortestPath}
+
+    "should return the length of a shortest paths from vertex 1 to vertex i in a DAG" in {
+      val nrNodes: Int = 5
+      val edges: List[Edge] =
+        List(Edge(2, 3, 4), Edge(4, 3, -2), Edge(1, 4, 1), Edge(1, 5, -3), Edge(2, 4, -2), Edge(5, 4, 1))
+      val graph = new DirectedGraph(nrNodes, edges)
+      findShortestPath(graph, startNode = 1) shouldEqual Vector(0.0, Double.PositiveInfinity, -4.0, -2.0, -3.0)
+    }
+  }
 }
