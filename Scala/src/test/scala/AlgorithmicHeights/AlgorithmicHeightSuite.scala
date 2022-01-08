@@ -495,6 +495,30 @@ class AlgorithmicHeightSuite extends AnyFreeSpec with Matchers {
     }
   }
 
+  "2-Satisfiability" - {
+    import AlgorithmicHeights.SAT2.{Edge, DirectedGraph, Node, readEdges, solve2SATProblem}
+
+    "should solve the 2-satisfiability problem" - {
+      "test case 1" in {
+        val nrNodes: Int = 3
+        val nrEdges: Int = 4
+        val lines: Iterator[String] = Iterator("1 2", "2 3", "-1 -2", "-2 -3")
+        val edges: List[Edge] = readEdges(lines, nrNodes, nrEdges)
+        val graph = new DirectedGraph(2*nrNodes, edges)
+        solve2SATProblem(graph) shouldEqual Set(Node(1, nrNodes), Node(-2, nrNodes), Node(3, nrNodes))
+      }
+
+      "test case 2" in {
+        val nrNodes: Int = 2
+        val nrEdges: Int = 4
+        val lines: Iterator[String] = Iterator("1 2", "-1 2", "1 -2", "-1 -2")
+        val edges: List[Edge] = readEdges(lines, nrNodes, nrEdges)
+        val graph = new DirectedGraph(2*nrNodes, edges)
+        solve2SATProblem(graph) shouldBe empty
+      }
+    }
+  }
+
   "General Sink" - {
     import AlgorithmicHeights.GS.{Edge, DirectedGraph, getSourceNode}
 
