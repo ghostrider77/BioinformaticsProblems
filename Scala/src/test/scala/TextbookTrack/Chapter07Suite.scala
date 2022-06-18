@@ -104,4 +104,17 @@ class Chapter07Suite extends AnyFreeSpec with Matchers {
       result.map(_.toString) should contain theSameElementsAs expectedResult
     }
   }
+
+  "Implement SmallParsimony" - {
+    import TextbookTrack.Chapter07.BA7F.{Node, Children, Tree, solveSmallParsimonyProblem}
+
+    "should find the most parsimonious labeling of the internal nodes of a rooted tree" in {
+      val nrLeaves: Int = 4
+      val adjacencyList: Map[Node, Children] = Map(4 -> (0, 1), 5 -> (2, 3), 6 -> (4, 5))
+      val characters: List[String] = List("CAAATCCC", "ATTGCGAC", "CTGCGCTG", "ATGGACGA")
+      val tree = new Tree(adjacencyList, nrLeaves)
+      val (parsimonyScore, _): (Int, Vector[String]) = solveSmallParsimonyProblem(tree, characters)
+      parsimonyScore shouldEqual 16
+    }
+  }
 }
