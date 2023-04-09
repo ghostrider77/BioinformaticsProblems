@@ -31,4 +31,14 @@ class StrongholdSuite extends AnyFreeSpec with Matchers {
       calcReverseComplement(dna) shouldEqual "ACCGGGTTTT"
     }
   }
+
+  "Counting Point Mutations" - {
+    import HAMM.calcHammingDistance
+
+    "should calculate the Hamming-distace of two strings" in {
+      val s1: String = "GAGCCTACTAACGGGAT"
+      val s2: String = "CATCGTAATGACGGCCT"
+      calcHammingDistance(s1, s2) shouldEqual 7
+    }
+  }
 }
