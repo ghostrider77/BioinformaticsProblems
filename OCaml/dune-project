@@ -1,0 +1,5 @@
+(lang dune 3.7)
+
+(package
+   (name rosalind)
+   (version 1.0))
