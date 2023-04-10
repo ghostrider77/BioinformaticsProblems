@@ -1,4 +1,4 @@
-let convert_to_ints line =
+let convert_to_ints (line : string) : int array =
     Array.of_list @@ List.map int_of_string Str.(line |> split (regexp " "))
 
 
