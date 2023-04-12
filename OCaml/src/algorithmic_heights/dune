@@ -1,6 +1,6 @@
 (library
     (name algorithmic_heights)
-    (libraries str))
+    (libraries str batteries))
 
 (env
     (dev
