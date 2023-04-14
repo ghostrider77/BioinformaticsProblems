@@ -100,6 +100,6 @@ object BIP {
     val nrExamples: Int = reader.next().toInt
     val graphs: List[Graph] = readGraphs(reader, nrExamples)
     val result: List[Boolean] = testBipartiteness(graphs)
-    println(result.map(if (_) "1" else "-1"))
+    println(result.map(if (_) "1" else "-1").mkString(" "))
   }
 }
