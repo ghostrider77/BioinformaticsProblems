@@ -25,9 +25,7 @@ end = struct
                 | None -> Some [b]
                 | Some ns -> Some (b :: ns) in
             IntMap.update a update_function adjacency_list in
-        let add_edge_both_ways adjacency_list { a; b } =
-            add_edge adjacency_list { a; b } in
-        let adjacency_list = List.fold_left add_edge_both_ways IntMap.empty edges in
+        let adjacency_list = List.fold_left add_edge IntMap.empty edges in
         { nr_nodes; adjacency_list }
 
     let dfs { nr_nodes; adjacency_list } =
