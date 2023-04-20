@@ -45,11 +45,11 @@ end = struct
                         | Some neighbor ->
                             visit_started.(neighbor - 1) <- !previsit_id;
                             previsit_id := !previsit_id + 1;
-                            traverse_component (neighbor :: previsit_stack) (neighbor :: component)
+                            traverse_component (neighbor :: component) (neighbor :: previsit_stack)
                         | None ->
                             visit_ended.(node - 1) <- !postvisit_id;
                             postvisit_id := !postvisit_id + 1;
-                            traverse_component rest component in
+                            traverse_component component rest in
             visit_started.(start_node - 1) <- !previsit_id;
             previsit_id := !previsit_id + 1;
             traverse_component [start_node] [start_node] in
