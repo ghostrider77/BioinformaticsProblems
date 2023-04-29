@@ -1,18 +1,15 @@
 module IntMap = Map.Make(Int)
 
 type edge = { a : int; b : int }
-type dfsresult = { components : int list list; previsit_ids : int array; postvisit_ids : int array }
-
+type component = int list
+type dfsresult = { components : component list; previsit_ids : int list; postvisit_ids : int list }
 
 module Graph : sig
     type t
-    val adjacency_list : t -> int list IntMap.t
-    val dfs : t -> dfsresult
+    val dfs : t -> int list option -> dfsresult
     val create : int -> edge list -> t
 end = struct
     type t = { nr_nodes : int; adjacency_list : int list IntMap.t }
-
-    let adjacency_list { adjacency_list; _ } = adjacency_list
 
     let get_neighbors adjacency_list node =
         match IntMap.find_opt node adjacency_list with
@@ -28,7 +25,7 @@ end = struct
         let adjacency_list = List.fold_left add_edge IntMap.empty edges in
         { nr_nodes; adjacency_list }
 
-    let dfs { nr_nodes; adjacency_list } =
+    let dfs { nr_nodes; adjacency_list } nodes =
         let visit_started = Array.make nr_nodes 0 in
         let visit_ended = Array.make nr_nodes 0 in
         let previsit_id = ref 1 in
@@ -61,8 +58,14 @@ end = struct
                 else
                     let current_component = explore node in
                     find_components (current_component :: components) remaining_nodes in
-        let components = find_components [] (List.init nr_nodes (fun k -> k + 1)) in
-        { components = components; previsit_ids = visit_started; postvisit_ids = visit_ended }
+
+        let ordered_nodes = match nodes with
+            | None -> List.init nr_nodes (fun k -> k + 1)
+            | Some ns -> ns in
+        let components = find_components [] ordered_nodes in
+        { components = components
+        ; previsit_ids = Array.to_list visit_started
+        ; postvisit_ids = Array.to_list visit_ended }
 end
 
 
@@ -73,26 +76,23 @@ let read_edges (nr_edges : int) : edge list =
     List.of_seq @@ Seq.map (fun _ -> parse_line (read_line ())) range
 
 
-let read_graphs (n : int) : Graph.t list =
-    let read_graph () =
-        ignore (read_line ());
-        let (nr_nodes, nr_edges) = Scanf.sscanf (read_line ()) "%d %d" (fun n e -> (n, e)) in
-        let edges = read_edges nr_edges in
-        Graph.create nr_nodes edges in
-    List.(map (fun _ -> read_graph ()) @@ init n (fun _ -> 0))
+let get_node_visit_order_in_reversed_graph (postvisit_ids : int list) : int list =
+    let compare_pairs (_, id1) (_, id2) = compare id2 id1 in
+    List.(postvisit_ids |> mapi (fun node id -> (node + 1, id)) |> sort compare_pairs |> map (fun (node, _) -> node))
 
 
-let is_acyclic (graph : Graph.t) : bool =
-    let adjacency_list = Graph.adjacency_list graph in
-    let { postvisit_ids; _ } = Graph.dfs graph in
-    let check_property node neighbors =
-        let node_number = postvisit_ids.(node - 1) in
-        List.for_all (fun neighbor -> postvisit_ids.(neighbor - 1) < node_number) neighbors in
-    IntMap.for_all check_property adjacency_list
+let calc_strongly_connected_components (nr_nodes : int) (edges : edge list) : component list =
+    let graph = Graph.create nr_nodes edges in
+    let { postvisit_ids; _ } = Graph.dfs graph None in
+    let reversed_edges = List.map (fun {a; b} -> {a = b; b = a}) edges in
+    let reversed_graph = Graph.create nr_nodes reversed_edges in
+    let node_order = get_node_visit_order_in_reversed_graph postvisit_ids in
+    let { components; _ } = Graph.dfs reversed_graph (Some node_order) in
+    components
 
 
 let () =
-    let nr_examples = read_int () in
-    let graphs = read_graphs nr_examples in
-    let results = List.map is_acyclic graphs in
-    results |> List.map (fun res -> if res then "1" else "-1") |> String.concat " " |> print_endline
+    let (nr_nodes, nr_edges) = Scanf.sscanf (read_line ()) "%d %d" (fun n e -> (n, e)) in
+    let edge_list = read_edges nr_edges in
+    let components = calc_strongly_connected_components nr_nodes edge_list in
+    print_int (List.length components); print_newline ()
