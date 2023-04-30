@@ -6,12 +6,19 @@ type dfsresult = { components : component list; previsit_ids : int list; postvis
 
 module Graph : sig
     type t
+    val nr_nodes : t -> int
+    val edges : t -> edge list
+    val get_neighbors : t -> int -> int list
     val dfs : t -> int list option -> dfsresult
     val create : int -> edge list -> t
 end = struct
-    type t = { nr_nodes : int; adjacency_list : int list IntMap.t }
+    type t = { nr_nodes : int; edges : edge list; adjacency_list : int list IntMap.t }
 
-    let get_neighbors adjacency_list node =
+    let nr_nodes { nr_nodes; _ } = nr_nodes
+
+    let edges { edges; _} = edges
+
+    let get_neighbors { adjacency_list; _ } node =
         match IntMap.find_opt node adjacency_list with
             | None -> []
             | Some neighbors -> neighbors
@@ -23,16 +30,16 @@ end = struct
                 | Some ns -> Some (b :: ns) in
             IntMap.update a update_function adjacency_list in
         let adjacency_list = List.fold_left add_edge IntMap.empty edges in
-        { nr_nodes; adjacency_list }
+        { nr_nodes; edges; adjacency_list }
 
-    let dfs { nr_nodes; adjacency_list } nodes =
+    let dfs ({ nr_nodes; _ } as graph) nodes =
         let visit_started = Array.make nr_nodes 0 in
         let visit_ended = Array.make nr_nodes 0 in
         let previsit_id = ref 1 in
         let postvisit_id = ref 1 in
         let is_node_visited node = visit_started.(node - 1) > 0 in
         let find_unvisited_neighbor node =
-            node |> get_neighbors adjacency_list |> List.find_opt (fun item -> not (is_node_visited item)) in
+            node |> get_neighbors graph |> List.find_opt (fun item -> not (is_node_visited item)) in
 
         let explore start_node =
             let rec traverse_component component = function
@@ -63,15 +70,24 @@ end = struct
             | None -> List.init nr_nodes (fun k -> k + 1)
             | Some ns -> ns in
         let components = find_components [] ordered_nodes in
-        { components; previsit_ids = Array.to_list visit_started; postvisit_ids = Array.to_list visit_ended }
+        { components = List.rev components
+        ; previsit_ids = Array.to_list visit_started
+        ; postvisit_ids = Array.to_list visit_ended }
 end
 
 
-let read_edges (nr_edges : int) : edge list =
-    let parse_line line =
-        Scanf.sscanf line "%d %d" (fun a b -> { a; b }) in
-    let range = Seq.init nr_edges (fun k -> k) in
-    List.of_seq @@ Seq.map (fun _ -> parse_line (read_line ())) range
+let read_graphs (n : int) : Graph.t list =
+    let read_edges (nr_edges : int) : edge list =
+        let parse_line line =
+            Scanf.sscanf line "%d %d" (fun a b -> { a; b }) in
+        let range = Seq.init nr_edges (fun k -> k) in
+        List.of_seq @@ Seq.map (fun _ -> parse_line (read_line ())) range in
+    let read_graph () =
+        ignore (read_line ());
+        let (nr_nodes, nr_edges) = Scanf.sscanf (read_line ()) "%d %d" (fun n e -> (n, e)) in
+        let edges = read_edges nr_edges in
+        Graph.create nr_nodes edges in
+    List.(map (fun _ -> read_graph ()) @@ init n (fun _ -> 0))
 
 
 let get_node_visit_order_in_reversed_graph (postvisit_ids : int list) : int list =
@@ -79,18 +95,26 @@ let get_node_visit_order_in_reversed_graph (postvisit_ids : int list) : int list
     List.(postvisit_ids |> mapi (fun node id -> (node + 1, id)) |> sort compare_pairs |> map (fun (node, _) -> node))
 
 
-let calc_strongly_connected_components (nr_nodes : int) (edges : edge list) : component list =
-    let graph = Graph.create nr_nodes edges in
+let has_incoming_edge (component : int list) (reversed_graph : Graph.t) : bool =
+    let component_neighbors = List.concat_map (Graph.get_neighbors reversed_graph) component in
+    List.exists (fun neighbor -> not (List.mem neighbor component)) component_neighbors
+
+
+let get_source_node (graph : Graph.t) : int =
     let { postvisit_ids; _ } = Graph.dfs graph None in
-    let reversed_edges = List.map (fun {a; b} -> {a = b; b = a}) edges in
-    let reversed_graph = Graph.create nr_nodes reversed_edges in
+    let reversed_edges = List.map (fun {a; b} -> {a = b; b = a}) (Graph.edges graph) in
+    let reversed_graph = Graph.create (Graph.nr_nodes graph) reversed_edges in
     let node_order = get_node_visit_order_in_reversed_graph postvisit_ids in
     let { components; _ } = Graph.dfs reversed_graph (Some node_order) in
-    components
+    match components with
+        | [] -> -1
+        | source_component :: rest ->
+            if List.for_all (fun c -> has_incoming_edge c reversed_graph) rest then List.hd source_component
+            else -1
 
 
 let () =
-    let (nr_nodes, nr_edges) = Scanf.sscanf (read_line ()) "%d %d" (fun n e -> (n, e)) in
-    let edge_list = read_edges nr_edges in
-    let components = calc_strongly_connected_components nr_nodes edge_list in
-    print_int (List.length components); print_newline ()
+    let nr_examples = read_int () in
+    let graphs = read_graphs nr_examples in
+    let results = List.map get_source_node graphs in
+    results |> List.map string_of_int |> String.concat " " |> print_endline
