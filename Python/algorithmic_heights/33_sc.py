@@ -107,14 +107,6 @@ def create_graph_with_edges_reversed(graph, postvisit_numbers):
     return DirectedGraph(graph.nr_nodes, reversed_edges, node_order)
 
 
-def component_has_incoming_edge(component, reversed_graph):
-    for node in component:
-        neighbours = reversed_graph.neighbours(node)
-        if any(neighbour not in component for neighbour in neighbours):
-            return True
-    return False
-
-
 def has_edge_from_source_to_next(source_component, next_component, graph):
     for node in source_component:
         if any(neighbour in next_component for neighbour in graph.neighbours(node)):
