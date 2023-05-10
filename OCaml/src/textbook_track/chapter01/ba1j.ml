@@ -2,7 +2,7 @@ module StringSet = Set.Make(String)
 
 let nucleotides = ['A'; 'C'; 'G'; 'T']
 let nucleotide_complements = [('A', 'T'); ('C', 'G'); ('T', 'A'); ('G', 'C')]
-let nucleotide_order = List.mapi (fun ix c -> (c, ix)) ['A'; 'C'; 'G'; 'T']
+let nucleotide_order = List.mapi (fun ix c -> (c, ix)) nucleotides
 
 
 let calc_reverse_complement (dna : string) : string =

@@ -1,7 +1,7 @@
 module StringSet = Set.Make(String)
 
 let nucleotides = ['A'; 'C'; 'G'; 'T']
-let nucleotide_order = List.mapi (fun ix c -> (c, ix)) ['A'; 'C'; 'G'; 'T']
+let nucleotide_order = List.mapi (fun ix c -> (c, ix)) nucleotides
 
 
 let integer_power (n : int) (k : int) : int =
