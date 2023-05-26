@@ -1,0 +1,3 @@
+(library
+    (name chapter02)
+    (libraries batteries))
