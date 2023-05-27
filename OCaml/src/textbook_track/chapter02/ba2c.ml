@@ -1,7 +1,7 @@
 type profile_column = { a : float; c : float; g : float; t : float }
 
 
-let get_profile_value {a; c; g; t} = function
+let get_nucleotide_probability {a; c; g; t} = function
     | 'A' -> a
     | 'C' -> c
     | 'G' -> g
@@ -17,13 +17,13 @@ let read_profile_matrix () : profile_column list =
     let rows = List.init 4 (fun _ -> convert_to_float_list @@ read_line ()) in
     let profile_of_list = function
         | [a; c; g; t] -> { a; c; g; t }
-        | _ -> raise (Invalid_argument "4 values are expected in each column.") in
+        | _ -> failwith "4 values are expected in each column." in
     let open Batteries in
     List.(rows |> transpose |> map profile_of_list)
 
 
 let calc_k_mer_probability (k_mer : string) (profile_matrix : profile_column list) : float =
-    Seq.fold_left2 (fun acc nucleotide column -> acc *. (get_profile_value column nucleotide)) 1.0
+    Seq.fold_left2 (fun acc nucleotide column -> acc *. (get_nucleotide_probability column nucleotide)) 1.0
         (String.to_seq k_mer) (List.to_seq profile_matrix)
 
 
