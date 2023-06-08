@@ -33,7 +33,7 @@ let profile_most_probable_k_mer (text : string) (profile_matrix : profile_column
     let process_k_mer ((max_probability, _) as acc) k_mer =
         let p = calc_k_mer_probability k_mer profile_matrix in
         if p > max_probability then (p, k_mer) else acc in
-    snd @@ Seq.fold_left process_k_mer (0.0, "") k_mers
+    snd @@ Seq.fold_left process_k_mer (0.0, String.sub text 0 k) k_mers
 
 
 let () =
