@@ -21,7 +21,7 @@ object BA2E {
     def apply(counts: Map[Char, Int], n: Int): ProfileColumn = {
       val adjustedProbs: Map[Char, Double] = (for {
         nucleotide <- Nucleotides
-      } yield (nucleotide, (counts.getOrElse(nucleotide, 0) + 1) / (n.toDouble + 1))).toMap
+      } yield (nucleotide, (counts.getOrElse(nucleotide, 0) + 1) / (n.toDouble + 4))).toMap
       ProfileColumn(adjustedProbs('A'), adjustedProbs('C'), adjustedProbs('G'), adjustedProbs('T'))
     }
   }

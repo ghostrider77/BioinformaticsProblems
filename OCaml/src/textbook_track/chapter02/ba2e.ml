@@ -24,14 +24,15 @@ let calc_hamming_distance (s1 : string) (s2 : string) : int =
 
 let create_profile_matrix (motifs : string list) (k : int) : profile_column list =
     let nr_motifs = float @@ List.length motifs in
+    let pcnt = 1.0 /. (nr_motifs +. 4.0) in
     let update_nucleotide_count ({a; c; g; t} as counts) = function
-        | 'A' -> { counts with a = a +. 1.0 /. nr_motifs }
-        | 'C' -> { counts with c = c +. 1.0 /. nr_motifs }
-        | 'G' -> { counts with g = g +. 1.0 /. nr_motifs }
-        | 'T' -> { counts with t = t +. 1.0 /. nr_motifs }
+        | 'A' -> { counts with a = a +. pcnt }
+        | 'C' -> { counts with c = c +. pcnt }
+        | 'G' -> { counts with g = g +. pcnt }
+        | 'T' -> { counts with t = t +. pcnt }
         | _ -> failwith "Unknown nucleotide." in
     let create_profile_column (chars : char list) : profile_column =
-        List.fold_left update_nucleotide_count {a = 0.0; c = 0.0; g = 0.0; t = 0.0} chars in
+        List.fold_left update_nucleotide_count {a = pcnt; c = pcnt; g = pcnt; t = pcnt} chars in
     List.map (fun ix -> create_profile_column @@ List.map (fun s -> s.[ix]) motifs) @@ List.init k Fun.id
 
 
@@ -66,7 +67,7 @@ let select_motif_from_each_text (initial_motif : string) (texts : string list) (
     loop [initial_motif] texts
 
 
-let greedy_motif_search (texts : string list) (k : int) : (string list) =
+let improved_greedy_motif_search (texts : string list) (k : int) : (string list) =
     match texts with
         | [] -> []
         | text :: rest ->
@@ -84,5 +85,5 @@ let greedy_motif_search (texts : string list) (k : int) : (string list) =
 let () =
     let k, t = Scanf.sscanf (read_line ()) "%d %d" (fun k t -> (k, t)) in
     let texts = List.init t (fun _ -> read_line()) in
-    let result = greedy_motif_search texts k in
+    let result = improved_greedy_motif_search texts k in
     List.iter print_endline result
