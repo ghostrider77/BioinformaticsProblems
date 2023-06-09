@@ -23,7 +23,7 @@ object BA2F {
     def apply(counts: Map[Char, Int], n: Int): ProfileColumn = {
       val adjustedProbs: Map[Char, Double] = (for {
         nucleotide <- Nucleotides
-      } yield (nucleotide, (counts.getOrElse(nucleotide, 0) + 1) / (n.toDouble + 1))).toMap
+      } yield (nucleotide, (counts.getOrElse(nucleotide, 0) + 1) / (n.toDouble + 4))).toMap
       ProfileColumn(adjustedProbs('A'), adjustedProbs('C'), adjustedProbs('G'), adjustedProbs('T'))
     }
   }
@@ -72,11 +72,9 @@ object BA2F {
     def loop(bestMotifs: List[String], bestScore: Int, motifs: List[String]): (List[String], Int) = {
       val score: Int = calcProfileMatrixScore(motifs)
       if (score < bestScore) {
-        val updatedBestScore: Int = score
-        val updatedBestMotifs: List[String] = motifs
         val profile: List[ProfileColumn] = createProfileMatrixFromMotifs(motifs)
         val nextMotifs: List[String] = texts.map(profileMostProbableKMer(_, profile, k))
-        loop(updatedBestMotifs, updatedBestScore, nextMotifs)
+        loop(motifs, score, nextMotifs)
       }
       else (bestMotifs, bestScore)
     }
