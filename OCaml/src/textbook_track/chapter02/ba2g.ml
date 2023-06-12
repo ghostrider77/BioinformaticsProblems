@@ -56,8 +56,8 @@ let get_profile_randomly_generated_k_mer (text : string) (profile_matrix : profi
     let weights = Seq.map (fun k_mer -> calc_k_mer_probability k_mer profile_matrix) k_mers in
     let total_weight = Seq.fold_left (+.) 0.0 weights in
     let cumulative_sums = Seq.(weights |> scan (+.) 0.0 |> drop 1 |> mapi (fun ix s -> (ix, s))) in
-    let r = Random.float 1.0 in
-    match Seq.find (fun (_, s) -> r *. total_weight <= s) cumulative_sums with
+    let r = Random.float total_weight in
+    match Seq.find (fun (_, s) -> r  <= s) cumulative_sums with
         | None -> failwith "Could not determine random substring."
         | Some (index, _) -> String.sub text index k
 
