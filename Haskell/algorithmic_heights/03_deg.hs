@@ -25,8 +25,7 @@ readEdges nrEdges = do
 
 createGraph :: Int -> [Edge] -> Graph
 createGraph nrNodes edges =
-    let addEdge :: AdjacencyList -> Edge -> AdjacencyList
-        addEdge adjacencyList (Edge a b) =
+    let addEdge adjacencyList (Edge a b) =
             let update Nothing = Just [b]
                 update (Just ns) = Just (b : ns)
             in M.alter update a adjacencyList

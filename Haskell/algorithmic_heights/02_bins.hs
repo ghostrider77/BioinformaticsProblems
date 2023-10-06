@@ -7,8 +7,7 @@ convertToIntList = map read . words
 
 findElemsInSortedArray :: Vector Int -> [Int] -> Int -> [Int]
 findElemsInSortedArray array queries n =
-    let binarySearch :: Int -> Int -> Int -> Int
-        binarySearch item left right =
+    let binarySearch item left right =
             if left > right then -1
             else
                 let ix = (left + right) `div` 2
