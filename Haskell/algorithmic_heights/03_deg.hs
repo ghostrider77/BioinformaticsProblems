@@ -3,7 +3,7 @@ import Data.IntMap (IntMap)
 import qualified Data.IntMap as M
 
 type AdjacencyList = IntMap [Int]
-data Edge = Edge { from :: Int, to :: Int }
+data Edge = Edge Int Int
 data Graph = Graph { nrNodes :: Int, adjacencyList :: AdjacencyList }
 
 convertToIntList :: String -> [Int]
@@ -20,7 +20,7 @@ readInputLine line =
 readEdges :: Int -> IO [Edge]
 readEdges nrEdges = do
     edges <- replicateM nrEdges getLine
-    return $ map (\line -> let (a, b) = readInputLine line in Edge {from = a, to = b}) edges
+    return $ map (\line -> let (a, b) = readInputLine line in Edge a b) edges
 
 
 createGraph :: Int -> [Edge] -> Graph
