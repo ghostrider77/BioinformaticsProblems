@@ -49,7 +49,7 @@ calcNodeDegrees nrNodes edges =
 
 main :: IO ()
 main = do
-    (nrNodes, nrEdges) <- fmap readInputLine getLine
+    (nrNodes, nrEdges) <- readInputLine <$> getLine
     edges <- readEdges nrEdges
     let result = calcNodeDegrees nrNodes edges
     putStrLn $ unwords $ map show result

@@ -22,7 +22,7 @@ main :: IO ()
 main = do
     n <- readLn
     _ <- readLn :: IO Int
-    array <- fmap (fromList . convertToIntList) getLine
-    queries <- fmap convertToIntList getLine
+    array <- fromList . convertToIntList <$> getLine
+    queries <- convertToIntList <$> getLine
     let result = findElemsInSortedArray array queries n
     putStrLn $ unwords $ map show result
