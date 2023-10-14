@@ -19,10 +19,9 @@ calcInsertionSortSwaps vector n =
                 else do
                     MV.swap array k (k - 1)
                     go array (nrSwaps + 1) (k - 1)
-        getAllSwaps array = foldM (go array) 0 [1..(n-1)]
     in runST $ do
         array <- thaw vector
-        getAllSwaps array
+        foldM (go array) 0 [1..(n-1)]
 
 
 main :: IO ()
