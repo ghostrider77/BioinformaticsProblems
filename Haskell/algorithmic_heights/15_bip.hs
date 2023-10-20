@@ -4,7 +4,7 @@ import Control.Monad (mapM, replicateM)
 import Data.IntMap (IntMap, (!))
 import qualified Data.IntMap as M
 import Data.List (partition)
-import Data.Sequence ((|>), (><), ViewL ((:< ), EmptyL))
+import Data.Sequence ((><), ViewL ((:< ), EmptyL))
 import qualified Data.Sequence as S
 
 type AdjacencyList = IntMap [Int]
