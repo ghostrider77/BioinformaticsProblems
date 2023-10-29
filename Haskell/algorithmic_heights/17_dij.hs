@@ -15,10 +15,10 @@ data State = State { queue :: MinPrioHeap Distance Int, distances :: IntMap Dist
 
 
 instance Ord Distance where
-  Infinity <= Infinity = True
-  Dist d1 <= Dist d2 = d1 <= d2
-  Infinity <= Dist _ = False
-  Dist _ <= Infinity = True
+    Infinity <= Infinity = True
+    Dist d1 <= Dist d2 = d1 <= d2
+    Infinity <= Dist _ = False
+    Dist _ <= Infinity = True
 
 
 instance Show Distance where
@@ -91,8 +91,7 @@ calcShortestDistances graph @ (Graph nrNodes adjacencyList) sourceNode =
                         let neighbors = getNeighbors graph node
                             state' = updateDistances state neighbors dist
                         in go state' { finalizedNodes = S.insert node finalizedNodes }
-        initialState = State (H.fromList [(Dist 0, sourceNode)]) ( M.singleton sourceNode (Dist 0)) S.empty
-    in go initialState
+    in go $ State (H.fromList [(Dist 0, sourceNode)]) ( M.singleton sourceNode (Dist 0)) S.empty
 
 
 main :: IO ()
