@@ -8,8 +8,8 @@ convertToIntVector :: String -> Vector Int
 convertToIntVector = fromList . map read . words
 
 
-heapify :: Ord a => Vector a -> Int -> Vector a
-heapify vector n =
+heapsort :: Ord a => Vector a -> Int -> Vector a
+heapsort vector n =
     let getIndexOfParentChildrenMaximum array parentIx n = do
             let leftChildIx = 2 * parentIx + 1
             let rightChildIx = leftChildIx + 1
@@ -38,14 +38,14 @@ heapify vector n =
                 createHeap array (parentIx - 1)
             | otherwise = return ()
 
-        sortOneElem array k = do
+        moveElemToItsPlace array k = do
             MV.swap array 0 (k - 1)
             siftDown array 0 (k - 1)
 
     in runST $ do
         array <- thaw vector
         createHeap array (n `div` 2 - 1)
-        mapM_ (sortOneElem array) [n, (n-1)..2]
+        mapM_ (moveElemToItsPlace array) [n, (n-1)..2]
         freeze array
 
 
@@ -53,5 +53,5 @@ main :: IO ()
 main = do
     n <- readLn
     vector <- convertToIntVector <$> getLine
-    let result = heapify vector n
+    let result = heapsort vector n
     putStrLn $ unwords $ map show $ toList result
