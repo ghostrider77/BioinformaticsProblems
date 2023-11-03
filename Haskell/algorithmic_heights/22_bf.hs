@@ -72,7 +72,7 @@ updateDistances graph distances =
 
 
 bellmanFord :: Graph -> Int -> [Distance]
-bellmanFord graph @ (Graph nrNodes adjacencyList) sourceNode =
+bellmanFord graph @ (Graph nrNodes _) sourceNode =
     let distances = foldl (\acc _ -> updateDistances graph acc) (M.singleton sourceNode (Dist 0)) [1..nrNodes]
     in map (\node -> M.findWithDefault Infinity node distances) [1..nrNodes]
 
