@@ -3,7 +3,6 @@ import Control.Monad.ST (runST)
 import Data.Vector (Vector, freeze, fromList, thaw, toList)
 import qualified Data.Vector.Mutable as MV
 
-
 convertToIntVector :: String -> Vector Int
 convertToIntVector = fromList . map read . words
 

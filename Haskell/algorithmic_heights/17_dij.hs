@@ -1,18 +1,16 @@
 import Control.Monad (replicateM)
-import Data.IntMap (IntMap)
-import qualified Data.IntMap as M
 import Data.Heap (MinPrioHeap)
-import qualified Data.Heap as H
+import Data.IntMap (IntMap)
 import Data.IntSet (IntSet)
+import qualified Data.Heap as H
+import qualified Data.IntMap as M
 import qualified Data.IntSet as S
 
 data Edge = Edge { nodeFrom :: Int, nodeTo :: Int, weight :: Int }
-type AdjacencyList = IntMap [Edge]
-data Graph = Graph { nrNodes :: Int, adjacencyList :: AdjacencyList }
+data Graph = Graph { nrNodes :: Int, adjacencyList :: IntMap [Edge] }
 
 data Distance = Dist Int | Infinity deriving Eq
 data State = State { queue :: MinPrioHeap Distance Int, distances :: IntMap Distance, finalizedNodes :: IntSet }
-
 
 instance Ord Distance where
     Infinity <= Infinity = True

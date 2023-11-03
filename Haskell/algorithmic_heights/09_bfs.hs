@@ -5,9 +5,8 @@ import Data.Sequence ((|>), ViewL ((:< ), EmptyL))
 import qualified Data.IntMap as Map
 import qualified Data.Sequence as S
 
-type AdjacencyList = IntMap [Int]
 data Edge = Edge Int Int
-data DirectedGraph = DirectedGraph { nrNodes :: Int, adjacencyList :: AdjacencyList }
+data DirectedGraph = DirectedGraph { nrNodes :: Int, adjacencyList :: IntMap [Int] }
 
 convertToIntList :: String -> [Int]
 convertToIntList = map read . words

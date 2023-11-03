@@ -1,8 +1,7 @@
 import Control.Monad (mapM_, replicateM)
 import Data.IntMap (IntMap)
-import qualified Data.IntMap as M
 import Data.Maybe (listToMaybe, mapMaybe)
-
+import qualified Data.IntMap as M
 
 convertToIntList :: String -> [Int]
 convertToIntList = map read . words

@@ -2,17 +2,14 @@
 
 import Control.Monad (mapM, replicateM)
 import Data.IntMap (IntMap, (!))
-import qualified Data.IntMap as M
 import Data.List (partition)
 import Data.Sequence ((><), ViewL ((:< ), EmptyL))
+import qualified Data.IntMap as M
 import qualified Data.Sequence as S
-
-type AdjacencyList = IntMap [Int]
 
 data NodeColor = Red | Blue deriving Eq
 data Edge = Edge Int Int
-data Graph = Graph { nrNodes :: Int, adjacencyList :: AdjacencyList }
-
+data Graph = Graph { nrNodes :: Int, adjacencyList :: IntMap [Int] }
 
 convertToIntList :: String -> [Int]
 convertToIntList = map read . words

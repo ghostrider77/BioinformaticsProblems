@@ -4,7 +4,6 @@ import Control.Monad (replicateM)
 import Data.IntMap (IntMap, fromListWith)
 import qualified Data.IntMap as M
 
-
 convertToIntList :: String -> [Int]
 convertToIntList = map read . words
 

@@ -3,9 +3,8 @@ import Data.IntMap (IntMap)
 import Data.Maybe (fromMaybe)
 import qualified Data.IntMap as M
 
-type AdjacencyList = IntMap [Int]
 data Edge = Edge Int Int
-data Graph = Graph { nrNodes :: Int, adjacencyList :: AdjacencyList }
+data Graph = Graph { nrNodes :: Int, adjacencyList :: IntMap [Int] }
 
 convertToIntList :: String -> [Int]
 convertToIntList = map read . words

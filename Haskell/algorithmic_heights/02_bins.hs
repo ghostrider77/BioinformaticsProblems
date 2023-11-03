@@ -1,6 +1,5 @@
 import Data.Vector (Vector, (!), fromList, last)
 
-
 convertToIntList :: String -> [Int]
 convertToIntList = map read . words
 

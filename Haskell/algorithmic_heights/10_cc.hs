@@ -3,11 +3,10 @@ import Data.IntMap (IntMap)
 import Data.List (find)
 import qualified Data.IntMap as M
 
-type AdjacencyList = IntMap [Int]
 type Component = [Int]
 
 data Edge = Edge Int Int
-data Graph = Graph { nrNodes :: Int, adjacencyList :: AdjacencyList }
+data Graph = Graph { nrNodes :: Int, adjacencyList :: IntMap [Int] }
 data DFSState = DFSState { visitStarted :: IntMap Int, visitEnded :: IntMap Int, previsitId :: Int, postvisitId :: Int }
 
 convertToIntList :: String -> [Int]

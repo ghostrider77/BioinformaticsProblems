@@ -4,10 +4,8 @@ import Data.IntSet (IntSet)
 import qualified Data.IntMap as M
 import qualified Data.IntSet as S
 
-type AdjacencyList = IntMap IntSet
 data Edge = Edge Int Int
-data Graph = Graph { nrNodes :: Int, adjacencyList :: AdjacencyList }
-
+data Graph = Graph { nrNodes :: Int, adjacencyList :: IntMap IntSet }
 
 convertToIntList :: String -> [Int]
 convertToIntList = map read . words

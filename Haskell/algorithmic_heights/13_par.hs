@@ -3,7 +3,6 @@ import Data.Vector (Vector, freeze, fromList, thaw, toList)
 import qualified Data.Vector as V
 import qualified Data.Vector.Mutable as MV
 
-
 convertToIntList :: String -> [Int]
 convertToIntList = map read . words
 
