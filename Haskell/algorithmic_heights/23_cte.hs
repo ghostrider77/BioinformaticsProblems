@@ -60,6 +60,16 @@ createGraph nrNodes edges =
     in Graph { nrNodes = nrNodes, adjacencyList = adjacencyList }
 
 
+readGraphs :: Int -> IO [(Graph, Edge)]
+readGraphs n =
+    let readGraph = do
+            _ <- getLine
+            (nrNodes, nrEdges) <- readInputLine <$> getLine
+            edges <- readEdges nrEdges
+            return (createGraph nrNodes edges, head edges)
+    in mapM (const readGraph) [1..n]
+
+
 getNeighbors :: Graph -> Int -> [Edge]
 getNeighbors (Graph _ adjacencyList) node = M.findWithDefault [] node adjacencyList
 
@@ -78,11 +88,11 @@ updateDistances state neighbors dist =
     in go state neighbors
 
 
-calcShortestDistances :: Graph -> Int -> [Distance]
+calcShortestDistances :: Graph -> Int -> IntMap Distance
 calcShortestDistances graph @ (Graph nrNodes adjacencyList) sourceNode =
     let go state @ (State queue distances finalizedNodes) =
             case H.view queue of
-                Nothing -> map (\node -> M.findWithDefault Infinity node distances) [1..nrNodes]
+                Nothing -> distances
                 Just ((dist, node), rest) ->
                     if S.member node finalizedNodes then go (State rest distances finalizedNodes)
                     else
@@ -92,10 +102,16 @@ calcShortestDistances graph @ (Graph nrNodes adjacencyList) sourceNode =
     in go $ State (H.fromList [(Dist 0, sourceNode)]) (M.singleton sourceNode (Dist 0)) S.empty
 
 
+calcShortestCycleThroughGivenEdge :: (Graph, Edge) -> Distance
+calcShortestCycleThroughGivenEdge (graph, Edge a b w) =
+    case M.lookup a $ calcShortestDistances graph b of
+        Just (Dist d) -> if d >= 0 then Dist (d + w) else Dist d
+        _ -> Infinity
+
+
 main :: IO ()
 main = do
-    (nrNodes, nrEdges) <- readInputLine <$> getLine
-    edges <- readEdges nrEdges
-    let graph = createGraph nrNodes edges
-    let result = calcShortestDistances graph 1
+    n <- readLn
+    graphs <- readGraphs n
+    let result = map calcShortestCycleThroughGivenEdge graphs
     putStrLn $ unwords $ map show result
