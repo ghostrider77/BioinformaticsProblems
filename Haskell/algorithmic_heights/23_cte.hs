@@ -105,7 +105,7 @@ calcShortestDistances graph @ (Graph nrNodes adjacencyList) sourceNode =
 calcShortestCycleThroughGivenEdge :: (Graph, Edge) -> Distance
 calcShortestCycleThroughGivenEdge (graph, Edge a b w) =
     case M.lookup a $ calcShortestDistances graph b of
-        Just (Dist d) -> if d >= 0 then Dist (d + w) else Dist d
+        Just (Dist d) -> Dist (d + w)
         _ -> Infinity
 
 
